@@ -35,6 +35,8 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
-		"@inlang/paraglide-sveltekit": "^0.15.5"
+		"@inlang/paraglide-sveltekit": "^0.15.5",
+		"axios": "^1.7.9",
+		"cheerio": "^1.0.0"
 	}
 }
