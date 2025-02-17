@@ -1,14 +1,20 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://new.osudroid.moe/apitest'; // Example API endpoint
+const API_BASE_URL = 'https://new.osudroid.moe/apitest';
 
 export async function fetchUserFromApi(uid: string) {
 	try {
 		const response = await axios.get(`${API_BASE_URL}/profile-uid/${uid}`);
-		return response.data; // Assuming the API returns JSON
-	} catch (error) {
+		return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 404) {
+				console.warn(`User ${uid} not found`);
+				return null;
+			}
+		}
 		console.error(error);
 		console.warn(`API request failed for user ${uid}, falling back to scraping.`);
-		return null; // Return null to trigger fallback
+		throw new Error('API request failed');
 	}
 }

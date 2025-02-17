@@ -1,13 +1,18 @@
 import type { RequestHandler } from './$types';
 import { getUserProfile } from '$lib/services/userService';
-import { json } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ params }) => {
 	try {
 		const user = await getUserProfile(params.id);
-		return json(user);
+		return new Response(JSON.stringify(user), { status: 200 });
 	} catch (error) {
-		console.error(`Failed to fetch user ${params.id}:`, error);
-		return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+
+		if (error instanceof Error) {
+			if (error.message === 'User not found') {
+				return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+			}
+		}
+
+		return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
 	}
 };
