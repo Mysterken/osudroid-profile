@@ -1,17 +1,18 @@
 import { fetchUserFromApi } from './osudroidApi';
-import { scrapeUserData } from './scraper/osudroidScraper';
+import type { Player } from '$lib/models/player';
 
-export async function getUserProfile(uid: string) {
-	const userData = await fetchUserFromApi(uid);
+export async function getUserProfile(uid: string): Promise<Player> {
+	let userData = await fetchUserFromApi(uid);
 
-	if (userData === null) {
-		// API returned 404
-		throw new Error('User not found');
+	if (!userData) {
+		// TODO: Implement web scraping
+		// return await scrapeUserData(uid);
+		console.log(`Falling back to web scraping for user ${uid}`);
+		userData = await fetchUserFromApi(uid);
 	}
 
 	if (!userData) {
-		console.log(`Falling back to web scraping for user ${uid}`);
-		return await scrapeUserData(uid);
+		throw new Error('User not found');
 	}
 
 	return userData;
