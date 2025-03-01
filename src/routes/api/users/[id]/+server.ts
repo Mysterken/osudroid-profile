@@ -1,11 +1,11 @@
 import type { RequestHandler } from './$types';
 import { getUserProfile } from '$lib/services/userService';
-import { type Player } from '$lib/models/player';
 import { json } from '@sveltejs/kit';
+import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
 
 export const GET: RequestHandler = async ({ params }) => {
 	try {
-		const user: Player = await getUserProfile(params.id);
+		const user: ApiPlayer | ScraperPlayer = await getUserProfile(params.id);
 
 		return json(user);
 	} catch (error) {
