@@ -11,6 +11,7 @@ export async function scrapeUserData(uid: string) {
 		const $ = cheerio.load(response.data);
 
 		const slideshows = $('#slideshow');
+		const tablesTr = $('table tr');
 
 		const topPlays = slideshows.first().parent().next().find('li');
 		const recentPlays = slideshows.eq(1).first().parent().next().find('li');
@@ -34,7 +35,7 @@ export async function scrapeUserData(uid: string) {
 
 		const parsePlays = (plays: cheerio.Cheerio<Element>) =>
 			plays
-				.map((i, el) => ({
+				.map((_i, el) => ({
 					rank: getMapRank($(el).find('img').attr('src')),
 					title: $(el).find('strong').text(),
 					date: $(el).find('small').text().split(' / ')[0].trim(),
@@ -81,13 +82,13 @@ export async function scrapeUserData(uid: string) {
 			location: $('p:contains("Location:") a').text().trim(),
 			scoreRank: parseInt($('.topnav p:contains("Score Rank:") a').text().replace('#', '').trim()),
 			ppRank: parseInt($('.topnav p:contains("PP Rank:") a').text().replace('#', '').trim()),
-			rankedScore: parseInt($('table tr').eq(0).find('td').eq(1).text().replace(/,/g, '').trim()),
-			performancePoints: parseInt($('table tr').eq(1).find('td').eq(1).text().replace(/,/g, '').trim()),
+			rankedScore: parseInt(tablesTr.eq(0).find('td').eq(1).text().replace(/,/g, '').trim()),
+			performancePoints: parseInt(tablesTr.eq(1).find('td').eq(1).text().replace(/,/g, '').trim()),
 			hitAccuracy: parseFloat(
-				$('table tr').eq(2).find('td').eq(1).text().replace('%', '').trim()
+				tablesTr.eq(2).find('td').eq(1).text().replace('%', '').trim()
 			),
 			playcount: parseInt(
-				$('table tr').eq(3).find('td').eq(1).text().replace(/,/g, '').trim()
+				tablesTr.eq(3).find('td').eq(1).text().replace(/,/g, '').trim()
 			),
 			topPlays: topPlaysData,
 			recentPlays: recentPlaysData
