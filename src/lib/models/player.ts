@@ -39,7 +39,7 @@ export interface ScraperPlayer extends BasePlayer {
 	Last50Scores: ScraperPlay[];
 }
 
-interface ScraperData {
+interface ScraperPlayerData {
 	uid: number;
 	username: string;
 	location: string;
@@ -75,7 +75,7 @@ export function parsePlayerFromApi(data: ApiPlayer): ApiPlayer {
 	};
 }
 
-export function parsePlayerFromScraper(data: ScraperData): ScraperPlayer {
+export function parsePlayerFromScraper(data: ScraperPlayerData): ScraperPlayer {
 	return {
 		UserId: data.uid,
 		Username: data.username,
