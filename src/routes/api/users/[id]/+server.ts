@@ -16,6 +16,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			}
 		}
 
+		console.error('Error getting user profile', error);
 		return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
 	}
 };
