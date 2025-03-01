@@ -10,6 +10,11 @@ export async function scrapeUserData(uid: string) {
 		const response = await axios.get(`${OSUDROID_PROFILE_URL}?uid=${uid}`);
 		const $ = cheerio.load(response.data);
 
+		if ($('main.content-wrapper').text().includes('User not found.')) {
+			console.warn(`User ${uid} not found`);
+			return null;
+		}
+
 		const slideshows = $('#slideshow');
 		const tablesTr = $('table tr');
 
