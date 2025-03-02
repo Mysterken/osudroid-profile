@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <div
 	class="
 	bg-[#1E1E1E]
