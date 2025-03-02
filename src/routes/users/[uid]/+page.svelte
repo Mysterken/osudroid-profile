@@ -4,6 +4,9 @@
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
+	import ProfileInfoMobile from '$lib/components/users/ProfileInfoMobile.svelte';
+	import { breakpoints, screenSize } from '$lib/stores/screenSize';
+	import ProfileInfoDesktop from '$lib/components/users/ProfileInfoDesktop.svelte';
 
 	let user: ApiPlayer | ScraperPlayer | null = null;
 	let isLoading = true;
@@ -38,10 +41,13 @@
 		<p>Loading user data...</p>
 	{:else}
 		{#if user}
-			<ContentCard>card</ContentCard>
-			<div style="background-color: #476426"><h1>Hello {user.Username}</h1></div>
-			<div style="background-color: #2077c4"><h1>card 2</h1></div>
-			<div style="background-color: #8018b2"><h1>card 3</h1></div>
+			{#if $screenSize < breakpoints.desktopSm}
+				<ProfileInfoMobile/>
+			{:else}
+				<ProfileInfoDesktop/>
+			{/if}
+			<ContentCard>Top Plays</ContentCard>
+			<ContentCard>Recent Plays</ContentCard>
 		{:else}
 			<p>User not found.</p>
 		{/if}
