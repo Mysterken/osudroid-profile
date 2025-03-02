@@ -1,3 +1,7 @@
+<script lang="ts">
+	let { children } = $props();
+</script>
+
 <div
 	class="
 	bg-[#1E1E1E]
@@ -17,5 +21,5 @@
 	desktop-lg:gap-8
 	desktop-lg:p-8"
 >
-	<slot />
+	{@render children?.()}
 </div>

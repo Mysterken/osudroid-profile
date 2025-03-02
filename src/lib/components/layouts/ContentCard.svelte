@@ -1,3 +1,7 @@
+<script lang="ts">
+	let { children } = $props();
+</script>
+
 <div
 	class="
 	card
@@ -11,5 +15,5 @@
 	p-4
 	text-center"
 >
-	<slot />
+	{@render children?.()}
 </div>
