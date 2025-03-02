@@ -2,6 +2,15 @@
 
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
-@import '@skeletonlabs/skeleton/themes/terminus';
+@import './lib/styles/osudroid.css';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+@theme {
+    --breakpoint-phone-sm: 22.5rem;
+    --breakpoint-phone-lg: 30rem;
+    --breakpoint-tablet-sm: 48rem;
+    --breakpoint-tablet-lg: 64rem;
+    --breakpoint-desktop-sm: 80rem;
+    --breakpoint-desktop-lg: 90rem;
+}
