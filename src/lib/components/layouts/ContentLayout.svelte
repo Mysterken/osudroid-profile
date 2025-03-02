@@ -5,16 +5,18 @@
 	class="
 	bg-[#1E1E1E]
 	flex flex-col
+	max-w-[1240px]
+	mx-auto
 	phone-sm:gap-2.5
 	phone-lg:gap-3.5
 	tablet-sm:gap-5
-	tablet-sm:mx-5
+	tablet-sm:p-5
 	tablet-lg:gap-6
-	tablet-lg:mx-6
+	tablet-lg:p-6
 	desktop-sm:gap-8
-	desktop-sm:mx-8
+	desktop-sm:p-8
 	desktop-lg:gap-8
-	desktop-lg:mx-8"
+	desktop-lg:p-8"
 >
 	<slot />
 </div>

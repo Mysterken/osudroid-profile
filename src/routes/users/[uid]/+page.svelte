@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	// import { onMount } from 'svelte';
 	import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
+	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 
 	let user: ApiPlayer | ScraperPlayer | null = null;
 	let isLoading = true;
@@ -29,7 +30,9 @@
 	isLoading = false;
 </script>
 
+<SearchBar/>
 <ContentLayout>
+
 	{#if isLoading}
 		<p>Loading user data...</p>
 	{:else}
