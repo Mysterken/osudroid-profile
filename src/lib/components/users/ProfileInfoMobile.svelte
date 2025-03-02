@@ -49,20 +49,20 @@
 			<table class="w-full text-sm max-w-[400px]">
 				<tbody>
 				<tr>
-					<td class="py-1 text-left">Performance Points</td>
-					<td class="py-1 text-right font-bold">6000</td>
+					<td class="py-0.5 tablet-sm:py-1 text-left">Performance Points</td>
+					<td class="py-0.5 tablet-sm:py-1 text-right font-bold">6000</td>
 				</tr>
 				<tr>
-					<td class="py-1 text-left">Score</td>
-					<td class="py-1 text-right font-bold">17,183,008,068</td>
+					<td class="py-0.5 tablet-sm:py-1 text-left">Score</td>
+					<td class="py-0.5 tablet-sm:py-1 text-right font-bold">17,183,008,068</td>
 				</tr>
 				<tr>
-					<td class="py-1 text-left">Hit Accuracy</td>
-					<td class="py-1 text-right font-bold">99.29%</td>
+					<td class="py-0.5 tablet-sm:py-1 text-left">Hit Accuracy</td>
+					<td class="py-0.5 tablet-sm:py-1 text-right font-bold">99.29%</td>
 				</tr>
 				<tr>
-					<td class="py-1 text-left">Play Count</td>
-					<td class="py-1 text-right font-bold">1213</td>
+					<td class="py-0.5 tablet-sm:py-1 text-left">Play Count</td>
+					<td class="py-0.5 tablet-sm:py-1 text-right font-bold">1213</td>
 				</tr>
 				</tbody>
 			</table>
