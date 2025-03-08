@@ -3,7 +3,6 @@
 	import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
-	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import ProfileInfoMobile from '$lib/components/users/ProfileInfoMobile.svelte';
 	import { breakpoints, screenSize } from '$lib/stores/screenSize';
 	import ProfileInfoDesktop from '$lib/components/users/ProfileInfoDesktop.svelte';
