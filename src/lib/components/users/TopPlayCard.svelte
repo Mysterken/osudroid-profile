@@ -11,7 +11,6 @@
 	class="
 	top-play
 	card
-
 	border-color rounded-[5px] border-[1px] border-[#E5E5E5]
 	w-full"
 >
@@ -27,13 +26,18 @@
 		>
 			<span>1</span>
 		</div>
-		<div class="flex w-full bg-[#2A2A2A] pl-2.5 justify-between items-center">
-			<div class="text-left">
+		<div class="flex w-full bg-[#2A2A2A]  items-center">
+			{#if !isOpen}
+				<div class="text-2xl font-bold size-10">
+					SS
+				</div>
+			{/if}
+			<div class="text-left pl-2.5">
 				<h2>Title</h2>
 				<p class="text-xs italic">Author</p>
 				<p class="text-[#E69F00] text-xs italic">Difficulty Name</p>
 			</div>
-			<button onclick={toggleDetails} class="transition-transform duration-300"
+			<button onclick={toggleDetails} class="transition-transform duration-300 ml-auto"
 							aria-label="Toggle Details"
 							style="transform: rotate({isOpen ? '180deg' : '0deg'})"
 			>
