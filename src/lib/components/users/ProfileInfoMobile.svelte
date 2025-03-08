@@ -45,7 +45,7 @@
 		</div>
 
 		<!-- Stats Section -->
-		<div class="user-stats flex flex-col justify-center w-full">
+		<div class="user-stats flex flex-col justify-center w-full px-2">
 			<table class="w-full text-sm max-w-[400px]">
 				<tbody>
 				<tr>
