@@ -7,6 +7,8 @@
 	import ProfileInfoMobile from '$lib/components/users/ProfileInfoMobile.svelte';
 	import { breakpoints, screenSize } from '$lib/stores/screenSize';
 	import ProfileInfoDesktop from '$lib/components/users/ProfileInfoDesktop.svelte';
+	import TopPlays from '$lib/components/users/TopPlays.svelte';
+	import RecentPlays from '$lib/components/users/RecentPlays.svelte';
 
 	let user: ApiPlayer | ScraperPlayer | null = null;
 	let isLoading = true;
@@ -46,8 +48,8 @@
 			{:else}
 				<ProfileInfoDesktop/>
 			{/if}
-			<ContentCard>Top Plays</ContentCard>
-			<ContentCard>Recent Plays</ContentCard>
+			<TopPlays/>
+			<RecentPlays/>
 		{:else}
 			<p>User not found.</p>
 		{/if}
