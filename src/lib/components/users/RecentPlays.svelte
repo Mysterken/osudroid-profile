@@ -11,8 +11,7 @@
 		phone-sm:gap-3
 		phone-lg:gap-4
 		tablet-sm:gap-5
-		tablet-lg:gap-6
-"
+		tablet-lg:gap-6"
 	>
 		<Disc3Icon/>
 		<h1 class="font-bold text-lg">Recent Plays</h1>

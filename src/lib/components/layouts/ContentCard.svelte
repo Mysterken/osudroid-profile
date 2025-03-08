@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { children } = $props();
+	let { children, sx = "" } = $props();
 </script>
 
 <div
@@ -13,7 +13,8 @@
 	tablet-sm:p-5
 	tablet-lg:p-6
 	p-4
-	text-center"
+	text-center
+  {sx}"
 >
 	{@render children?.()}
 </div>
