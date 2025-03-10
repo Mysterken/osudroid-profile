@@ -1,7 +1,8 @@
 <script>
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { TrophyIcon } from 'lucide-svelte';
-	import TopPlayCard from '$lib/components/users/TopPlayCard.svelte';
+	import TopPlayCardSmall from '$lib/components/users/TopPlayCardSmall.svelte';
+	import TopPlayCardLarge from '$lib/components/users/TopPlayCardLarge.svelte';
 </script>
 
 <ContentCard
@@ -28,6 +29,7 @@
 	<div
 		class="flex flex-col gap-1 phone-sm:gap-1.5"
 	>
-		<TopPlayCard />
+		<TopPlayCardSmall />
+		<TopPlayCardLarge />
 	</div>
 </ContentCard>
