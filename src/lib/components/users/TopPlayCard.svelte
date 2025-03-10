@@ -1,9 +1,10 @@
 <script>
 	import { ChevronDownIcon } from 'lucide-svelte';
-	let isOpen = $state(false)
+
+	let isOpen = $state(false);
 
 	function toggleDetails() {
-		isOpen = !isOpen
+		isOpen = !isOpen;
 	}
 </script>
 
@@ -26,29 +27,82 @@
 		>
 			<span>1</span>
 		</div>
+
 		<div class="flex w-full bg-[#2A2A2A]  items-center">
 			{#if !isOpen}
 				<div class="text-2xl font-bold size-10">
 					SS
 				</div>
 			{/if}
+
 			<div class="text-left pl-2.5">
 				<h2>Title</h2>
 				<p class="text-xs italic">Author</p>
 				<p class="text-[#E69F00] text-xs italic">Difficulty Name</p>
 			</div>
-			<button onclick={toggleDetails} class="transition-transform duration-300 ml-auto"
-							aria-label="Toggle Details"
-							style="transform: rotate({isOpen ? '180deg' : '0deg'})"
+
+			<button
+				onclick={toggleDetails} class="transition-transform duration-300 ml-auto"
+				aria-label="Toggle Details"
+				style="transform: rotate({isOpen ? '180deg' : '0deg'})"
 			>
 				<ChevronDownIcon size={35} />
 			</button>
-
 		</div>
 	</div>
-	{#if isOpen}
-		<div class="details text-black bg-[#E5E5E5] rounded-b-[4px]">
-			This will hide or not
+
+	<div
+		class={
+			`details
+			flex flex-col
+			text-black
+			bg-[#E5E5E5]
+			rounded-b-[4px]
+			px-2.5
+			py-auto
+			justify-center
+			${isOpen ? 'min-h-[50px]' : 'min-h-[30px]'}`
+		}
+	>
+		<div class="flex items-center gap-1.5 font-bold">
+			{#if isOpen}
+				<div
+					class="
+					flex
+					w-14
+					h-5
+					text-white
+					bg-[#2A2A2A]
+					border-[#3C3C3C] border-[1px] rounded-[5px]
+					items-center justify-center
+					"
+				>
+					SS
+				</div>
+			{:else}
+				<div class="mods flex gap-[1px]">
+					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
+					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
+				</div>
+			{/if}
+
+			<p>
+				100.00%
+			</p>
+
+			<p class="ml-auto">1000<span class="text-[#505050]">pp</span></p>
 		</div>
-	{/if}
+		{#if isOpen}
+			<div class="flex text-xs italic text-left gap-1.5">
+				<div class="mods flex gap-[1px]">
+					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
+					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
+				</div>
+
+				<p>30,000,000 / 1300x / 0 miss</p>
+
+				<p class="ml-auto">(1000<span class="text-[#505050]">pp</span>)</p>
+			</div>
+		{/if}
+	</div>
 </div>
