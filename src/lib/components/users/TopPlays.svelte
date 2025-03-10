@@ -26,9 +26,7 @@
 		<TrophyIcon />
 		<h1 class="font-bold text-lg">Top Plays</h1>
 	</div>
-	<div
-		class="flex flex-col gap-1 phone-sm:gap-1.5"
-	>
+	<div class="flex flex-col gap-1 phone-sm:gap-1.5">
 		<TopPlayCardSmall />
 		<TopPlayCardLarge />
 	</div>
