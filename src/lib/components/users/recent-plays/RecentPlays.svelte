@@ -1,7 +1,7 @@
 <script>
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { Disc3Icon } from 'lucide-svelte';
-	import RecentPlayCard from '$lib/components/users/recent-plays/RecentPlayCard.svelte';
+	import RecentPlayCardSmall from '$lib/components/users/recent-plays/RecentPlayCardSmall.svelte';
 </script>
 
 <ContentCard
@@ -26,6 +26,6 @@
 		<h1 class="font-bold text-lg">Recent Plays</h1>
 	</div>
 	<div class="flex flex-col gap-1 phone-sm:gap-1.5">
-		<RecentPlayCard />
+		<RecentPlayCardSmall />
 	</div>
 </ContentCard>
