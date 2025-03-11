@@ -3,11 +3,11 @@
 	import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
-	import ProfileInfoMobile from '$lib/components/users/ProfileInfoMobile.svelte';
+	import ProfileInfoMobile from '$lib/components/users/profile-info/ProfileInfoMobile.svelte';
 	import { breakpoints, screenSize } from '$lib/stores/screenSize';
-	import ProfileInfoDesktop from '$lib/components/users/ProfileInfoDesktop.svelte';
-	import TopPlays from '$lib/components/users/TopPlays.svelte';
-	import RecentPlays from '$lib/components/users/RecentPlays.svelte';
+	import ProfileInfoDesktop from '$lib/components/users/profile-info/ProfileInfoDesktop.svelte';
+	import TopPlays from '$lib/components/users/top-plays/TopPlays.svelte';
+	import RecentPlays from '$lib/components/users/recent-plays/RecentPlays.svelte';
 
 	let user: ApiPlayer | ScraperPlayer | null = null;
 	let isLoading = true;

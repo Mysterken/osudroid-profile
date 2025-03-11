@@ -1,8 +1,8 @@
 <script>
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { TrophyIcon } from 'lucide-svelte';
-	import TopPlayCardSmall from '$lib/components/users/TopPlayCardSmall.svelte';
-	import TopPlayCardLarge from '$lib/components/users/TopPlayCardLarge.svelte';
+	import TopPlayCardSmall from '$lib/components/users/top-plays/TopPlayCardSmall.svelte';
+	import TopPlayCardLarge from '$lib/components/users/top-plays/TopPlayCardLarge.svelte';
 </script>
 
 <ContentCard
