@@ -29,8 +29,8 @@
 			</div>
 
 			<div class="mt-1">
-				<p class="leading-2.5 text-sm italic">Author</p>
-				<p class="leading-4 text-[#E69F00] text-sm italic">Difficulty Name</p>
+				<p class="leading-4 text-sm italic">Author</p>
+				<p class="leading-3 text-[#E69F00] text-sm italic">Difficulty Name</p>
 			</div>
 
 			<div>

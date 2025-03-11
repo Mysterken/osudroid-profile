@@ -37,8 +37,8 @@
 
 			<div class="text-left pl-2.5">
 				<h2>Title</h2>
-				<p class="text-xs italic">Author</p>
-				<p class="text-[#E69F00] text-xs italic">Difficulty Name</p>
+				<p class="leading-3.5 text-xs italic">Author</p>
+				<p class="leading-3.5 text-[#E69F00] text-xs italic">Difficulty Name</p>
 			</div>
 
 			<button
