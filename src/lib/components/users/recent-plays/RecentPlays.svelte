@@ -3,6 +3,7 @@
 	import { Disc3Icon } from 'lucide-svelte';
 	import RecentPlayCardSmall from '$lib/components/users/recent-plays/RecentPlayCardSmall.svelte';
 	import RecentPlayCardLarge from '$lib/components/users/recent-plays/RecentPlayCardLarge.svelte';
+	import { breakpoints, screenSize } from '$lib/stores/screenSize';
 </script>
 
 <ContentCard
@@ -27,7 +28,10 @@
 		<h1 class="font-bold text-lg">Recent Plays</h1>
 	</div>
 	<div class="flex flex-col gap-1 phone-sm:gap-1.5">
-		<RecentPlayCardSmall />
-		<RecentPlayCardLarge />
+		{#if $screenSize < breakpoints.tabletSm}
+			<RecentPlayCardSmall />
+		{:else}
+			<RecentPlayCardLarge />
+		{/if}
 	</div>
 </ContentCard>
