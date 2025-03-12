@@ -12,7 +12,7 @@
 	class="
 	recent-play
 	card
-	border-color rounded-[5px] border-[1px] border-[#E5E5E5]
+	rounded-[5px]
 	bg-[#E5E5E5]
 	text-black
 	w-full"
