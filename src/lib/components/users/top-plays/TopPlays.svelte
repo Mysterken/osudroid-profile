@@ -3,35 +3,39 @@
 	import { TrophyIcon } from 'lucide-svelte';
 	import TopPlayCardSmall from '$lib/components/users/top-plays/TopPlayCardSmall.svelte';
 	import TopPlayCardLarge from '$lib/components/users/top-plays/TopPlayCardLarge.svelte';
-	import { breakpoints, screenSize } from '$lib/stores/screenSize';
 </script>
 
 <ContentCard
 	sx="
-	flex flex-col
-	gap-1
-	phone-sm:gap-3
-	phone-lg:gap-4
-	tablet-sm:gap-5
-	tablet-lg:gap-6"
->
-	<div
-		class="
-		flex items-center
-		gap-1
+		flex flex-col gap-1
 		phone-sm:gap-3
 		phone-lg:gap-4
 		tablet-sm:gap-5
 		tablet-lg:gap-6"
+>
+	<!-- Header -->
+	<div
+		class="
+			flex items-center gap-1
+			phone-sm:gap-3
+			phone-lg:gap-4
+			tablet-sm:gap-5
+			tablet-lg:gap-6"
 	>
 		<TrophyIcon />
 		<h1 class="font-bold text-lg">Top Plays</h1>
 	</div>
+
+	<!-- Top Plays -->
 	<div class="flex flex-col gap-1 phone-sm:gap-1.5">
-		{#if $screenSize < breakpoints.tabletSm}
+		<!-- Small Screen -->
+		<div class="tablet-sm:hidden">
 			<TopPlayCardSmall />
-		{:else}
+		</div>
+
+		<!-- Large Screen -->
+		<div class="hidden tablet-sm:block">
 			<TopPlayCardLarge />
-		{/if}
+		</div>
 	</div>
 </ContentCard>

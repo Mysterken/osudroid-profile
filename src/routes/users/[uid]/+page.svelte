@@ -4,7 +4,6 @@
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 	import ProfileInfoMobile from '$lib/components/users/profile-info/ProfileInfoMobile.svelte';
-	import { breakpoints, screenSize } from '$lib/stores/screenSize';
 	import ProfileInfoDesktop from '$lib/components/users/profile-info/ProfileInfoDesktop.svelte';
 	import TopPlays from '$lib/components/users/top-plays/TopPlays.svelte';
 	import RecentPlays from '$lib/components/users/recent-plays/RecentPlays.svelte';
@@ -46,29 +45,28 @@
 	{:else}
 		{#if user}
 			<!-- Desktop Layout -->
-			{#if $screenSize >= breakpoints.desktopSm}
-				<div class="grid grid-cols-[1fr_3fr] gap-8">
-					<!-- Sidebar -->
-					<div class="flex flex-col gap-4 w-[300px]">
-						<RankingPanel />
-						<StatisticsPanel />
-						<UserInfoPanel />
-					</div>
-
-					<!-- Main Content -->
-					<div class="flex flex-col gap-4">
-						<ProfileInfoDesktop />
-						<TopPlays />
-						<RecentPlays />
-					</div>
+			<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
+				<!-- Sidebar -->
+				<div class="flex flex-col gap-4 w-[300px]">
+					<RankingPanel />
+					<StatisticsPanel />
+					<UserInfoPanel />
 				</div>
 
-				<!-- Mobile/Tablet Layout -->
-			{:else}
+				<!-- Main Content -->
+				<div class="flex flex-col gap-4">
+					<ProfileInfoDesktop />
+					<TopPlays />
+					<RecentPlays />
+				</div>
+			</div>
+
+			<!-- Mobile/Tablet Layout -->
+			<div class="desktop-sm:hidden flex flex-col gap-4">
 				<ProfileInfoMobile />
 				<TopPlays />
 				<RecentPlays />
-			{/if}
+			</div>
 
 		{:else}
 			<p>User not found.</p>
