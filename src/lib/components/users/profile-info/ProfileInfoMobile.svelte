@@ -9,6 +9,8 @@
 		country,
 		globalRanking,
 		countryRanking,
+		scoreRanking,
+		ppRanking,
 		performancePoints,
 		score,
 		accuracy,
@@ -22,6 +24,8 @@
 		country: string;
 		globalRanking: number | null;
 		countryRanking: number | null;
+		scoreRanking: number | null;
+		ppRanking: number | null;
 		performancePoints: number;
 		score: number;
 		accuracy: number;
@@ -65,12 +69,12 @@
 {#snippet userRankings()}
 	<div class="user-rankings flex gap-7 px-2 text-left">
 		<div class="global-ranking">
-			<h3 class="text-sm text-gray-400">Global Ranking</h3>
-			<h1 class="font-bold text-lg">#{globalRanking}</h1>
+			<h3 class="text-sm text-gray-400">{source === 'api' ? 'Global Ranking' : 'Score Ranking'}</h3>
+			<h1 class="font-bold text-lg">#{source === 'api' ? globalRanking : scoreRanking}</h1>
 		</div>
 		<div class="country-ranking">
-			<h3 class="text-sm text-gray-400">Country Ranking</h3>
-			<h1 class="font-bold text-lg">#{countryRanking}</h1>
+			<h3 class="text-sm text-gray-400">{source === 'api' ? 'Country Ranking' : 'PP Ranking'}</h3>
+			<h1 class="font-bold text-lg">#{source === 'api' ? countryRanking : ppRanking}</h1>
 		</div>
 	</div>
 {/snippet}

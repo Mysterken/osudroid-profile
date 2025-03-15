@@ -14,6 +14,8 @@
 	let user: ApiPlayer | ScraperPlayer | null = null;
 	let globalRank: number | null = null;
 	let countryRank: number | null = null;
+	let scoreRank: number | null = null;
+	let ppRank: number | null = null;
 	let registered: string | null = null;
 	let lastLogin: string | null = null;
 
@@ -37,13 +39,19 @@
 		user = await fetchUser(userId);
 
 		if (user?.Source === "api") {
-			globalRank = user.GlobalRank;
-			countryRank = user.CountryRank;
-			registered = user.Registered;
-			lastLogin = user.LastLogin;
+			({
+				GlobalRank: globalRank,
+				CountryRank: countryRank,
+				Registered: registered,
+				LastLogin: lastLogin
+			} = user);
+		} else if (user?.Source === "scraper") {
+			({
+				ScoreRank: scoreRank,
+				PPRank: ppRank
+			} = user);
 		} else {
-			globalRank = null;
-			countryRank = null;
+			user = null;
 		}
 
 		isLoading = false;
@@ -90,6 +98,8 @@
 					avatarLink="now"
 					globalRanking={globalRank}
 					countryRanking={countryRank}
+					scoreRanking={scoreRank}
+					ppRanking={ppRank}
 					performancePoints={user.OverallPP}
 					score={user.OverallScore}
 					accuracy={user.OverallAccuracy}
