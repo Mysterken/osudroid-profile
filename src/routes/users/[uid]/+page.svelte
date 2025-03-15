@@ -76,9 +76,26 @@
 			<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
 				<!-- Sidebar -->
 				<div class="flex flex-col gap-4 w-[300px]">
-					<RankingPanel />
-					<StatisticsPanel />
-					<UserInfoPanel />
+					<RankingPanel
+						source={user.Source}
+						globalRanking={globalRank}
+						countryRanking={countryRank}
+						scoreRanking={scoreRank}
+						ppRanking={ppRank}
+					/>
+					<StatisticsPanel
+						source={user.Source}
+						performancePoints={user.OverallPP}
+						score={user.OverallScore}
+						accuracy={user.OverallAccuracy}
+						playcount={user.OverallPlaycount}
+					/>
+					{#if user.Source === 'api'}
+						<UserInfoPanel
+							registered={registered}
+							lastLogin={lastLogin}
+						/>
+					{/if}
 				</div>
 
 				<!-- Main Content -->

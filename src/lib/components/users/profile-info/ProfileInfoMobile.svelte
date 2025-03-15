@@ -35,11 +35,8 @@
 	} = $props();
 
 	let calculatedAccuracy = source === 'api' ? (accuracy * 100).toFixed(2) : accuracy;
-
 	let formattedScore = score.toLocaleString();
-
 	let formattedPlaycount = playcount.toLocaleString();
-
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
 
 	$effect(() => {
@@ -49,7 +46,7 @@
 	const stats = [
 		{ name: 'Performance Points', value: performancePoints, id: 'pp' },
 		{ name: 'Score', value: formattedScore, id: 'score' },
-		{ name: 'Hit Accuracy', value: calculatedAccuracy, id: 'accuracy' },
+		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
 	];
 </script>

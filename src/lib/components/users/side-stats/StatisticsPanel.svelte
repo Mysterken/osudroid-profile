@@ -1,39 +1,52 @@
-<script>
+<script lang="ts">
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { ChartPieIcon } from 'lucide-svelte';
+
+	let {
+		source,
+		performancePoints,
+		score,
+		accuracy,
+		playcount
+	}: {
+		source: 'api' | 'scraper';
+		performancePoints: number;
+		score: number;
+		accuracy: number;
+		playcount: number;
+	} = $props();
+
+	let calculatedAccuracy = source === 'api' ? (accuracy * 100).toFixed(2) : accuracy;
+	let formattedScore = score.toLocaleString();
+	let formattedPlaycount = playcount.toLocaleString();
+
+	let stats = [
+		{ name: 'Performance Points', value: performancePoints, id: 'pp' },
+		{ name: 'Score', value: formattedScore, id: 'score' },
+		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
+		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
+	];
 </script>
 
-<ContentCard
-	sx="!p-2.5 flex flex-col gap-2.5"
->
-	<div
-		class="
-			flex items-center gap-3.5"
-	>
+{#snippet userStats()}
+	<table class="w-full text-sm max-w-[400px]">
+		<tbody>
+		{#each stats as stat (stat.id)}
+			<tr>
+				<td class="pb-1 text-left">{stat.name}</td>
+				<td class="pb-1 text-right font-bold">{stat.value}</td>
+			</tr>
+		{/each}
+		</tbody>
+	</table>
+{/snippet}
+
+<ContentCard sx="!p-2.5 flex flex-col gap-2.5">
+	<div class="flex items-center gap-3.5">
 		<ChartPieIcon class="size-8" />
 		<h1 class="font-bold text-lg">Statistics</h1>
 	</div>
-
 	<div class="user-stats flex flex-col justify-center w-full px-2">
-		<table class="w-full text-sm max-w-[400px]">
-			<tbody>
-			<tr>
-				<td class="pb-1 text-left">Performance Points</td>
-				<td class="pb-1 text-right font-bold">6000</td>
-			</tr>
-			<tr>
-				<td class="pb-1 text-left">Score</td>
-				<td class="pb-1 text-right font-bold">17,183,008,068</td>
-			</tr>
-			<tr>
-				<td class="pb-1 text-left">Hit Accuracy</td>
-				<td class="pb-1 text-right font-bold">99.29%</td>
-			</tr>
-			<tr>
-				<td class="pb-1 text-left">Play Count</td>
-				<td class="pb-1 text-right font-bold">1213</td>
-			</tr>
-			</tbody>
-		</table>
+		{@render userStats()}
 	</div>
 </ContentCard>
