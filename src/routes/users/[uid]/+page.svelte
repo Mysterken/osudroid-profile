@@ -1,5 +1,5 @@
 <script lang="ts">
-	// import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
@@ -12,32 +12,52 @@
 	import UserInfoPanel from '$lib/components/users/side-stats/UserInfoPanel.svelte';
 
 	let user: ApiPlayer | ScraperPlayer | null = null;
+	let globalRank: number | null = null;
+	let countryRank: number | null = null;
+	let registered: string | null = null;
+	let lastLogin: string | null = null;
+
 	let isLoading = true;
 
-	// async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
-	// 	try {
-	// 		const response = await fetch(`/api/users/${userId}`);
-	// 		if (!response.ok) return null;
-	// 		return (await response.json()) as ApiPlayer | ScraperPlayer;
-	// 	} catch (error) {
-	// 		console.error("Error fetching user:", error);
-	// 		return null;
-	// 	}
-	// }
-	//
-	// onMount(async () => {
-	// 	const userId = window.location.pathname.split('/').pop() || "";
-	// 	user = await fetchUser(userId);
-	// 	isLoading = false;
-	// });
+	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
+		try {
+			// const response = await fetch(`/api/users/${userId}`);
+			console.log(userId)
+			const response = await fetch(`/test/33306.json`);
+			if (!response.ok) return null;
+			return (await response.json()) as ApiPlayer | ScraperPlayer;
+		} catch (error) {
+			console.error('Error fetching user:', error);
+			return null;
+		}
+	}
 
-	user = {
-		Username: "John Doe",
-	};
+	onMount(async () => {
+		const userId = window.location.pathname.split('/').pop() || '';
+		user = await fetchUser(userId);
+
+		if (user?.Source === "api") {
+			globalRank = user.GlobalRank;
+			countryRank = user.CountryRank;
+			registered = user.Registered;
+			lastLogin = user.LastLogin;
+		} else {
+			globalRank = null;
+			countryRank = null;
+		}
+
+		isLoading = false;
+	});
+
+
+
+	// user = {
+	// 	Username: "John Doe",
+	// };
 	isLoading = false;
 </script>
 
-<SearchBar/>
+<SearchBar />
 
 <ContentLayout>
 	{#if isLoading}
@@ -63,7 +83,20 @@
 
 			<!-- Mobile/Tablet Layout -->
 			<div class="desktop-sm:hidden flex flex-col gap-4">
-				<ProfileInfoMobile />
+				<ProfileInfoMobile
+					source={user.Source}
+					username={user.Username}
+					country={user.Region}
+					avatarLink="now"
+					globalRanking={globalRank}
+					countryRanking={countryRank}
+					performancePoints={user.OverallPP}
+					score={user.OverallScore}
+					accuracy={user.OverallAccuracy}
+					playcount={user.OverallPlaycount}
+					registered={registered}
+					lastLogin={lastLogin}
+				/>
 				<TopPlays />
 				<RecentPlays />
 			</div>
