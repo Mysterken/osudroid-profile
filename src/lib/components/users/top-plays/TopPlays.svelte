@@ -22,7 +22,7 @@
 			tablet-sm:gap-5
 			tablet-lg:gap-6"
 	>
-		<TrophyIcon />
+		<TrophyIcon class="tablet-sm:size-8" />
 		<h1 class="font-bold text-lg">Top Plays</h1>
 	</div>
 

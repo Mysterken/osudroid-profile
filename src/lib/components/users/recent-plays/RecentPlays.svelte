@@ -22,7 +22,7 @@
 			tablet-sm:gap-5
 			tablet-lg:gap-6"
 	>
-		<Disc3Icon />
+		<Disc3Icon class="tablet-sm:size-8" />
 		<h1 class="font-bold text-lg">Recent Plays</h1>
 	</div>
 
