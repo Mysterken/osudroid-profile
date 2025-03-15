@@ -17,7 +17,7 @@ export interface BasePlayer {
 	Region: string;
 	Top50Plays: Play[];
 	Last50Scores: Play[];
-	source: "api" | "scraper";
+	Source: "api" | "scraper";
 }
 
 export interface ApiPlayer extends BasePlayer {
@@ -31,7 +31,7 @@ export interface ApiPlayer extends BasePlayer {
 	Contributor: boolean;
 	Top50Plays: ApiPlay[];
 	Last50Scores: ApiPlay[];
-	source: "api";
+	Source: "api";
 }
 
 export interface ScraperPlayer extends BasePlayer {
@@ -39,7 +39,7 @@ export interface ScraperPlayer extends BasePlayer {
 	PPRank: number;
 	Top50Plays: ScraperPlay[];
 	Last50Scores: ScraperPlay[];
-	source: "scraper";
+	Source: "scraper";
 }
 
 interface ScraperPlayerData {
@@ -75,7 +75,7 @@ export function parsePlayerFromApi(data: ApiPlayer): ApiPlayer {
 		Region: data.Region,
 		Top50Plays: data.Top50Plays.map(parsePlayFromApi),
 		Last50Scores: data.Last50Scores?.map(parsePlayFromApi) ?? [],
-		source: "api"
+		Source: "api"
 	};
 }
 
@@ -92,6 +92,6 @@ export function parsePlayerFromScraper(data: ScraperPlayerData): ScraperPlayer {
 		Last50Scores: data.recentPlays.map(parsePlayFromScraper),
 		ScoreRank: data.scoreRank,
 		PPRank: data.ppRank,
-		source: 'scraper'
+		Source: 'scraper'
 	};
 }
