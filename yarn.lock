@@ -226,6 +226,11 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.9.tgz#50dea3616bc8191fb8e112283b49eaff03e78429"
   integrity sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==
 
+"@fontsource/quicksand@^5.2.5":
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/@fontsource/quicksand/-/quicksand-5.2.5.tgz#d4dec9b82ad1d74b4b7c8e48023dada263274ecd"
+  integrity sha512-V8/RSjgRrLWRqAM0oyLwOWDITf8a9B4mM2RiEZhP6ZVORdXyOWur+MEL908syPi3AiNj90qh2/0d41+bY3LgAQ==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"

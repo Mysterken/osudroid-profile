@@ -4,6 +4,8 @@
 @import '@skeletonlabs/skeleton/optional/presets';
 @import './lib/styles/osudroid.css';
 
+@import "@fontsource/quicksand";
+
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
 @plugin '@tailwindcss/forms';
