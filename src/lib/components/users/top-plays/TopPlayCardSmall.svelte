@@ -1,44 +1,58 @@
-<script>
+<script lang="ts">
 	import { ChevronDownIcon } from 'lucide-svelte';
+	import { playUtils } from '$lib/utils/playUtils';
+
+	let {
+		index,
+		filename,
+		// mods,
+		score,
+		combo,
+		rank,
+		miss,
+		accuracy,
+		pp
+	}: {
+		index: number;
+		filename: string;
+		score: number;
+		combo: number;
+		rank: string;
+		miss: number;
+		accuracy: number;
+		pp: number | null;
+	} = $props();
 
 	let isOpen = $state(false);
 
 	function toggleDetails() {
 		isOpen = !isOpen;
 	}
+
+	let formattedScore = score.toLocaleString();
+	let formattedCombo = combo.toLocaleString();
+	let calculatedAccuracy = (accuracy * 100).toFixed(2);
+	let formattedPP = pp?.toFixed(2);
+	let rawPP = playUtils.calculateRawPP(pp, index + 1).toFixed(2);
+
+	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 </script>
 
-<div
-	class="
-	top-play
-	card
-	border-color rounded-[5px] border-[1px] border-[#E5E5E5]
-	w-full"
->
+<div class="top-play card border-color rounded-[5px] border-[1px] border-[#E5E5E5] w-full">
 	<div class="showoff flex pr-5 min-h-[70px]">
-		<div
-			class="
-			flex counter
-			bg-[#E5E5E5]
-			w-5 h-5
-			rounded-tl-[4px] rounded-br-[5px]
-			text-black font-bold
-			items-center justify-center"
-		>
-			<span>1</span>
+		<div class="flex counter bg-[#E5E5E5] w-5 h-5 rounded-tl-[4px] rounded-br-[5px] text-black font-bold items-center justify-center">
+			<span>{index + 1}</span>
 		</div>
 
-		<div class="flex w-full bg-[#2A2A2A]  items-center">
+		<div class="flex w-full bg-[#2A2A2A] items-center">
 			{#if !isOpen}
-				<div class="text-2xl font-bold size-10">
-					SS
-				</div>
+				<div class="text-2xl font-bold size-10">{rank}</div>
 			{/if}
 
 			<div class="text-left pl-2.5">
-				<h2>Title</h2>
-				<p class="leading-3.5 text-xs italic">Author</p>
-				<p class="leading-3.5 text-[#E69F00] text-xs italic">Difficulty Name</p>
+				<h2>{songTitle}</h2>
+				<p class="leading-3.5 text-xs italic">{songArtist}</p>
+				<p class="leading-3.5 text-[#E69F00] text-xs italic">{difficulty}</p>
 			</div>
 
 			<button
@@ -77,7 +91,7 @@
 					items-center justify-center
 					"
 				>
-					SS
+					{rank}
 				</div>
 			{:else}
 				<div class="mods flex gap-[1px]">
@@ -85,12 +99,8 @@
 					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
 				</div>
 			{/if}
-
-			<p>
-				100.00%
-			</p>
-
-			<p class="ml-auto">1000<span class="text-[#505050]">pp</span></p>
+			<p>{calculatedAccuracy}%</p>
+			<p class="ml-auto">{formattedPP}<span class="text-[#505050]">pp</span></p>
 		</div>
 		{#if isOpen}
 			<div class="flex text-xs italic text-left gap-1.5">
@@ -98,10 +108,8 @@
 					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
 					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
 				</div>
-
-				<p>30,000,000 / 1300x / 0 miss</p>
-
-				<p class="ml-auto">(1000<span class="text-[#505050]">pp</span>)</p>
+				<p>{formattedScore} / {formattedCombo}x / {miss} miss</p>
+				<p class="ml-auto">({rawPP}<span class="text-[#505050]">pp</span>)</p>
 			</div>
 		{/if}
 	</div>

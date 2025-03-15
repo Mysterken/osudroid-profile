@@ -105,7 +105,7 @@
 						username={user.Username}
 						country={user.Region}
 					/>
-					<TopPlays />
+					<TopPlays topPlays={user.Top50Plays} />
 					<RecentPlays />
 				</div>
 			</div>
@@ -136,7 +136,7 @@
 					registered={registered}
 					lastLogin={lastLogin}
 				/>
-				<TopPlays />
+				<TopPlays topPlays={user.Top50Plays} />
 				<RecentPlays />
 			</div>
 

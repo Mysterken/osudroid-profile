@@ -3,7 +3,6 @@
 	import { InfoIcon } from 'lucide-svelte';
 	import { timeAgoStore, timestamp } from '$lib/stores/timeAgo';
 
-
 	let { registered, lastLogin }:
 		{ registered: string | null; lastLogin: string | null; } = $props();
 
