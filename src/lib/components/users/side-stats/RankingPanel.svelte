@@ -13,7 +13,7 @@
 		<h1 class="font-bold text-lg">Ranking</h1>
 	</div>
 
-	<div class="user-stats flex flex-col justify-center w-full px-2">
+	<div class="user-ranking flex flex-col justify-center w-full px-2">
 		<table class="w-full text-sm max-w-[400px]">
 			<tbody>
 			<tr>
