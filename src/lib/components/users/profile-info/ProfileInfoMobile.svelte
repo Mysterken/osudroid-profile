@@ -67,5 +67,30 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div class="tablet-sm:hidden justify-center items-center">
+			<hr class="hr w-full tablet-sm:invisible" />
+		</div>
+
+		<div class="user-dates tablet-sm:hidden flex gap-7 px-2 text-left">
+			<div class="registered-date">
+				<h3 class="text-sm text-gray-400">Registered</h3>
+				<h1 class="font-bold text-xs">22/05/2016</h1>
+			</div>
+			<div class="last-login">
+				<h3 class="text-sm text-gray-400">Last Login</h3>
+				<h1 class="font-bold text-xs">a year ago</h1>
+			</div>
+		</div>
+	</div>
+	<div class="user-dates hidden tablet-sm:flex gap-7 px-2 pt-2 text-left">
+		<div class="registered-date">
+			<h3 class="text-sm text-gray-400">Registered</h3>
+			<h1 class="font-bold text-xs">22/05/2016</h1>
+		</div>
+		<div class="last-login">
+			<h3 class="text-sm text-gray-400">Last Login</h3>
+			<h1 class="font-bold text-xs">a year ago</h1>
+		</div>
 	</div>
 </ContentCard>
