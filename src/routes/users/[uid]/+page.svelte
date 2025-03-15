@@ -83,7 +83,11 @@
 
 				<!-- Main Content -->
 				<div class="flex flex-col gap-8">
-					<ProfileInfoDesktop />
+					<ProfileInfoDesktop
+						avatarLink=""
+						username={user.Username}
+						country={user.Region}
+					/>
 					<TopPlays />
 					<RecentPlays />
 				</div>
@@ -103,7 +107,7 @@
 					source={user.Source}
 					username={user.Username}
 					country={user.Region}
-					avatarLink="now"
+					avatarLink=""
 					globalRanking={globalRank}
 					countryRanking={countryRank}
 					scoreRanking={scoreRank}
