@@ -47,13 +47,14 @@ function convertStringIntoPlayDetails(text: string) {
  */
 function convertLongModNameToAlias(mod: string): string {
 	const modMapping: Record<string, string> = {
+		"Precise": "PR",
 		"NoFail": "NF",
 		"Easy": "EZ",
 		"Hidden": "HD",
-		"Hard Rock": "HR",
+		"HardRock": "HR",
 		"DoubleTime": "DT",
 		"HalfTime": "HT",
-		"Nightcore": "NC",
+		"NightCore": "NC",
 		"Flashlight": "FL",
 		"Relax": "RX",
 		"Autopilot": "AP",

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { ChevronDownIcon } from 'lucide-svelte';
 	import { playUtils } from '$lib/utils/playUtils';
+	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 
 	let {
 		index,
 		filename,
-		// mods,
+		mods,
 		score,
 		combo,
 		rank,
@@ -15,6 +16,7 @@
 	}: {
 		index: number;
 		filename: string;
+		mods: string[];
 		score: number;
 		combo: number;
 		rank: string;
@@ -34,6 +36,8 @@
 	let calculatedAccuracy = (accuracy * 100).toFixed(2);
 	let formattedPP = pp?.toFixed(2);
 	let rawPP = playUtils.calculateRawPP(pp, index + 1).toFixed(2);
+
+	console.log(mods)
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 </script>
@@ -95,8 +99,9 @@
 				</div>
 			{:else}
 				<div class="mods flex gap-[1px]">
-					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
-					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
+					{#each mods as mod (mod)}
+						<ModIcon {mod} />
+					{/each}
 				</div>
 			{/if}
 			<p>{calculatedAccuracy}%</p>
@@ -105,8 +110,9 @@
 		{#if isOpen}
 			<div class="flex text-xs italic text-left gap-1.5">
 				<div class="mods flex gap-[1px]">
-					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
-					<img class="max-w-[24px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
+					{#each mods as mod (mod)}
+						<ModIcon {mod} />
+					{/each}
 				</div>
 				<p>{formattedScore} / {formattedCombo}x / {miss} miss</p>
 				<p class="ml-auto">({rawPP}<span class="text-[#505050]">pp</span>)</p>

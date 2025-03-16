@@ -1,3 +1,5 @@
+import { playUtils } from '$lib/utils/playUtils';
+
 export interface Play {
 	Filename: string;
 	Mods: string[];
@@ -59,7 +61,7 @@ export function parsePlayFromApi(data: ApiPlay): ApiPlay {
 export function parsePlayFromScraper(data: ScraperPlayData): ScraperPlay {
 	return {
 		Filename: data.title,
-		Mods: data.mod.split(', '),
+		Mods: data.mod.split(', ').map(playUtils.convertLongModNameToAlias),
 		MapScore: data.score,
 		MapCombo: data.combo,
 		MapRank: data.rank,

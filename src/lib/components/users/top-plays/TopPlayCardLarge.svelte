@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { playUtils } from '$lib/utils/playUtils';
+	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 
 	let {
 		index,
 		filename,
-		// mods,
+		mods,
 		score,
 		combo,
 		rank,
@@ -14,6 +15,7 @@
 	}: {
 		index: number;
 		filename: string;
+		mods: string[];
 		score: number;
 		combo: number;
 		rank: string;
@@ -75,8 +77,9 @@
 			<p class="absolute text-xl font-bold self-end">{calculatedAccuracy}%</p>
 
 			<div class="flex gap-[1px] mt-auto">
-				<img class="max-w-[42px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
-				<img class="max-w-[42px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
+				{#each mods as mod (mod)}
+					<ModIcon size={42} {mod} />
+				{/each}
 			</div>
 		</div>
 	</div>
