@@ -227,9 +227,9 @@
   integrity sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==
 
 "@fontsource/quicksand@^5.2.5":
-  version "5.2.5"
-  resolved "https://registry.yarnpkg.com/@fontsource/quicksand/-/quicksand-5.2.5.tgz#d4dec9b82ad1d74b4b7c8e48023dada263274ecd"
-  integrity sha512-V8/RSjgRrLWRqAM0oyLwOWDITf8a9B4mM2RiEZhP6ZVORdXyOWur+MEL908syPi3AiNj90qh2/0d41+bY3LgAQ==
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@fontsource/quicksand/-/quicksand-5.2.6.tgz#9cf17cf4c4da92fe27c012f8a7dcfe62f14c90c3"
+  integrity sha512-MI1EO6ENXbmAxzwkxhLdCUKLLP6SGQ7IHLktuwOcS7llvK4Ni6QiqFCHZg40wpOfR0Z0FMCOJAqykf3QSqYpFA==
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
@@ -983,9 +983,9 @@
     rollup "^4.9.5"
 
 "@sveltejs/kit@^2.16.0":
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.19.1.tgz#47a15f720f64184b40e7a106970b46dd129f5dc0"
-  integrity sha512-1u8FGWtT+V0eBSQpDtsjINhQd6RTjadvEgVApdNVxbUeOXmQTDENTeRiZw2i1lNUx1/5Wa65CHzxtMh3P3yviw==
+  version "2.19.2"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.19.2.tgz#62a7c206fdcf74920bb4e40e623f6dc4f0e82985"
+  integrity sha512-OkW7MMGkjXtdfqdHWlyPozh/Ct1X3pthXAKTSqHm+mwmvmTBASmPE6FhwlvUgsqlCceRYL+5QUGiIJfOy0xIjQ==
   dependencies:
     "@types/cookie" "^0.6.0"
     cookie "^0.6.0"
@@ -2920,9 +2920,9 @@ murmurhash3js@^3.0.1:
   integrity sha512-KL8QYUaxq7kUbcl0Yto51rMcYt7E/4N4BG3/c96Iqw1PQrTRspu8Cpx4TZ4Nunib1d4bEkIH3gjCYlP2RLBdow==
 
 nanoid@^3.3.8:
-  version "3.3.9"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.9.tgz#e0097d8e026b3343ff053e9ccd407360a03f503a"
-  integrity sha512-SppoicMGpZvbF1l3z4x7No3OlIjP7QJvC9XR7AhZr1kL133KHnKPztkKDc+Ir4aJ/1VhTySrtKhrsycmrMQfvg==
+  version "3.3.10"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.10.tgz#7bc882237698ef787d5cbba109e3b0168ba6e7b1"
+  integrity sha512-vSJJTG+t/dIKAUhUDw/dLdZ9s//5OxcHqLaDWWrW4Cdq7o6tdLIczUkMXt2MBNmk6sJRZBZRXVixs7URY1CmIg==
 
 natural-compare@^1.4.0:
   version "1.4.0"
