@@ -2,6 +2,7 @@
 	import { ChevronDownIcon } from 'lucide-svelte';
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
+	import LetterRank from '$lib/components/ui/LetterRank.svelte';
 
 	let {
 		index,
@@ -50,7 +51,7 @@
 
 		<div class="flex w-full bg-[#2A2A2A] items-center">
 			{#if !isOpen}
-				<div class="text-2xl font-bold size-10">{rank}</div>
+				<LetterRank sx="text-2xl font-bold size-10" letter={rank} />
 			{/if}
 
 			<div class="text-left pl-2.5">
@@ -84,19 +85,18 @@
 	>
 		<div class="flex items-center gap-1.5 font-bold">
 			{#if isOpen}
-				<div
-					class="
+				<LetterRank
+					sx="
 					flex
 					w-14
 					h-5
 					text-white
 					bg-[#2A2A2A]
 					border-[#3C3C3C] border-[1px] rounded-[5px]
-					items-center justify-center
-					"
-				>
+					items-center justify-center"
+
 					{rank}
-				</div>
+				/>
 			{:else}
 				<div class="mods flex gap-[1px]">
 					{#each mods as mod (mod)}

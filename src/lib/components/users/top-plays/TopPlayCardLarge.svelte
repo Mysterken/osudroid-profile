@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
+	import LetterRank from '$lib/components/ui/LetterRank.svelte';
 
 	let {
 		index,
@@ -54,9 +55,7 @@
 	</div>
 
 	<div class="flex w-full items-center justify-center gap-2.5 mx-5">
-		<div class="text-5xl font-bold min-w-[60px]">
-			{rank}
-		</div>
+		<LetterRank sx="text-5xl font-bold min-w-[60px]" {rank} />
 
 		<div class="text-left pl-2.5">
 			<div class="flex h-14 items-center">
