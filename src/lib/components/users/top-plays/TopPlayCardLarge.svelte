@@ -54,13 +54,13 @@
 	</div>
 
 	<div class="flex w-full items-center justify-center gap-2.5 mx-5">
-		<div class="text-5xl font-bold">
+		<div class="text-5xl font-bold min-w-[60px]">
 			{rank}
 		</div>
 
-		<div class="text-left">
+		<div class="text-left pl-2.5">
 			<div class="flex h-14 items-center">
-				<h2 class="text-2xl">{songTitle}</h2>
+				<h2 class="text-xl">{songTitle}</h2>
 			</div>
 
 			<div class="mt-1">
