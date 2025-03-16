@@ -1,6 +1,6 @@
 <script lang="ts">
 	let { sx, rank }: { sx: string; rank: string } = $props();
-	let letterRank = rank.toUpperCase();
+	let letterRank = rank?.toUpperCase();
 
 	function getRankColor(rank: string): { color: string; displayLetter: string } {
 		const rankMap: Record<string, { color: string; displayLetter: string }> = {

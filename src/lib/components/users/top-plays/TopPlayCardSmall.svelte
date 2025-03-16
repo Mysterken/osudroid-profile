@@ -38,8 +38,6 @@
 	let formattedPP = pp?.toFixed(2);
 	let rawPP = playUtils.calculateRawPP(pp, index + 1).toFixed(2);
 
-	console.log(mods)
-
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 </script>
 
@@ -51,7 +49,7 @@
 
 		<div class="flex w-full bg-[#2A2A2A] items-center">
 			{#if !isOpen}
-				<LetterRank sx="text-2xl font-bold size-10" letter={rank} />
+				<LetterRank sx="text-2xl font-bold size-10" {rank} />
 			{/if}
 
 			<div class="text-left pl-2.5">
