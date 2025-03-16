@@ -46,7 +46,7 @@
 		class="
 			flex counter
 			bg-[#E5E5E5]
-			w-8 h-8
+			size-9
 			rounded-tl-[4px] rounded-br-[5px]
 			text-black text-xl font-bold
 			items-center justify-center"
@@ -54,7 +54,7 @@
 		<span>{index + 1}</span>
 	</div>
 
-	<div class="flex w-full items-center justify-center gap-2.5 mx-5">
+	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5">
 		<LetterRank sx="text-5xl font-bold min-w-[60px]" {rank} />
 
 		<div class="text-left pl-2.5">

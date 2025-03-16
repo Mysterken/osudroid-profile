@@ -43,11 +43,11 @@
 
 <div class="top-play card border-color rounded-[5px] border-[1px] border-[#E5E5E5] w-full">
 	<div class="showoff flex pr-5 min-h-[70px]">
-		<div class="flex counter bg-[#E5E5E5] w-5 h-5 rounded-tl-[4px] rounded-br-[5px] text-black font-bold items-center justify-center">
+		<div class="flex counter bg-[#E5E5E5] size-6 rounded-tl-[4px] rounded-br-[5px] text-black font-bold items-center justify-center">
 			<span>{index + 1}</span>
 		</div>
 
-		<div class="flex w-full bg-[#2A2A2A] items-center">
+		<div class="flex flex-grow bg-[#2A2A2A] items-center">
 			{#if !isOpen}
 				<LetterRank sx="text-2xl font-bold size-10" {rank} />
 			{/if}
