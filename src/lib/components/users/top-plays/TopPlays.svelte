@@ -35,7 +35,7 @@
 		<div class="tablet-sm:hidden flex flex-col gap-1 phone-sm:gap-1.5">
 			{#each topPlays as topPlay, index (index)}
 				<TopPlayCardSmall
-					index={index}
+					{index}
 					filename={topPlay.Filename}
 					mods={topPlay.Mods}
 					score={topPlay.MapScore}
@@ -52,7 +52,7 @@
 		<div class="hidden tablet-sm:flex flex-col gap-2">
 			{#each topPlays as topPlay, index (index)}
 				<TopPlayCardLarge
-					index={index}
+					{index}
 					filename={topPlay.Filename}
 					mods={topPlay.Mods}
 					score={topPlay.MapScore}

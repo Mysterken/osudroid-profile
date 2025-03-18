@@ -9,6 +9,7 @@ export interface Play {
 	MapMiss: number;
 	MapAccuracy: number;
 	MapPP: number | null;
+	PlayedDate?: string;
 }
 
 export interface ApiPlay extends Play {

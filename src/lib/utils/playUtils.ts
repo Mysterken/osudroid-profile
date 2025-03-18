@@ -89,6 +89,9 @@ export function convertTitleToBeatmapMetadata(title: string): {
 	mapper: string;
 	difficulty: string;
 } {
+	// Remove .osu from the title at the end
+	title = title.replace(/\.osu$/, "");
+
 	// Helper function to escape regex special characters
 	function escapeRegExp(str: string): string {
 		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

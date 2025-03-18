@@ -1,3 +1,43 @@
+<script lang="ts">
+	import { playUtils } from '$lib/utils/playUtils';
+	import LetterRank from '$lib/components/ui/LetterRank.svelte';
+	import ModIcon from '$lib/components/ui/ModIcon.svelte';
+
+	let {
+		filename,
+		mods,
+		score,
+		combo,
+		rank,
+		miss,
+		accuracy,
+		// pp,
+		date
+	}: {
+		filename: string;
+		mods: string[];
+		score: number;
+		combo: number;
+		rank: string;
+		miss: number;
+		accuracy: number;
+		// pp: number | null;
+		date: string | null;
+	} = $props();
+
+	let formattedScore = score.toLocaleString();
+	let formattedCombo = combo.toLocaleString();
+	let calculatedAccuracy = (accuracy * 100).toFixed(2);
+	let formattedDate = date ? new Date(date).toLocaleString() : '';
+
+	let {
+		songArtist,
+		songTitle,
+		mapper,
+		difficulty
+	} = playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '));
+</script>
+
 <div
 	class="
 	recent-play
@@ -7,33 +47,35 @@
 	bg-[#E5E5E5]
 	text-black
 	min-h-[80px]
-	px-5 py-3.5 gap-5
+	px-4 py-2 gap-5
 	w-full"
 >
-	<div
-		class="
+	<LetterRank
+		sx="
 		flex
 		size-[50px]
 		text-white font-bold text-lg
 		bg-[#2A2A2A]
 		border-[#3C3C3C] border-[1px] rounded-[5px]
 		items-center justify-center"
-	>
-		SS
-	</div>
+		{rank}
+	/>
 
 	<div class="text-left">
-		<h2 class="text-base leading-4">Artist - Title</h2>
-		<p class="text-[#505050] text-sm italic leading-3.5">Difficulty name</p>
+		<h2 class="text-base leading-4">{songArtist} - {songTitle}</h2>
+		<p class="text-[#505050] text-sm italic leading-3.5">{difficulty}</p>
 		<div class="mods flex gap-[1px]">
-			<img class="max-w-[28px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />
-			<img class="max-w-[28px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />
+			{#each mods as mod, i (i)}
+				<ModIcon size={28} {mod} />
+			{/each}
+<!--			<img class="max-w-[28px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />-->
+<!--			<img class="max-w-[28px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />-->
 		</div>
 	</div>
 
-	<div class="text-right ml-auto">
-		<h2 class="text-base font-bold leading-3.5">100%</h2>
-		<p class="text-sm italic">30,000,000 / 1111x / 0 miss</p>
-		<p class="text-[#505050] text-xs leading-3">1970/01/01 00:00:00</p>
+	<div class="text-right ml-auto min-w-max">
+		<h2 class="text-base font-bold leading-3.5">{calculatedAccuracy}%</h2>
+		<p class="text-sm italic">{formattedScore} / {formattedCombo}x / {miss} miss</p>
+		<p class="text-[#505050] text-xs leading-3">{formattedDate}</p>
 	</div>
 </div>

@@ -1,11 +1,47 @@
-<script>
+<script lang="ts">
 	import { ChevronDownIcon } from 'lucide-svelte';
+	import { playUtils } from '$lib/utils/playUtils';
+	import LetterRank from '$lib/components/ui/LetterRank.svelte';
+
+	let {
+		filename,
+		mods,
+		score,
+		combo,
+		rank,
+		miss,
+		accuracy,
+		// pp,
+		date
+	}: {
+		filename: string;
+		mods: string[];
+		score: number;
+		combo: number;
+		rank: string;
+		miss: number;
+		accuracy: number;
+		// pp: number | null;
+		date: string | null;
+	} = $props();
 
 	let isOpen = $state(false);
 
 	function toggleDetails() {
 		isOpen = !isOpen;
 	}
+
+	let formattedScore = score.toLocaleString();
+	let formattedCombo = combo.toLocaleString();
+	let calculatedAccuracy = (accuracy * 100).toFixed(2);
+	let formattedDate = date ? new Date(date).toLocaleString() : '';
+
+	let {
+		songArtist,
+		songTitle,
+		mapper,
+		difficulty
+	} = playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '));
 </script>
 
 <div
@@ -19,23 +55,23 @@
 >
 	<div class="showoff flex px-2.5 py-1 gap-1.5 min-h-[40px]">
 		{#if !isOpen}
-			<div
-				class="
-					flex
-					size-[30px]
-					text-white font-bold text-lg
-					bg-[#2A2A2A]
-					border-[#3C3C3C] border-[1px] rounded-[5px]
-					items-center justify-center
-					"
-			>
-				SS
-			</div>
+			<LetterRank
+				sx="
+				flex
+				size-[30px]
+				min-w-[30px]
+				my-auto
+				text-white font-bold text-lg
+				bg-[#2A2A2A]
+				border-[#3C3C3C] border-[1px] rounded-[5px]
+				items-center justify-center"
+				{rank}
+			/>
 		{/if}
 
 		<div class="text-left">
-			<h2 class="text-sm leading-4">Artist - Title</h2>
-			<p class="text-xs text-[#505050] italic leading-3.5">Difficulty Name</p>
+			<h2 class="text-sm leading-4">{songArtist} - {songTitle}</h2>
+			<p class="text-xs text-[#505050] italic leading-3.5">{difficulty}</p>
 		</div>
 
 		<button
@@ -60,27 +96,25 @@
 			<div
 				class="flex gap-1.5 items-center"
 			>
-				<div
-					class="
+				<LetterRank
+					sx="
 					flex
 					size-[30px]
 					text-white font-bold text-lg
 					bg-[#2A2A2A]
 					border-[#3C3C3C] border-[1px] rounded-[5px]
-					items-center justify-center
-					"
-				>
-					SS
-				</div>
+					items-center justify-center"
+					{rank}
+				/>
 
-				<p class="text-[#505050] text-xs italic">+HDHR</p>
+				<p class="text-[#505050] text-xs italic">{mods.length ? `+${mods.join('')}` : 'NM'}</p>
 			</div>
 
 			<div
 				class="flex flex-col text-right"
 			>
-				<p class="text-sm italic">30,000,000 / 1111x / 100% / 0 m</p>
-				<p class="text-[0.5rem] text-[#505050] italic">1970/01/01 00:00:00</p>
+				<p class="text-sm italic">{formattedScore} / {formattedCombo}x / {calculatedAccuracy}% / {miss} m</p>
+				<p class="text-[0.5rem] text-[#505050] italic">{formattedDate}</p>
 			</div>
 		</div>
 	{/if}

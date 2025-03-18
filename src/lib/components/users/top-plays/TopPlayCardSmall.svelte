@@ -97,7 +97,7 @@
 				/>
 			{:else}
 				<div class="mods flex gap-[1px]">
-					{#each mods as mod (mod)}
+					{#each mods as mod, i (i)}
 						<ModIcon {mod} />
 					{/each}
 				</div>
@@ -108,7 +108,7 @@
 		{#if isOpen}
 			<div class="flex text-xs italic text-left gap-1.5">
 				<div class="mods flex gap-[1px]">
-					{#each mods as mod (mod)}
+					{#each mods as mod, i (i)}
 						<ModIcon {mod} />
 					{/each}
 				</div>

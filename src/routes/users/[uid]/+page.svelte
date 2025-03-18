@@ -106,7 +106,7 @@
 						country={user.Region}
 					/>
 					<TopPlays topPlays={user.Top50Plays} />
-					<RecentPlays />
+					<RecentPlays recentPlays={user.Last50Scores} />
 				</div>
 			</div>
 
@@ -137,7 +137,7 @@
 					lastLogin={lastLogin}
 				/>
 				<TopPlays topPlays={user.Top50Plays} />
-				<RecentPlays />
+				<RecentPlays recentPlays={user.Last50Scores}/>
 			</div>
 
 		{:else}
