@@ -28,8 +28,8 @@
 	let formattedScore = score.toLocaleString();
 	let formattedCombo = combo.toLocaleString();
 	let calculatedAccuracy = (accuracy * 100).toFixed(2);
-	let formattedPP = pp?.toFixed(2);
-	let rawPP = playUtils.calculateRawPP(pp, index + 1).toFixed(2);
+	let formattedPP = pp ? Math.round(pp) : 0;
+	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 </script>
@@ -47,6 +47,7 @@
 			flex counter
 			bg-[#E5E5E5]
 			size-9
+			min-w-9
 			rounded-tl-[4px] rounded-br-[5px]
 			text-black text-xl font-bold
 			items-center justify-center"
@@ -84,7 +85,7 @@
 	</div>
 
 	<div
-		class="relative flex flex-col justify-center p-2.5 ml-auto w-[160px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]">
+		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-[120px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]">
 		<p class="absolute left-1/2 -translate-x-1/2 text-xl font-bold">{formattedPP}<span class="text-[#A7A3A3]">pp</span></p>
 		<p class="mt-auto self-end">({rawPP}<span class="text-[#A7A3A3]">pp</span>)</p>
 	</div>
