@@ -4,8 +4,10 @@
 	import TopPlayCardSmall from '$lib/components/users/top-plays/TopPlayCardSmall.svelte';
 	import TopPlayCardLarge from '$lib/components/users/top-plays/TopPlayCardLarge.svelte';
 	import type { Play } from '$lib/models/play';
+	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 
 	let { topPlays }: { topPlays: Play[] } = $props();
+	let itemsToShow = $state(5);
 </script>
 
 <ContentCard
@@ -33,7 +35,7 @@
 	<div class="flex flex-col gap-1 phone-sm:gap-1.5">
 		<!-- Small Screen -->
 		<div class="tablet-sm:hidden flex flex-col gap-1 phone-sm:gap-1.5">
-			{#each topPlays as topPlay, index (index)}
+			{#each topPlays.slice(0, itemsToShow) as topPlay, index (index)}
 				<TopPlayCardSmall
 					{index}
 					filename={topPlay.Filename}
@@ -50,7 +52,7 @@
 
 		<!-- Large Screen -->
 		<div class="hidden tablet-sm:flex flex-col gap-2">
-			{#each topPlays as topPlay, index (index)}
+			{#each topPlays.slice(0, itemsToShow) as topPlay, index (index)}
 				<TopPlayCardLarge
 					{index}
 					filename={topPlay.Filename}
@@ -64,5 +66,7 @@
 				/>
 			{/each}
 		</div>
+
+		<ShowMoreButton steps={[5, 25, 50]} totalItems={topPlays.length} bind:itemsToShow />
 	</div>
 </ContentCard>

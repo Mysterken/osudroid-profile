@@ -4,9 +4,10 @@
 	import RecentPlayCardSmall from '$lib/components/users/recent-plays/RecentPlayCardSmall.svelte';
 	import RecentPlayCardLarge from '$lib/components/users/recent-plays/RecentPlayCardLarge.svelte';
 	import type { ApiPlay, ScraperPlay } from '$lib/models/play.js';
+	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 
 	let { recentPlays }: { recentPlays: ApiPlay[] | ScraperPlay[] } = $props();
-
+	let itemsToShow = $state(5);
 </script>
 
 <ContentCard
@@ -34,7 +35,7 @@
 	<div class="flex flex-col gap-1 phone-sm:gap-1.5">
 		<!-- Small Screen -->
 		<div class="tablet-sm:hidden flex flex-col gap-1 phone-sm:gap-1.5">
-			{#each recentPlays as recentPlay, index (index)}
+			{#each recentPlays.slice(0, itemsToShow) as recentPlay, index (index)}
 				<RecentPlayCardSmall
 					filename={recentPlay.Filename}
 					mods={recentPlay.Mods}
@@ -50,7 +51,7 @@
 
 		<!-- Large Screen -->
 		<div class="hidden tablet-sm:flex flex-col gap-2">
-			{#each recentPlays as recentPlay, index (index)}
+			{#each recentPlays.slice(0, itemsToShow) as recentPlay, index (index)}
 				<RecentPlayCardLarge
 					filename={recentPlay.Filename}
 					mods={recentPlay.Mods}
@@ -63,5 +64,7 @@
 				/>
 			{/each}
 		</div>
+
+		<ShowMoreButton steps={[5, 25, 50]} totalItems={recentPlays.length} bind:itemsToShow />
 	</div>
 </ContentCard>
