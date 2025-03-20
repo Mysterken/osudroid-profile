@@ -5,6 +5,7 @@
 @import './lib/styles/osudroid.css';
 
 @import "@fontsource/quicksand";
+@import "../node_modules/flag-icons/css/flag-icons.min.css";
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 

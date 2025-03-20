@@ -40,6 +40,10 @@
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
 	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
 
+	function defaultAvatar(event: Event) {
+		(event.target as HTMLInputElement).src = '/default/avatar.webp';
+	}
+
 	const stats = [
 		{ name: 'Performance Points', value: performancePoints, id: 'pp' },
 		{ name: 'Score', value: formattedScore, id: 'score' },
@@ -51,7 +55,7 @@
 {#snippet userIdentity()}
 	<div class="user-identity flex gap-3.5">
 		<div class="user-avatar size-[80px] bg-[#FFFFFF] rounded-[10px] overflow-hidden">
-			<img src={avatarLink} alt="User Avatar" />
+			<img src={avatarLink} onerror={defaultAvatar} alt="User Avatar" />
 		</div>
 		<div class="user-info flex flex-col justify-end text-left">
 			<h1 class="font-bold text-lg">{username}</h1>

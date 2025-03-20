@@ -136,7 +136,7 @@
 				<!-- Main Content -->
 				<div class="flex flex-col gap-8">
 					<ProfileInfoDesktop
-						avatarLink=""
+						avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
 						username={user.Username}
 						country={user.Region}
 					/>
@@ -159,7 +159,7 @@
 					source={user.Source}
 					username={user.Username}
 					country={user.Region}
-					avatarLink=""
+					avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
 					globalRanking={globalRank}
 					countryRanking={countryRank}
 					scoreRanking={scoreRank}
