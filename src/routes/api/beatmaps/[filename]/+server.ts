@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			return json(cachedData.data);
 		}
 
-		const beatmap = await lookupBeatmap(filename);
+		const beatmap = await lookupBeatmap(filename + '.osu');
 
 		// Store response in cache
 		beatmapCache.set(filename, { data: beatmap, expires: Date.now() + CACHE_TTL });
