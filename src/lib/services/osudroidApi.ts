@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { parsePlayerFromApi } from '$lib/models/player';
+import { ApiError, NotFoundError } from '$lib/services/errors/userErrors';
 
 const API_BASE_URL = 'https://new.osudroid.moe/apitest';
 
@@ -9,15 +10,19 @@ export async function fetchUserFromApi(uid: string) {
 		return parsePlayerFromApi(response.data);
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
-			if (error.response?.status === 404) {
-				console.warn(`User ${uid} not found`);
-				return null;
+			const status = error.response?.status;
+
+			if (status === 404) {
+				console.warn(`🔍 User ${uid} not found in API.`);
+				throw new NotFoundError(`User ${uid} not found in API`);
 			}
+
+			console.error(`❌ osu! API error (Status ${status}):`, error.message);
+			throw new ApiError(`osu! API request failed with status ${status}`);
 		}
 
-		console.error(error);
-		console.warn(`API request failed for user ${uid}, falling back to scraping.`);
-
-		throw new Error('API request failed');
+		// Unexpected error (e.g., network failure)
+		console.error(`❌ Unexpected error fetching user ${uid}:`, error);
+		throw new ApiError(`Unexpected error fetching user ${uid}`);
 	}
 }

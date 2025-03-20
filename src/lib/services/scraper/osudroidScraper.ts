@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import { parsePlayerFromScraper } from '$lib/models/player';
+import { NotFoundError, ScraperError } from '$lib/services/errors/userErrors';
 
 const OSUDROID_PROFILE_URL = 'https://osudroid.moe/profile.php';
 
@@ -10,9 +11,11 @@ export async function scrapeUserData(uid: string) {
 		const response = await axios.get(`${OSUDROID_PROFILE_URL}?uid=${uid}`);
 		const $ = cheerio.load(response.data);
 
+		// Check if user does not exist
 		if ($('main.content-wrapper').text().includes('User not found.')) {
-			console.warn(`User ${uid} not found`);
-			return null;
+			console.warn(`🔍 User ${uid} not found in scraper.`);
+			// noinspection ExceptionCaughtLocallyJS
+			throw new NotFoundError(`User ${uid} not found in scraper`);
 		}
 
 		const slideshows = $('#slideshow');
@@ -27,7 +30,7 @@ export async function scrapeUserData(uid: string) {
 				return match[1];
 			}
 			throw new Error('Invalid map rank image source');
-		}
+		};
 
 		const getHashValue = (hashString: string): string => {
 			const match = hashString.match(/^{""hash":([a-zA-Z0-9]+)}/);
@@ -36,7 +39,6 @@ export async function scrapeUserData(uid: string) {
 			}
 			throw new Error('Invalid hash string format');
 		};
-
 
 		const parsePlays = (plays: cheerio.Cheerio<Element>) =>
 			plays
@@ -89,19 +91,15 @@ export async function scrapeUserData(uid: string) {
 			ppRank: parseInt($('.topnav p:contains("PP Rank:") a').text().replace('#', '').trim()),
 			rankedScore: parseInt(tablesTr.eq(0).find('td').eq(1).text().replace(/,/g, '').trim()),
 			performancePoints: parseInt(tablesTr.eq(1).find('td').eq(1).text().replace(/,/g, '').trim()),
-			hitAccuracy: parseFloat(
-				tablesTr.eq(2).find('td').eq(1).text().replace('%', '').trim()
-			),
-			playcount: parseInt(
-				tablesTr.eq(3).find('td').eq(1).text().replace(/,/g, '').trim()
-			),
+			hitAccuracy: parseFloat(tablesTr.eq(2).find('td').eq(1).text().replace('%', '').trim()),
+			playcount: parseInt(tablesTr.eq(3).find('td').eq(1).text().replace(/,/g, '').trim()),
 			topPlays: topPlaysData,
 			recentPlays: recentPlaysData
 		};
 
 		return parsePlayerFromScraper(returnData);
 	} catch (error) {
-		console.error(`Error scraping user ${uid}:`, error);
-		throw new Error('Failed to fetch user data');
+		console.error(`❌ Error scraping user ${uid}:`, error);
+		throw new ScraperError(`Failed to fetch user data from scraper`);
 	}
 }
