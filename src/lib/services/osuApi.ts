@@ -1,6 +1,7 @@
 import { OSU_CLIENT_ID, OSU_CLIENT_SECRET } from '$env/static/private';
 import { ApiError, NotFoundError } from '$lib/services/errors/osuApiError';
 import axios from 'axios';
+import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
 const API_BASE_URL = 'https://osu.ppy.sh/api/v2';
 const TOKEN_URL = 'https://osu.ppy.sh/oauth/token';
@@ -62,7 +63,7 @@ async function refreshTokenIfNeeded(): Promise<string> {
 /**
  * Lookup a beatmap using the osu! API.
  */
-export async function lookupBeatmap(filename: string) {
+export async function lookupBeatmap(filename: string): Promise<BeatmapExtended> {
 	try {
 		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?filename=${filename}`);
 		return response.data;
