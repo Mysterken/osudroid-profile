@@ -52,6 +52,13 @@
 		beatmaps = await Promise.all(requests);
 	}
 
+	async function fetchAdditionalBeatmaps(topPlays: Play[]) {
+		const requests = topPlays.slice(5, 25).map((play) => fetchBeatmapData(play.Filename));
+		const additionalBeatmaps = await Promise.all(requests);
+
+		beatmaps = [...beatmaps, ...additionalBeatmaps];
+	}
+
 	onMount(async () => {
 		const userId = window.location.pathname.split('/').pop() || '';
 		user = await fetchUser(userId);
@@ -75,6 +82,8 @@
 		// Fetch beatmaps for first 5 top plays
 		if (user?.Top50Plays) {
 			await fetchInitialBeatmaps(user.Top50Plays);
+			// Start fetching additional 25 beatmaps in the background
+			fetchAdditionalBeatmaps(user.Top50Plays);
 		}
 
 		isLoading = false;
