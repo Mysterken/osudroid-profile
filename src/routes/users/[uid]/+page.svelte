@@ -49,26 +49,19 @@
 		}
 	}
 
-	// Fetch the first 5 beatmaps
 	async function fetchInitialBeatmaps(topPlays: Play[]) {
-		const requests = topPlays.slice(0, 5).map((play) => fetchBeatmapData(play.Filename));
-		beatmaps = await Promise.all(requests);
+		beatmaps = await Promise.all(topPlays.slice(0, 5).map(play => fetchBeatmapData(play.Filename)));
 	}
 
 	async function fetchAdditionalBeatmaps(topPlays: Play[]) {
-		const requests = topPlays.slice(5, 25).map((play) => fetchBeatmapData(play.Filename));
-		const additionalBeatmaps = await Promise.all(requests);
-
+		const additionalBeatmaps = await Promise.all(topPlays.slice(5, 25).map(play => fetchBeatmapData(play.Filename)));
 		beatmaps = [...beatmaps, ...additionalBeatmaps];
 	}
 
 	async function fetchRemainingBeatmaps(topPlays: Play[]) {
 		if (isFetchingMore || beatmaps.length >= topPlays.length) return;
 		isFetchingMore = true;
-
-		const requests = topPlays.slice(25, 50).map((play) => fetchBeatmapData(play.Filename));
-		const remainingBeatmaps = await Promise.all(requests);
-
+		const remainingBeatmaps = await Promise.all(topPlays.slice(25, 50).map(play => fetchBeatmapData(play.Filename)));
 		beatmaps = [...beatmaps, ...remainingBeatmaps];
 		isFetchingMore = false;
 	}
@@ -85,18 +78,13 @@
 				LastLogin: lastLogin
 			} = user);
 		} else if (user?.Source === 'scraper') {
-			({
-				ScoreRank: scoreRank,
-				PPRank: ppRank
-			} = user);
+			({ ScoreRank: scoreRank, PPRank: ppRank } = user);
 		} else {
 			user = null;
 		}
 
-		// Fetch beatmaps for first 5 top plays
 		if (user?.Top50Plays) {
 			await fetchInitialBeatmaps(user.Top50Plays);
-			// Start fetching additional 20 beatmaps in the background
 			fetchAdditionalBeatmaps(user.Top50Plays);
 		}
 
@@ -105,12 +93,10 @@
 
 	// Fetch remaining beatmaps **when user requests more plays**
 	$effect(() => {
-		console.log(topPlaysToShow)
 		if (topPlaysToShow === 25 && user?.Top50Plays) {
 			fetchRemainingBeatmaps(user.Top50Plays);
 		}
 	});
-
 </script>
 
 <SearchBar />
