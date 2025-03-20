@@ -1,16 +1,13 @@
 <script lang="ts">
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { InfoIcon } from 'lucide-svelte';
-	import { timeAgoStore, timestamp } from '$lib/stores/timeAgo';
+	import { timeAgo } from '$lib/utils/timeago';
 
 	let { registered, lastLogin }:
 		{ registered: string | null; lastLogin: string | null; } = $props();
 
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
-
-	$effect(() => {
-		timestamp.set(lastLogin);
-	});
+	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
 </script>
 
 <ContentCard sx="!p-2.5 flex flex-col gap-2.5">
@@ -27,7 +24,7 @@
 			</tr>
 			<tr>
 				<td class="pb-1 text-left">Last Login</td>
-				<td class="pb-1 text-right font-bold">{$timeAgoStore}</td>
+				<td class="pb-1 text-right font-bold">{formattedLastLogin}</td>
 			</tr>
 			</tbody>
 		</table>

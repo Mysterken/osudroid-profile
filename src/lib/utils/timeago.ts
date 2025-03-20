@@ -1,6 +1,4 @@
-import { derived, writable } from "svelte/store";
-
-function timeAgo(dateString: string): string {
+export function timeAgo(dateString: string): string {
 	const date = new Date(dateString);
 	const now = new Date();
 	const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -18,14 +16,11 @@ function timeAgo(dateString: string): string {
 
 	for (const { unit, seconds } of intervals) {
 		const interval = Math.floor(diffInSeconds / seconds);
-		if (interval >= 1) return rtf.format(-interval, unit);
+		if (interval >= 1) return rtf.format(
+			-interval,
+			<"year" | "years" | "quarter" | "quarters" | "month" | "months" | "week" | "weeks" | "day" | "days" | "hour" | "hours" | "minute" | "minutes" | "second" | "seconds">unit
+		);
 	}
 
 	return "just now";
 }
-
-export const timestamp = writable<string | null>(null);
-
-export const timeAgoStore = derived(timestamp, ($timestamp) =>
-	$timestamp ? timeAgo($timestamp) : "unknown"
-);

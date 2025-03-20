@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
-	import { timestamp, timeAgoStore } from '$lib/stores/timeAgo';
+	import { timeAgo } from '$lib/utils/timeago';
 
 	let {
 		source,
@@ -38,10 +38,7 @@
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
-
-	$effect(() => {
-		timestamp.set(lastLogin);
-	});
+	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
 
 	const stats = [
 		{ name: 'Performance Points', value: performancePoints, id: 'pp' },
@@ -96,7 +93,7 @@
 	</div>
 	<div class="last-login">
 		<h3 class="text-sm text-gray-400">Last Login</h3>
-		<h1 class="font-bold text-xs">{$timeAgoStore}</h1>
+		<h1 class="font-bold text-xs">{formattedLastLogin}</h1>
 	</div>
 {/snippet}
 
