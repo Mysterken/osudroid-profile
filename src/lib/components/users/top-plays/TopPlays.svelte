@@ -7,8 +7,8 @@
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
-	let { topPlays, beatmaps }: { topPlays: Play[], beatmaps: (BeatmapExtended | null)[] } = $props();
-	let itemsToShow = $state(5);
+	let { topPlays, beatmaps, itemsToShow = $bindable(5) }:
+		{ topPlays: Play[], beatmaps: (BeatmapExtended | null)[], itemsToShow: number } = $props();
 </script>
 
 <ContentCard

@@ -23,6 +23,8 @@
 	let beatmaps: (BeatmapExtended | null)[] = [];
 
 	let isLoading = true;
+	let topPlaysToShow = 5;
+	let recentPlaysToShow = 5;
 
 	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
 		try {
@@ -63,14 +65,14 @@
 		const userId = window.location.pathname.split('/').pop() || '';
 		user = await fetchUser(userId);
 
-		if (user?.Source === "api") {
+		if (user?.Source === 'api') {
 			({
 				GlobalRank: globalRank,
 				CountryRank: countryRank,
 				Registered: registered,
 				LastLogin: lastLogin
 			} = user);
-		} else if (user?.Source === "scraper") {
+		} else if (user?.Source === 'scraper') {
 			({
 				ScoreRank: scoreRank,
 				PPRank: ppRank
@@ -130,8 +132,8 @@
 						username={user.Username}
 						country={user.Region}
 					/>
-					<TopPlays topPlays={user.Top50Plays} {beatmaps} />
-					<RecentPlays recentPlays={user.Last50Scores} />
+					<TopPlays topPlays={user.Top50Plays} itemsToShow={topPlaysToShow} {beatmaps} />
+					<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
 				</div>
 			</div>
 
@@ -161,8 +163,8 @@
 					registered={registered}
 					lastLogin={lastLogin}
 				/>
-				<TopPlays topPlays={user.Top50Plays} {beatmaps} />
-				<RecentPlays recentPlays={user.Last50Scores}/>
+				<TopPlays topPlays={user.Top50Plays} itemsToShow={topPlaysToShow} {beatmaps} />
+				<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
 			</div>
 
 		{:else}

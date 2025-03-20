@@ -6,8 +6,8 @@
 	import type { ApiPlay, ScraperPlay } from '$lib/models/play.js';
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 
-	let { recentPlays }: { recentPlays: ApiPlay[] | ScraperPlay[] } = $props();
-	let itemsToShow = $state(5);
+	let { recentPlays, itemsToShow = $bindable(5) }:
+		{ recentPlays: ApiPlay[] | ScraperPlay[], itemsToShow: number } = $props();
 </script>
 
 <ContentCard
