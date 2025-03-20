@@ -13,18 +13,19 @@
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 	import type { Play } from '$lib/models/play';
 
-	let user: ApiPlayer | ScraperPlayer | null = null;
-	let globalRank: number | null = null;
-	let countryRank: number | null = null;
-	let scoreRank: number | null = null;
-	let ppRank: number | null = null;
-	let registered: string | null = null;
-	let lastLogin: string | null = null;
-	let beatmaps: (BeatmapExtended | null)[] = [];
+	let user = $state<ApiPlayer | ScraperPlayer | null>(null);
+	let globalRank = $state(0);
+	let countryRank = $state(0);
+	let scoreRank = $state(0);
+	let ppRank = $state(0);
+	let registered = $state('');
+	let lastLogin = $state('');
+	let beatmaps = $state([] as (BeatmapExtended | null)[]);
 
-	let isLoading = true;
-	let topPlaysToShow = 5;
+	let isLoading = $state(true);
+	let topPlaysToShow = $state(5);
 	let recentPlaysToShow = 5;
+	let isFetchingMore = false;
 
 	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
 		try {
@@ -61,6 +62,17 @@
 		beatmaps = [...beatmaps, ...additionalBeatmaps];
 	}
 
+	async function fetchRemainingBeatmaps(topPlays: Play[]) {
+		if (isFetchingMore || beatmaps.length >= topPlays.length) return;
+		isFetchingMore = true;
+
+		const requests = topPlays.slice(25, 50).map((play) => fetchBeatmapData(play.Filename));
+		const remainingBeatmaps = await Promise.all(requests);
+
+		beatmaps = [...beatmaps, ...remainingBeatmaps];
+		isFetchingMore = false;
+	}
+
 	onMount(async () => {
 		const userId = window.location.pathname.split('/').pop() || '';
 		user = await fetchUser(userId);
@@ -84,12 +96,21 @@
 		// Fetch beatmaps for first 5 top plays
 		if (user?.Top50Plays) {
 			await fetchInitialBeatmaps(user.Top50Plays);
-			// Start fetching additional 25 beatmaps in the background
+			// Start fetching additional 20 beatmaps in the background
 			fetchAdditionalBeatmaps(user.Top50Plays);
 		}
 
 		isLoading = false;
 	});
+
+	// Fetch remaining beatmaps **when user requests more plays**
+	$effect(() => {
+		console.log(topPlaysToShow)
+		if (topPlaysToShow === 25 && user?.Top50Plays) {
+			fetchRemainingBeatmaps(user.Top50Plays);
+		}
+	});
+
 </script>
 
 <SearchBar />
@@ -132,7 +153,7 @@
 						username={user.Username}
 						country={user.Region}
 					/>
-					<TopPlays topPlays={user.Top50Plays} itemsToShow={topPlaysToShow} {beatmaps} />
+					<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} />
 					<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
 				</div>
 			</div>
@@ -163,7 +184,7 @@
 					registered={registered}
 					lastLogin={lastLogin}
 				/>
-				<TopPlays topPlays={user.Top50Plays} itemsToShow={topPlaysToShow} {beatmaps} />
+				<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} />
 				<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
 			</div>
 
