@@ -57,7 +57,7 @@
 			<span>{index + 1}</span>
 		</div>
 
-		<div class="flex flex-grow items-center">
+		<div class="flex flex-grow items-center" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
 			{#if !isOpen}
 				<LetterRank sx="text-2xl font-bold size-10" {rank} />
 			{/if}

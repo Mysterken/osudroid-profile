@@ -66,7 +66,7 @@
 	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5">
 		<LetterRank sx="text-5xl font-bold min-w-[60px]" {rank} />
 
-		<div class="text-left pl-2.5">
+		<div class="text-left pl-2.5" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
 			<div class="flex h-14 items-center">
 				<h2 class="text-xl">{songTitle}</h2>
 			</div>
