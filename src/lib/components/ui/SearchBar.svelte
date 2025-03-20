@@ -1,5 +1,14 @@
 <script lang="ts">
 	import { Search } from 'lucide-svelte';
+
+	let searchQuery = $state('');
+
+	// TODO: optimize user search
+	function handleSearch(event: KeyboardEvent) {
+		if (event.key === 'Enter' && searchQuery.trim() !== '') {
+			location.replace(`/users/${encodeURIComponent(searchQuery.trim())}`)
+		}
+	}
 </script>
 
 <nav
@@ -24,7 +33,13 @@
 			<div class="ig-cell preset-tonal">
 				<Search size={16} />
 			</div>
-			<input class="ig-input text-white shadow-inner" type="search" placeholder="Search player..." />
+			<input
+				class="ig-input text-white shadow-inner"
+				type="search"
+				placeholder="Search player uid..."
+				bind:value={searchQuery}
+				onkeydown={handleSearch}
+			/>
 		</div>
 	</div>
 </nav>

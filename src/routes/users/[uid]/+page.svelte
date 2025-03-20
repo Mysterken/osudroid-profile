@@ -98,6 +98,15 @@
 			fetchRemainingBeatmaps(user.Top50Plays);
 		}
 	});
+
+	$effect(() => {
+		if (user?.Username) {
+			document.title = `${user.Username}'s Profile - osu!droid`;
+		} else {
+			document.title = 'User Profile - osu!droid';
+		}
+	});
+
 </script>
 
 <SearchBar />
