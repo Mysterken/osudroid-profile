@@ -47,7 +47,8 @@
 	flex
 	card
 	border-color rounded-[5px] border-[1px] border-[#E5E5E5]
-	w-full h-[120px]"
+	w-full h-[120px]
+	transition-transform transform hover:scale-[1.01] hover:opacity-95 duration-200"
 	style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 >
 	<div

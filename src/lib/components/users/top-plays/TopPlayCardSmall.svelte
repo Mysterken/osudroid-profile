@@ -48,7 +48,15 @@
 		'url(/backgrounds/black_cube_pattern.webp)';
 </script>
 
-<div class="top-play card border-color rounded-[5px] border-[1px] border-[#E5E5E5] w-full">
+<div
+	class="
+	top-play card
+	border-color
+ 	border-[1px] border-[#E5E5E5]
+ 	rounded-[5px]
+ 	w-full
+ 	transition-transform transform hover:scale-[1.01] hover:opacity-95 duration-200"
+>
 	<div class="showoff flex pr-5 min-h-[70px]"
 			 style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 	>

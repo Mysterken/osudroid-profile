@@ -49,9 +49,10 @@
 	recent-play
 	card
 	rounded-[5px]
-	bg-[#E5E5E5]
+	bg-[#E5E5E5] hover:bg-[#c9c9c9]
 	text-black
-	w-full"
+	w-full
+	transition-transform transform hover:scale-[1.01] hover:opacity-90 duration-200"
 >
 	<div class="showoff flex px-2.5 py-1 gap-1.5 min-h-[40px]">
 		{#if !isOpen}

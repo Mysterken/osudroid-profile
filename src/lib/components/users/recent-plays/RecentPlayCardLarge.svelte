@@ -44,12 +44,14 @@
 	card
 	flex items-center
 	border-color rounded-[5px]
-	bg-[#E5E5E5]
+	bg-[#E5E5E5] hover:bg-[#d5d5d5]
 	text-black
 	min-h-[80px]
 	px-4 py-2 gap-5
-	w-full"
+	w-full
+	transition-transform transform hover:scale-[1.01] hover:opacity-90 duration-200"
 >
+
 	<LetterRank
 		sx="
 		flex
@@ -68,8 +70,6 @@
 			{#each mods as mod, i (i)}
 				<ModIcon size={28} {mod} />
 			{/each}
-<!--			<img class="max-w-[28px] h-auto object-contain" src="/modicons/HD.png" alt="hidden mod icon" />-->
-<!--			<img class="max-w-[28px] h-auto object-contain" src="/modicons/HR.png" alt="hard rock mod icon" />-->
 		</div>
 	</div>
 
