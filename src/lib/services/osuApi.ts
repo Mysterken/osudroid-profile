@@ -65,8 +65,12 @@ async function refreshTokenIfNeeded(): Promise<string> {
  */
 export async function lookupBeatmap(filename: string): Promise<BeatmapExtended> {
 	try {
-		const encodedFilename = encodeURIComponent(filename)
-		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?filename=${encodedFilename}.osu`);
+		const decodedFilename = decodeURIComponent(filename)
+			.replace(/[/?:*"]/g, '') // Remove /, ?, :, *, "
+			.replace(/&/g, '%26') // Replace & with %26
+			.replace(/#/g, '%23'); // Replace # with %23
+
+		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?filename=${decodedFilename}.osu`);
 		return response.data;
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {

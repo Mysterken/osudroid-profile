@@ -40,6 +40,7 @@
 
 	async function fetchBeatmapData(filename: string): Promise<BeatmapExtended | null> {
 		try {
+			filename = encodeURIComponent(filename);
 			const response = await fetch(`/api/beatmaps/${filename}`);
 			if (!response.ok) return null;
 			return await response.json();
