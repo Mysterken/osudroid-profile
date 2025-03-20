@@ -1,7 +1,7 @@
 <script lang="ts">
 	let { mod, size = 24 }: { mod: string; size?: number } = $props();
 
-	let imgSrc = `/modicons/${mod}.png`;
+	let imgSrc = `/modicons/${mod}.webp`;
 
 	function shouldDisplayModIcon(mod: string): boolean {
 		return !(mod === "NM" || mod === "None" || mod.startsWith("x"));
