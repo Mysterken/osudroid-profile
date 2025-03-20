@@ -65,7 +65,8 @@ async function refreshTokenIfNeeded(): Promise<string> {
  */
 export async function lookupBeatmap(filename: string): Promise<BeatmapExtended> {
 	try {
-		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?filename=${filename}`);
+		const encodedFilename = encodeURIComponent(filename)
+		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?filename=${encodedFilename}.osu`);
 		return response.data;
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
