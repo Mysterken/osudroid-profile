@@ -3,6 +3,7 @@
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
+	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
 	let {
 		index,
@@ -13,7 +14,8 @@
 		rank,
 		miss,
 		accuracy,
-		pp
+		pp,
+		beatmap
 	}: {
 		index: number;
 		filename: string;
@@ -24,6 +26,7 @@
 		miss: number;
 		accuracy: number;
 		pp: number | null;
+		beatmap: BeatmapExtended | null;
 	} = $props();
 
 	let isOpen = $state(false);
@@ -39,15 +42,22 @@
 	let rawPP = playUtils.calculateRawPP(pp, index + 1).toFixed(2);
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
+
+	let backgroundImg = beatmap?.beatmapset?.covers?.cover ?
+		`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})` :
+		'url(/backgrounds/black_cube_pattern.webp)';
 </script>
 
 <div class="top-play card border-color rounded-[5px] border-[1px] border-[#E5E5E5] w-full">
-	<div class="showoff flex pr-5 min-h-[70px]">
-		<div class="flex counter bg-[#E5E5E5] size-6 rounded-tl-[4px] rounded-br-[5px] text-black font-bold items-center justify-center">
+	<div class="showoff flex pr-5 min-h-[70px]"
+			 style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
+	>
+		<div
+			class="flex counter bg-[#E5E5E5] size-6 rounded-tl-[4px] rounded-br-[5px] text-black font-bold items-center justify-center">
 			<span>{index + 1}</span>
 		</div>
 
-		<div class="flex flex-grow bg-[#2A2A2A] items-center">
+		<div class="flex flex-grow items-center">
 			{#if !isOpen}
 				<LetterRank sx="text-2xl font-bold size-10" {rank} />
 			{/if}

@@ -5,8 +5,9 @@
 	import TopPlayCardLarge from '$lib/components/users/top-plays/TopPlayCardLarge.svelte';
 	import type { Play } from '$lib/models/play';
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
+	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
-	let { topPlays }: { topPlays: Play[] } = $props();
+	let { topPlays, beatmaps }: { topPlays: Play[], beatmaps: (BeatmapExtended | null)[] } = $props();
 	let itemsToShow = $state(5);
 </script>
 
@@ -46,6 +47,7 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
+					beatmap={beatmaps ? beatmaps[index] : null}
 				/>
 			{/each}
 		</div>
@@ -63,6 +65,7 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
+					beatmap={beatmaps ? beatmaps[index] : null}
 				/>
 			{/each}
 		</div>

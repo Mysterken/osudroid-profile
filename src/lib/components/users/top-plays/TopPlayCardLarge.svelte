@@ -2,6 +2,7 @@
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
+	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
 	let {
 		index,
@@ -12,7 +13,8 @@
 		rank,
 		miss,
 		accuracy,
-		pp
+		pp,
+		beatmap
 	}: {
 		index: number;
 		filename: string;
@@ -23,6 +25,7 @@
 		miss: number;
 		accuracy: number;
 		pp: number | null;
+		beatmap: BeatmapExtended | null;
 	} = $props();
 
 	let formattedScore = score.toLocaleString();
@@ -32,6 +35,10 @@
 	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
+
+	let backgroundImg = beatmap?.beatmapset?.covers?.cover ?
+		`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})` :
+		'url(/backgrounds/black_cube_pattern.webp)';
 </script>
 
 <div
@@ -41,6 +48,7 @@
 	card
 	border-color rounded-[5px] border-[1px] border-[#E5E5E5]
 	w-full h-[120px]"
+	style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 >
 	<div
 		class="
@@ -86,7 +94,9 @@
 
 	<div
 		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-[120px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]">
-		<p class="absolute left-1/2 -translate-x-1/2 text-xl font-bold">{formattedPP}<span class="text-[#A7A3A3]">pp</span></p>
+		<p class="absolute left-1/2 -translate-x-1/2 text-xl font-bold">
+			{formattedPP}<span class="text-[#A7A3A3]">pp</span>
+		</p>
 		<p class="mt-auto self-end">({rawPP}<span class="text-[#A7A3A3]">pp</span>)</p>
 	</div>
 </div>
