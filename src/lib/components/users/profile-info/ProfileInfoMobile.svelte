@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { timeAgo } from '$lib/utils/timeago';
+	import { getCountryName } from '$lib/utils/countries';
 
 	let {
 		source,
@@ -39,6 +40,7 @@
 	let formattedPlaycount = playcount.toLocaleString();
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
 	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
+	let countryName = getCountryName(country);
 
 	function defaultAvatar(event: Event) {
 		(event.target as HTMLInputElement).src = '/default/avatar.webp';
@@ -59,7 +61,7 @@
 		</div>
 		<div class="user-info flex flex-col justify-end text-left">
 			<h1 class="font-bold text-lg">{username}</h1>
-			<p class="text-sm text-gray-400">{country}</p>
+			<p class="text-sm text-gray-400"><span class="rounded-[2px] fi fi-{country} mr-2"></span>{countryName}</p>
 		</div>
 	</div>
 {/snippet}
