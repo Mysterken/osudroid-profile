@@ -69,7 +69,7 @@
 		<p class="text-[#505050] text-sm italic leading-3.5">{difficulty}</p>
 		<div class="mods flex gap-[1px]">
 			{#each mods as mod, i (i)}
-				<ModIcon size={28} {mod} />
+				<ModIcon size={28} length={mods.length} {mod} />
 			{/each}
 		</div>
 	</div>
