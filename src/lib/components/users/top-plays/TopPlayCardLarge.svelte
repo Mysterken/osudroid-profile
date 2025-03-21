@@ -88,7 +88,7 @@
 
 			<div class="flex gap-[1px] mt-auto">
 				{#each mods as mod (mod)}
-					<ModIcon size={42} {mod} />
+					<ModIcon size={42} length={mods.length} {mod} />
 				{/each}
 			</div>
 		</div>

@@ -117,7 +117,7 @@
 			{:else}
 				<div class="mods flex gap-[1px]">
 					{#each mods as mod, i (i)}
-						<ModIcon {mod} />
+						<ModIcon length={mods.length} {mod} />
 					{/each}
 				</div>
 			{/if}
