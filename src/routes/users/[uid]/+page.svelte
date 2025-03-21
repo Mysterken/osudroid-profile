@@ -13,6 +13,7 @@
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 	import type { Play } from '$lib/models/play';
 	import UserIsLoading from '$lib/components/skeletons/UserIsLoading.svelte';
+	import UserNotFound from '$lib/components/users/not-found/UserNotFound.svelte';
 
 	let user = $state<ApiPlayer | ScraperPlayer | null>(null);
 	let globalRank = $state(0);
@@ -31,6 +32,7 @@
 	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
 		try {
 			const response = await fetch(`/api/users/${userId}`);
+			// const response = await fetch(`/test/33306.json`);
 			if (!response.ok) return null;
 			return (await response.json()) as ApiPlayer | ScraperPlayer;
 		} catch (error) {
@@ -101,10 +103,12 @@
 	});
 
 	$effect(() => {
-		if (user?.Username) {
+		if (isLoading) {
+			document.title = 'Loading... - osu!droid';
+		} else if (user?.Username) {
 			document.title = `${user.Username}'s Profile - osu!droid`;
 		} else {
-			document.title = 'User Profile - osu!droid';
+			document.title = 'User Not Found - osu!droid';
 		}
 	});
 
@@ -186,7 +190,7 @@
 			</div>
 
 		{:else}
-			<p>User not found.</p>
+			<UserNotFound />
 		{/if}
 	{/if}
 </ContentLayout>
