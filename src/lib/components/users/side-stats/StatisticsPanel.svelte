@@ -39,7 +39,6 @@
 			</div>
 		{/each}
 	</div>
-
 {/snippet}
 
 <ContentCard sx="!p-2.5 flex flex-col gap-2.5">

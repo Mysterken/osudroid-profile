@@ -12,6 +12,7 @@
 	import UserInfoPanel from '$lib/components/users/side-stats/UserInfoPanel.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 	import type { Play } from '$lib/models/play';
+	import UserIsLoading from '$lib/components/skeletons/UserIsLoading.svelte';
 
 	let user = $state<ApiPlayer | ScraperPlayer | null>(null);
 	let globalRank = $state(0);
@@ -113,7 +114,7 @@
 
 <ContentLayout>
 	{#if isLoading}
-		<p>Loading user data...</p>
+		<UserIsLoading />
 	{:else}
 		{#if user}
 			<!-- Desktop Layout -->
