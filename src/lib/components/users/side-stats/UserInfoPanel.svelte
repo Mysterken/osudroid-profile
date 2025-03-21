@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tooltip } from '$lib/actions/tooltip';
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { InfoIcon } from 'lucide-svelte';
 	import { timeAgo } from '$lib/utils/timeago';
@@ -20,11 +21,11 @@
 			<tbody>
 			<tr>
 				<td class="pb-1 text-left">Registered</td>
-				<td class="pb-1 text-right font-bold">{formattedRegistered}</td>
+				<td class="pb-1 text-right font-bold" use:tooltip={{text: registered}}>{formattedRegistered}</td>
 			</tr>
 			<tr>
 				<td class="pb-1 text-left">Last Login</td>
-				<td class="pb-1 text-right font-bold">{formattedLastLogin}</td>
+				<td class="pb-1 text-right font-bold" use:tooltip={{text: lastLogin}}>{formattedLastLogin}</td>
 			</tr>
 			</tbody>
 		</table>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tooltip } from '$lib/actions/tooltip';
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
@@ -95,9 +96,11 @@
 
 	<div
 		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-[120px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]">
-		<p class="absolute left-1/2 -translate-x-1/2 text-xl font-bold">
+		<p class="absolute left-1/2 -translate-x-1/2 text-xl font-bold" use:tooltip={{text: pp?.toFixed(2) + 'pp'}}>
 			{formattedPP}<span class="text-[#A7A3A3]">pp</span>
 		</p>
-		<p class="mt-auto self-end">({rawPP}<span class="text-[#A7A3A3]">pp</span>)</p>
+		<p class="mt-auto self-end" use:tooltip={{text: playUtils.calculateRawPP(pp, index + 1).toFixed(2) + 'pp'}}>
+			({rawPP}<span class="text-[#A7A3A3]">pp</span>)
+		</p>
 	</div>
 </div>

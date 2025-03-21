@@ -1,8 +1,14 @@
 export function tooltip(
 	node: HTMLElement,
-	params: { text: string; direction?: 'top' | 'bottom' | 'left' | 'right' }
+	params: { text?: string | null; direction?: 'top' | 'bottom' | 'left' | 'right' }
 ) {
-	const { text, direction = 'bottom' } = params;
+	const { text = '', direction = 'bottom' } = params;
+
+	if (!text) {
+		return {
+			destroy() {}
+		};
+	}
 
 	const tooltip = document.createElement('div');
 	tooltip.textContent = text;

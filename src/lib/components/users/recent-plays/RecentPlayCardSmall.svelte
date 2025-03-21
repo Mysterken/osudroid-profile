@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tooltip } from '$lib/actions/tooltip';
 	import { ChevronDownIcon } from 'lucide-svelte';
 	import { playUtils } from '$lib/utils/playUtils';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
@@ -115,7 +116,7 @@
 				class="flex flex-col text-right"
 			>
 				<p class="text-sm italic">{formattedScore} / {formattedCombo}x / {calculatedAccuracy}% / {miss} m</p>
-				<p class="text-[0.5rem] text-[#505050] italic">{formattedDate}</p>
+				<p class="text-[0.5rem] text-[#505050] italic" use:tooltip={{text: date}}>{formattedDate}</p>
 			</div>
 		</div>
 	{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tooltip } from '$lib/actions/tooltip';
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { ChartPieIcon } from 'lucide-svelte';
 
@@ -16,12 +17,13 @@
 		playcount: number;
 	} = $props();
 
+	let formattedPerformancePoints = Math.round(performancePoints);
 	let calculatedAccuracy = source === 'api' ? (accuracy * 100).toFixed(2) : accuracy;
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
 
 	let stats = [
-		{ name: 'Performance Points', value: performancePoints, id: 'pp' },
+		{ name: 'Performance Points', value: formattedPerformancePoints, id: 'pp', info: performancePoints },
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
@@ -34,7 +36,7 @@
 		{#each stats as stat (stat.id)}
 			<tr>
 				<td class="pb-1 text-left">{stat.name}</td>
-				<td class="pb-1 text-right font-bold">{stat.value}</td>
+				<td class="pb-1 text-right font-bold" use:tooltip={{text: String(stat.info ?? "")}}>{stat.value}</td>
 			</tr>
 		{/each}
 		</tbody>

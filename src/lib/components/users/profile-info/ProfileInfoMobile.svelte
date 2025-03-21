@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tooltip } from '$lib/actions/tooltip';
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { timeAgo } from '$lib/utils/timeago';
 	import { getCountryName } from '$lib/utils/countries';
@@ -35,6 +36,7 @@
 		lastLogin: string | null;
 	} = $props();
 
+	let formattedPerformancePoints = Math.round(performancePoints);
 	let calculatedAccuracy = source === 'api' ? (accuracy * 100).toFixed(2) : accuracy;
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
@@ -47,7 +49,7 @@
 	}
 
 	const stats = [
-		{ name: 'Performance Points', value: performancePoints, id: 'pp' },
+		{ name: 'Performance Points', value: formattedPerformancePoints, id: 'pp', info: performancePoints },
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
@@ -85,7 +87,9 @@
 		{#each stats as stat (stat.id)}
 			<tr>
 				<td class="py-0.5 tablet-sm:py-1 text-left">{stat.name}</td>
-				<td class="py-0.5 tablet-sm:py-1 text-right font-bold">{stat.value}</td>
+				<td class="py-0.5 tablet-sm:py-1 text-right font-bold" use:tooltip={{text: String(stat.info ?? "")}}>
+					{stat.value}
+				</td>
 			</tr>
 		{/each}
 		</tbody>
@@ -95,11 +99,11 @@
 {#snippet userDates()}
 	<div class="registered-date">
 		<h3 class="text-sm text-gray-400">Registered</h3>
-		<h1 class="font-bold text-xs">{formattedRegistered}</h1>
+		<h1 class="font-bold text-xs" use:tooltip={{text: registered}}>{formattedRegistered}</h1>
 	</div>
 	<div class="last-login">
 		<h3 class="text-sm text-gray-400">Last Login</h3>
-		<h1 class="font-bold text-xs">{formattedLastLogin}</h1>
+		<h1 class="font-bold text-xs" use:tooltip={{text: lastLogin}}>{formattedLastLogin}</h1>
 	</div>
 {/snippet}
 

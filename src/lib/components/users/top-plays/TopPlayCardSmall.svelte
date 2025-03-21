@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ChevronDownIcon } from 'lucide-svelte';
+	import { tooltip } from '$lib/actions/tooltip';
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
@@ -38,8 +39,8 @@
 	let formattedScore = score.toLocaleString();
 	let formattedCombo = combo.toLocaleString();
 	let calculatedAccuracy = (accuracy * 100).toFixed(2);
-	let formattedPP = pp?.toFixed(2);
-	let rawPP = playUtils.calculateRawPP(pp, index + 1).toFixed(2);
+	let formattedPP = pp ? Math.round(pp) : 0;
+	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 
@@ -121,7 +122,9 @@
 				</div>
 			{/if}
 			<p>{calculatedAccuracy}%</p>
-			<p class="ml-auto">{formattedPP}<span class="text-[#505050]">pp</span></p>
+			<p class="ml-auto" use:tooltip={{text: pp?.toFixed(2) + 'pp'}}>
+				{formattedPP}<span class="text-[#505050]">pp</span>
+			</p>
 		</div>
 		{#if isOpen}
 			<div class="flex text-xs italic text-left gap-1.5">
@@ -131,7 +134,9 @@
 					{/each}
 				</div>
 				<p>{formattedScore} / {formattedCombo}x / {miss} miss</p>
-				<p class="ml-auto">({rawPP}<span class="text-[#505050]">pp</span>)</p>
+				<p class="ml-auto" use:tooltip={{text: playUtils.calculateRawPP(pp, index + 1).toFixed(2) + 'pp'}}>
+					({rawPP}<span class="text-[#505050]">pp</span>)
+				</p>
 			</div>
 		{/if}
 	</div>

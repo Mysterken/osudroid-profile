@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tooltip } from '$lib/actions/tooltip';
 	import { playUtils } from '$lib/utils/playUtils';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
@@ -76,6 +77,6 @@
 	<div class="text-right ml-auto min-w-max">
 		<h2 class="text-base font-bold leading-3.5">{calculatedAccuracy}%</h2>
 		<p class="text-sm italic">{formattedScore} / {formattedCombo}x / {miss} miss</p>
-		<p class="text-[#505050] text-xs leading-3">{formattedDate}</p>
+		<p class="text-[#505050] text-xs leading-3" use:tooltip={{text: date}}>{formattedDate}</p>
 	</div>
 </div>

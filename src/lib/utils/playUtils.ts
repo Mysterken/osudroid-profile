@@ -20,14 +20,14 @@ function convertStringIntoPlayDetails(text: string) {
 
 	// Extract values, ensuring defaults in case of missing data
 	const date = dateMatch ? dateMatch[0] : null;
-	const score = scoreMatch ? parseInt(scoreMatch[0].replace(/,/g, ""), 10) : 0;
+	const score = scoreMatch ? parseInt(scoreMatch[0].replace(/,/g, ''), 10) : 0;
 	const combo = comboMatch ? parseInt(comboMatch[0], 10) : 0;
 	const accuracy = accuracyMatch ? parseFloat(accuracyMatch[0]) : 0.0;
 
-	let mods: string[] = ["NM"]; // Default to "NM" if no mods are found
+	let mods: string[] = ['NM']; // Default to "NM" if no mods are found
 	if (longModsMatch) {
 		mods = longModsMatch[0]
-			.split(", ")
+			.split(', ')
 			.filter(Boolean) // Remove empty values
 			.map(convertLongModNameToAlias);
 	}
@@ -37,36 +37,51 @@ function convertStringIntoPlayDetails(text: string) {
 		score,
 		mods,
 		combo,
-		accuracy,
+		accuracy
 	};
 }
+
+const modMapping: Record<string, string> = {
+	Precise: 'PR',
+	NoFail: 'NF',
+	Easy: 'EZ',
+	Hidden: 'HD',
+	HardRock: 'HR',
+	DoubleTime: 'DT',
+	HalfTime: 'HT',
+	NightCore: 'NC',
+	Flashlight: 'FL',
+	Relax: 'RX',
+	Autopilot: 'AP',
+	SpunOut: 'SO',
+	Perfect: 'PF',
+	SuddenDeath: 'SD'
+};
 
 /**
  * Converts long mod names to their alias.
  * Example: "NoFail" → "NF"
  */
 function convertLongModNameToAlias(mod: string): string {
-	const modMapping: Record<string, string> = {
-		"Precise": "PR",
-		"NoFail": "NF",
-		"Easy": "EZ",
-		"Hidden": "HD",
-		"HardRock": "HR",
-		"DoubleTime": "DT",
-		"HalfTime": "HT",
-		"NightCore": "NC",
-		"Flashlight": "FL",
-		"Relax": "RX",
-		"Autopilot": "AP",
-		"SpunOut": "SO",
-		"Perfect": "PF",
-		"SuddenDeath": "SD",
-	};
+	if (mod === 'None') return 'NM';
+	if (mod.startsWith('x')) return mod;
 
-	if (mod === "None") return "NM"; // Default to No Mod (NM)
-	if (mod.startsWith("x")) return mod; // Speed multipliers (e.g., x1.10)
+	return modMapping[mod] || mod;
+}
 
-	return modMapping[mod] || mod; // Default to original if not mapped
+/**
+ * Converts mod alias to their long name.
+ * Example: "NF" → "NoFail"
+ */
+function convertAliasToLongModName(alias: string): string {
+	if (alias === 'NM') return 'None';
+	if (alias.startsWith('x')) return alias;
+
+	const reverseMapping = Object.fromEntries(
+		Object.entries(modMapping).map(([key, value]) => [value, key])
+	);
+
+	return reverseMapping[alias] || alias;
 }
 
 /**
@@ -90,45 +105,45 @@ export function convertTitleToBeatmapMetadata(title: string): {
 	difficulty: string;
 } {
 	// Remove .osu from the title at the end
-	title = title.replace(/\.osu$/, "");
+	title = title.replace(/\.osu$/, '');
 
 	// Helper function to escape regex special characters
 	function escapeRegExp(str: string): string {
 		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 	}
 
-	let songArtist = "";
+	let songArtist = '';
 	const songArtistMatch = title.match(/^(.*?) - /);
 	if (songArtistMatch) {
 		songArtist = songArtistMatch[1];
 		// Remove the matched artist portion from the title
-		title = title.replace(new RegExp(escapeRegExp(songArtistMatch[0]), "g"), "");
+		title = title.replace(new RegExp(escapeRegExp(songArtistMatch[0]), 'g'), '');
 	}
 
-	let difficulty = "";
+	let difficulty = '';
 	const strippedTitleMatch = title.match(/.*?\) (?=\[)/);
 	if (strippedTitleMatch) {
 		const strippedTitle = strippedTitleMatch[0];
 		// Remove the strippedTitle from the title to get difficulty part
-		difficulty = title.replace(new RegExp(escapeRegExp(strippedTitle), "g"), "");
-		title = title.replace(new RegExp(escapeRegExp(difficulty), "g"), "");
+		difficulty = title.replace(new RegExp(escapeRegExp(strippedTitle), 'g'), '');
+		title = title.replace(new RegExp(escapeRegExp(difficulty), 'g'), '');
 	}
 
-	let songTitle = "";
+	let songTitle = '';
 	const songTitleMatch = title.match(/.*(?= \()/);
 	if (songTitleMatch) {
 		songTitle = songTitleMatch[0];
-		title = title.replace(new RegExp(escapeRegExp(songTitle), "g"), "");
+		title = title.replace(new RegExp(escapeRegExp(songTitle), 'g'), '');
 	}
 
-	let mapper = "";
+	let mapper = '';
 	const mapperMatch = title.match(/(?<= \().*(?=\))/);
 	if (mapperMatch) {
 		mapper = mapperMatch[0];
 	}
 
 	// Remove surrounding brackets from difficulty (e.g., "[Pedri]" -> "Pedri")
-	if (difficulty.startsWith("[") && difficulty.endsWith("]")) {
+	if (difficulty.startsWith('[') && difficulty.endsWith(']')) {
 		difficulty = difficulty.substring(1, difficulty.length - 1);
 	}
 
@@ -136,7 +151,7 @@ export function convertTitleToBeatmapMetadata(title: string): {
 		songArtist,
 		songTitle,
 		mapper,
-		difficulty,
+		difficulty
 	};
 }
 
@@ -144,7 +159,6 @@ export const playUtils = {
 	calculateRawPP,
 	convertStringIntoPlayDetails,
 	convertLongModNameToAlias,
+	convertAliasToLongModName,
 	convertTitleToBeatmapMetadata
 };
-
-
