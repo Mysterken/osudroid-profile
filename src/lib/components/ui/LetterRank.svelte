@@ -5,8 +5,8 @@
 	function getRankColor(rank: string): { color: string; displayLetter: string } {
 		const rankMap: Record<string, { color: string; displayLetter: string }> = {
 			"XH": { color: "#FFFFFF", displayLetter: "SS" },
-			"X": { color: "#FFFFFF", displayLetter: "S" },
 			"SH": { color: "#FFFFFF", displayLetter: "S" },
+			"X": { color: "#FFFF00", displayLetter: "SS" },
 			"SS": { color: "#FFFF00", displayLetter: "SS" },
 			"S": { color: "#FFFF00", displayLetter: "S" },
 			"A": { color: "#008000", displayLetter: "A" },
