@@ -31,16 +31,15 @@
 </script>
 
 {#snippet userStats()}
-	<table class="w-full text-sm max-w-[400px]">
-		<tbody>
+	<div class="space-y-1">
 		{#each stats as stat (stat.id)}
-			<tr>
-				<td class="pb-1 text-left">{stat.name}</td>
-				<td class="pb-1 text-right font-bold" use:tooltip={{text: String(stat.info ?? "")}}>{stat.value}</td>
-			</tr>
+			<div class="flex justify-between items-center">
+				<span class="text-left whitespace-nowrap">{stat.name}</span>
+				<span class="text-right font-bold truncate" use:tooltip={{text: String(stat.info ?? "")}}>{stat.value}</span>
+			</div>
 		{/each}
-		</tbody>
-	</table>
+	</div>
+
 {/snippet}
 
 <ContentCard sx="!p-2.5 flex flex-col gap-2.5">
