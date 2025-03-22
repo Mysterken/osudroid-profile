@@ -13,8 +13,8 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		const cachedData = beatmapCache.get(filename);
 		if (cachedData && cachedData.expires > Date.now()) {
-			console.log(`✅ Cache hit for beatmap: ${filename}`);
-			return json(cachedData.data);
+			const data = cachedData.data;
+			return json(data ? data : { error: 'Beatmap not found' }, { status: data ? 200 : 404 });
 		}
 
 		const beatmap = await lookupBeatmap(filename);
