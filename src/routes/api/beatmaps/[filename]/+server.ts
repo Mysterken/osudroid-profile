@@ -5,7 +5,7 @@ import { ApiError, NotFoundError } from '$lib/services/errors/osuApiError';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
 const CACHE_TTL = 60 * 60 * 1000; // ⏳ 1 hour cache duration
-const beatmapCache = new Map<string, { data: BeatmapExtended; expires: number }>();
+const beatmapCache = new Map<string, { data: BeatmapExtended | null; expires: number }>();
 
 export const GET: RequestHandler = async ({ params }) => {
 	try {
@@ -25,6 +25,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		return json(beatmap);
 	} catch (error) {
 		if (error instanceof NotFoundError) {
+			beatmapCache.set(params.filename, { data: null, expires: Date.now() + CACHE_TTL });
 			return json({ error: error.message }, { status: 404 });
 		}
 
