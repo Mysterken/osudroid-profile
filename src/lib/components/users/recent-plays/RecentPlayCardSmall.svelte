@@ -71,7 +71,7 @@
 			/>
 		{/if}
 
-		<div class="text-left">
+		<div class="text-left overflow-hidden">
 			<h2 class="text-sm leading-4">{songArtist} - {songTitle}</h2>
 			<p class="text-xs text-[#505050] italic leading-3.5">{difficulty}</p>
 		</div>
