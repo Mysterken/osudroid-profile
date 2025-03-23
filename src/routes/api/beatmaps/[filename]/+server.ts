@@ -4,7 +4,7 @@ import { json } from '@sveltejs/kit';
 import { ApiError, NotFoundError } from '$lib/services/errors/osuApiError';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
-const CACHE_TTL = 60 * 60 * 1000; // ⏳ 1 hour cache duration
+const CACHE_TTL = 24 * 60 * 60 * 1000; // ⏳ 24 hour cache duration
 const beatmapCache = new Map<string, { data: BeatmapExtended | null; expires: number }>();
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -14,6 +14,9 @@ export const GET: RequestHandler = async ({ params }) => {
 		const cachedData = beatmapCache.get(filename);
 		if (cachedData && cachedData.expires > Date.now()) {
 			const data = cachedData.data;
+			if (!data) {
+				console.warn(`🔍 Beatmap ${filename} not found, cache hit.`)
+			}
 			return json(data ? data : { error: 'Beatmap not found' }, { status: data ? 200 : 404 });
 		}
 

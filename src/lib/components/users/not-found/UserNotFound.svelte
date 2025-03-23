@@ -15,8 +15,8 @@
 	"
 >
 	<AlertCircleIcon class="size-16 text-red-500" />
-	<h2 class="text-2xl font-bold mt-4">User Not Found</h2>
-	<p class="text-gray-400 text-sm mt-2">
+	<h2 class="text-2xl font-bold mt-4 animate-fade-in">User Not Found</h2>
+	<p class="text-gray-400 text-sm mt-2 animate-fade-in delay-100">
 		Sorry, we couldn't find the player you're looking for. <br />
 		Please check the uid or try searching again.
 	</p>
@@ -30,3 +30,23 @@
 		Back to Home
 	</a>
 </div>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-in {
+        animation: fade-in 0.4s ease forwards;
+        opacity: 0;
+    }
+    .animate-fade-in.delay-100 {
+        animation-delay: 0.1s;
+    }
+</style>
