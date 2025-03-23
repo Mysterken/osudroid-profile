@@ -6,7 +6,12 @@
 	class="
 		flex flex-col items-center justify-center
 		text-center px-4
-		min-h-[calc(100vh-150px)] w-full
+		min-h-[calc(100vh-172px)]
+		phone-sm:min-h-[calc(100vh-170px)]
+		tablet-sm:min-h-[calc(100vh-206px)]
+		tablet-lg:min-h-[calc(100vh-214px)]
+		desktop-sm:min-h-[calc(100vh-150px-80px)]
+		w-full
 	"
 >
 	<AlertCircleIcon class="size-16 text-red-500" />

@@ -14,6 +14,7 @@
 	import type { Play } from '$lib/models/play';
 	import UserIsLoading from '$lib/components/skeletons/UserIsLoading.svelte';
 	import UserNotFound from '$lib/components/users/not-found/UserNotFound.svelte';
+	import Footer from '$lib/components/layouts/Footer.svelte';
 
 	let user = $state<ApiPlayer | ScraperPlayer | null>(null);
 	let globalRank = $state(0);
@@ -194,3 +195,5 @@
 		{/if}
 	{/if}
 </ContentLayout>
+
+<Footer />
