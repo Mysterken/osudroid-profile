@@ -15,12 +15,7 @@
 	<div
 		class="
 			flex flex-col items-center justify-center text-center px-4
-			min-h-[calc(100vh-150px)]
-			phone-sm:min-h-[calc(100vh-170px)]
-			phone-lg:min-h-[calc(100vh-178px)]
-			tablet-sm:min-h-[calc(100vh-206px)]
-			tablet-lg:min-h-[calc(100vh-214px)]
-			desktop-sm:min-h-[calc(100vh-230px)]
+			min-h-page
 			w-full
 		"
 	>
