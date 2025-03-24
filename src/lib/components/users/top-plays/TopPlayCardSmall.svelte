@@ -127,7 +127,7 @@
  	w-full
  	transition-transform transform hover:scale-[1.01] hover:opacity-95 duration-200"
 >
-	<div class="showoff flex pr-5 min-h-[70px]"
+	<div class="showoff flex pr-5 min-h-[70px] rounded-t-[5px]"
 			 style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 	>
 		{@render showoff()}

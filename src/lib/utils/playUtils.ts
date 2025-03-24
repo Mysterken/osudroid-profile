@@ -75,6 +75,7 @@ function convertLongModNameToAlias(mod: string): string {
  */
 function convertAliasToLongModName(alias: string): string {
 	if (alias === 'NM') return 'None';
+	if (alias === 'HF') return 'HalfTime';
 	if (alias.startsWith('x')) return alias;
 
 	const reverseMapping = Object.fromEntries(
