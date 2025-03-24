@@ -51,7 +51,14 @@
 
 {#snippet showoff()}
 	<div
-		class="flex counter bg-[#E5E5E5] size-6 rounded-tl-[4px] rounded-br-[5px] text-black font-bold items-center justify-center">
+		class="
+		flex counter
+		bg-[#E5E5E5]
+		size-6 min-w-6
+		rounded-tl-[4px] rounded-br-[5px]
+		text-black font-bold
+		items-center justify-center"
+	>
 		<span>{index + 1}</span>
 	</div>
 
