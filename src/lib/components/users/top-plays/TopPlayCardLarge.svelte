@@ -37,6 +37,19 @@
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 
+	let tooltipText = $state(songTitle);
+	let titleElement: HTMLHeadingElement;
+
+	function checkOverflow(el: HTMLElement) {
+		if (!el) return;
+		const showTooltip = el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth;
+		if (showTooltip) {
+			tooltipText = songTitle;
+		} else {
+			tooltipText = '';
+		}
+	}
+
 	let backgroundImg = beatmap?.beatmapset?.covers?.cover ?
 		`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})` :
 		'url(/backgrounds/black_cube_pattern.webp)';
@@ -70,7 +83,15 @@
 
 		<div class="text-left pl-2.5" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
 			<div class="flex h-14 items-center">
-				<h2 class="text-xl">{songTitle}</h2>
+				<h2
+					bind:this={titleElement}
+					onmouseenter={() => checkOverflow(titleElement)}
+					use:tooltip={{text:tooltipText}}
+					class="text-xl line-clamp-2 break-words"
+				>
+					{songTitle}
+				</h2>
+
 			</div>
 
 			<div class="mt-1">

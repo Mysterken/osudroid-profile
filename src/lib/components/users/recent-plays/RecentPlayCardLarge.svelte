@@ -57,6 +57,7 @@
 		sx="
 		flex
 		size-[50px]
+		min-w-[50px]
 		text-white font-bold text-lg
 		bg-[#2A2A2A]
 		border-[#3C3C3C] border-[1px] rounded-[5px]

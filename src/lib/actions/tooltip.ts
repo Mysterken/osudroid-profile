@@ -5,6 +5,7 @@ export function tooltip(
 	const { text = '', direction = 'bottom' } = params;
 
 	if (!text) {
+		console.log(123123);
 		return {
 			destroy() {}
 		};
@@ -56,6 +57,7 @@ export function tooltip(
 	}
 
 	function show() {
+		if (!tooltip.textContent) return;
 		if (!document.body.contains(tooltip)) {
 			document.body.appendChild(tooltip);
 		}

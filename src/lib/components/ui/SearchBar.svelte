@@ -31,6 +31,7 @@
 	sticky top-0 z-50
 	transition-transform duration-300 ease-in-out
 	{hidden ? '-translate-y-full' : 'translate-y-0'}
+	desktop-sm:translate-y-0
 	flex flex-col justify-center
 	p-2 phone-sm:p-2.5 tablet-sm:p-3.5 desktop-sm:px-6 desktop-sm:py-4
 	phone-sm:h16 tablet-sm:h-20 h-16"
