@@ -53,7 +53,7 @@ async function fetchNewToken(): Promise<string> {
 /**
  * Ensures the osu! API token is valid, refreshing it if needed.
  */
-async function refreshTokenIfNeeded(): Promise<string> {
+export async function refreshTokenIfNeeded(): Promise<string> {
 	if (!osuAccessToken || !tokenExpiry || Date.now() >= tokenExpiry) {
 		return await fetchNewToken();
 	}

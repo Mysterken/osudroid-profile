@@ -1,4 +1,4 @@
-import { lookupBeatmap } from '$lib/services/osuApi';
+import { lookupBeatmap, refreshTokenIfNeeded } from '$lib/services/osuApi';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { ApiError, MissingError, NotFoundError } from '$lib/services/errors/osuApiError';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
@@ -15,6 +15,8 @@ export const POST: RequestHandler = async ({ request }) => {
 		if (!Array.isArray(lookups)) {
 			return json({ error: 'lookups must be an array' }, { status: 400 });
 		}
+
+		await refreshTokenIfNeeded();
 
 		const results = await Promise.all(
 			lookups.map(async ({ filename, hash }) => {
