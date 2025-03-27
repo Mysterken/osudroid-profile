@@ -1,5 +1,5 @@
 import { OSU_CLIENT_ID, OSU_CLIENT_SECRET } from '$env/static/private';
-import { ApiError, NotFoundError } from '$lib/services/errors/osuApiError';
+import { ApiError, MissingError, NotFoundError } from '$lib/services/errors/osuApiError';
 import axios from 'axios';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
@@ -63,30 +63,39 @@ async function refreshTokenIfNeeded(): Promise<string> {
 /**
  * Lookup a beatmap using the osu! API.
  */
-export async function lookupBeatmap(filename: string): Promise<BeatmapExtended> {
-	try {
+export async function lookupBeatmap(filename?: string, hash?: string): Promise<BeatmapExtended> {
+	let query = '';
+
+	if (hash) {
+		query = `checksum=${encodeURIComponent(hash)}`;
+	} else if (filename) {
 		const decodedFilename = decodeURIComponent(filename)
 			.replace(/[/?:*"]/g, '') // Remove /, ?, :, *, "
 			.replace(/&/g, '%26') // Replace & with %26
 			.replace(/#/g, '%23'); // Replace # with %23
 
-		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?filename=${decodedFilename}.osu`);
+		query = `filename=${decodedFilename}.osu`;
+	} else {
+		throw new MissingError('No filename or checksum provided for beatmap lookup');
+	}
+
+	try {
+		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?${query}`);
 		return response.data;
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
 			const status = error.response?.status;
 
 			if (status === 404) {
-				console.warn(`🔍 Beatmap ${filename} not found.`);
-				throw new NotFoundError(`Beatmap ${filename} not found`);
+				console.warn(`🔍 Beatmap ${filename || hash} not found.`);
+				throw new NotFoundError(`Beatmap ${filename || hash} not found`);
 			}
 
 			console.error(`❌ osu! API error (Status ${status}):`, error.message);
 			throw new ApiError(`osu! API request failed with status ${status}`);
 		}
 
-		// Unknown errors (e.g., network issues, unexpected format)
-		console.error(`❌ Unexpected error fetching beatmap ${filename}:`, error);
-		throw new ApiError(`Unexpected error fetching beatmap ${filename}`);
+		console.error(`❌ Unexpected error fetching beatmap ${filename || hash}:`, error);
+		throw new ApiError(`Unexpected error fetching beatmap ${filename || hash}`);
 	}
 }

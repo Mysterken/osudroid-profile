@@ -11,3 +11,10 @@ export class ApiError extends Error {
 		this.name = 'ApiError';
 	}
 }
+
+export class MissingError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'MissingError';
+	}
+}

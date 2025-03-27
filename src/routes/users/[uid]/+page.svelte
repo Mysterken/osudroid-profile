@@ -11,7 +11,7 @@
 	import StatisticsPanel from '$lib/components/users/side-stats/StatisticsPanel.svelte';
 	import UserInfoPanel from '$lib/components/users/side-stats/UserInfoPanel.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
-	import type { Play } from '$lib/models/play';
+	import type { Play, ScraperPlay } from '$lib/models/play';
 	import UserIsLoading from '$lib/components/skeletons/UserIsLoading.svelte';
 	import UserNotFound from '$lib/components/users/not-found/UserNotFound.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
@@ -41,24 +41,28 @@
 		}
 	}
 
-	async function fetchBeatmapsBatch(filenames: string[]): Promise<(BeatmapExtended | null)[]> {
+	async function fetchBeatmapsBatch(topPlays: Play[]): Promise<(BeatmapExtended | null)[]> {
 		try {
+			const lookups = topPlays.map(play => ({
+				filename: play.Filename,
+				hash: (play as ScraperPlay)?.Hash
+			}));
+
 			const response = await fetch('/api/beatmaps', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ filenames })
+				body: JSON.stringify({ lookups })
 			});
 
-			if (!response.ok) return Array(filenames.length).fill(null);
+			if (!response.ok) return Array(topPlays.length).fill(null);
 			const data = await response.json();
 
-			return filenames.map(fn => data.find((item: {
-				filename: string,
-				beatmap: BeatmapExtended
-			}) => item.filename === fn)?.beatmap ?? null);
+			return lookups.map(lk => data.find((item: {
+				key: string
+			}) => item.key === (lk.hash || lk.filename))?.beatmap ?? null);
 		} catch (error) {
 			console.error('Error fetching beatmaps batch:', error);
-			return Array(filenames.length).fill(null);
+			return Array(topPlays.length).fill(null);
 		}
 	}
 
@@ -67,11 +71,11 @@
 
 		if (start >= 25) isFetchingMore = true;
 
-		const filenames = topPlays.slice(start, end).map(play => play.Filename);
-		const fetched = await fetchBeatmapsBatch(filenames);
+		const slice = topPlays.slice(start, end);
+		const fetched = await fetchBeatmapsBatch(slice);
 
 		beatmaps = start === 0
-			? fetched // initial load
+			? fetched
 			: [...beatmaps, ...fetched];
 
 		if (start >= 25) isFetchingMore = false;
