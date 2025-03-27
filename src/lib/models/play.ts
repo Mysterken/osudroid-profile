@@ -67,7 +67,7 @@ export function parsePlayFromScraper(data: ScraperPlayData): ScraperPlay {
 		MapCombo: data.combo,
 		MapRank: data.rank,
 		MapMiss: data.miss,
-		MapAccuracy: data.accuracy,
+		MapAccuracy: data.accuracy / 100,
 		MapPP: data.pp,
 		Hash: data.hash,
 	};

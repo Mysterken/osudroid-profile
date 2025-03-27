@@ -1,6 +1,6 @@
 import { fetchUserFromApi } from '$lib/services/osudroidApi';
 import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
-import { NotFoundError } from '$lib/services/errors/userErrors';
+import { ApiError, NotFoundError } from '$lib/services/errors/userErrors';
 import { scrapeUserData } from '$lib/services/scraper/osudroidScraper';
 
 export async function getUserProfile(uid: string): Promise<ApiPlayer | ScraperPlayer> {
@@ -8,7 +8,7 @@ export async function getUserProfile(uid: string): Promise<ApiPlayer | ScraperPl
 		// Try API first
 		return await fetchUserFromApi(uid);
 	} catch (error) {
-		if (error instanceof NotFoundError) {
+		if (error instanceof NotFoundError || error instanceof ApiError) {
 			console.log(`🔄 Fallback to web scraping for user ${uid}`);
 
 			try {
