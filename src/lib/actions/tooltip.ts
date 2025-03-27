@@ -5,7 +5,6 @@ export function tooltip(
 	const { text = '', direction = 'bottom' } = params;
 
 	if (!text) {
-		console.log(123123);
 		return {
 			destroy() {}
 		};
