@@ -33,7 +33,6 @@
 	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
 		try {
 			const response = await fetch(`/api/users/${userId}`);
-			// const response = await fetch(`/test/33306.json`);
 			if (!response.ok) return null;
 			return (await response.json()) as ApiPlayer | ScraperPlayer;
 		} catch (error) {
@@ -42,34 +41,42 @@
 		}
 	}
 
-	async function fetchBeatmapData(filename: string): Promise<BeatmapExtended | null> {
+	async function fetchBeatmapsBatch(filenames: string[]): Promise<(BeatmapExtended | null)[]> {
 		try {
-			filename = encodeURIComponent(filename);
-			const response = await fetch(`/api/beatmaps/${filename}`);
-			if (!response.ok) return null;
-			return await response.json();
+			const response = await fetch('/api/beatmaps', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ filenames })
+			});
+
+			if (!response.ok) return Array(filenames.length).fill(null);
+			const data = await response.json();
+
+			return filenames.map(fn => data.find((item: {
+				filename: string,
+				beatmap: BeatmapExtended
+			}) => item.filename === fn)?.beatmap ?? null);
 		} catch (error) {
-			console.error(`Error fetching beatmap for ${filename}:`, error);
-			return null;
+			console.error('Error fetching beatmaps batch:', error);
+			return Array(filenames.length).fill(null);
 		}
 	}
 
-	async function fetchInitialBeatmaps(topPlays: Play[]) {
-		beatmaps = await Promise.all(topPlays.slice(0, 5).map(play => fetchBeatmapData(play.Filename)));
-	}
-
-	async function fetchAdditionalBeatmaps(topPlays: Play[]) {
-		const additionalBeatmaps = await Promise.all(topPlays.slice(5, 25).map(play => fetchBeatmapData(play.Filename)));
-		beatmaps = [...beatmaps, ...additionalBeatmaps];
-	}
-
-	async function fetchRemainingBeatmaps(topPlays: Play[]) {
+	async function fetchBeatmapsInRange(topPlays: Play[], start: number, end: number) {
 		if (isFetchingMore || beatmaps.length >= topPlays.length) return;
-		isFetchingMore = true;
-		const remainingBeatmaps = await Promise.all(topPlays.slice(25, 50).map(play => fetchBeatmapData(play.Filename)));
-		beatmaps = [...beatmaps, ...remainingBeatmaps];
-		isFetchingMore = false;
+
+		if (start >= 25) isFetchingMore = true;
+
+		const filenames = topPlays.slice(start, end).map(play => play.Filename);
+		const fetched = await fetchBeatmapsBatch(filenames);
+
+		beatmaps = start === 0
+			? fetched // initial load
+			: [...beatmaps, ...fetched];
+
+		if (start >= 25) isFetchingMore = false;
 	}
+
 
 	onMount(async () => {
 		const userId = window.location.pathname.split('/').pop() || '';
@@ -89,17 +96,16 @@
 		}
 
 		if (user?.Top50Plays) {
-			await fetchInitialBeatmaps(user.Top50Plays);
-			fetchAdditionalBeatmaps(user.Top50Plays);
+			await fetchBeatmapsInRange(user.Top50Plays, 0, 5);   // initial
+			fetchBeatmapsInRange(user.Top50Plays, 5, 25);
 		}
 
 		isLoading = false;
 	});
 
-	// Fetch remaining beatmaps **when user requests more plays**
 	$effect(() => {
 		if (topPlaysToShow === 25 && user?.Top50Plays) {
-			fetchRemainingBeatmaps(user.Top50Plays);
+			fetchBeatmapsInRange(user.Top50Plays, 25, 50);
 		}
 	});
 
