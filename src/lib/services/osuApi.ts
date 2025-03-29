@@ -99,3 +99,32 @@ export async function lookupBeatmap(filename?: string, hash?: string): Promise<B
 		throw new ApiError(`Unexpected error fetching beatmap ${filename || hash}`);
 	}
 }
+
+/**
+ * Fetch multiple beatmaps by ID using the osu! API.
+ * @param ids Array of beatmap IDs (up to 50)
+ */
+export async function getBeatmaps(ids: number[]): Promise<BeatmapExtended[]> {
+	if (!Array.isArray(ids) || ids.length === 0) {
+		throw new MissingError('No beatmap IDs provided');
+	}
+	if (ids.length > 50) {
+		throw new ApiError('Too many beatmap IDs. Maximum is 50.');
+	}
+
+	const query = ids.map((id) => `ids[]=${id}`).join('&');
+
+	try {
+		const response = await callApi(`${API_BASE_URL}/beatmaps?${query}`);
+		return response.data.beatmaps;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			const status = error.response?.status;
+			console.error(`❌ osu! API error (Status ${status}):`, error.message);
+			throw new ApiError(`osu! API request failed with status ${status}`);
+		}
+
+		console.error(`❌ Unexpected error fetching beatmaps:`, error);
+		throw new ApiError(`Unexpected error fetching beatmaps`);
+	}
+}
