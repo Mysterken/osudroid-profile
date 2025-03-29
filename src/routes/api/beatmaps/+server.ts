@@ -9,7 +9,9 @@ const hashToIdCache = new Map<string, number>();
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
-		const { lookups } = await request.json() as { lookups: { filename: string; hash?: string }[] };
+		const { lookups } = (await request.json()) as {
+			lookups: { filename: string; hash?: string }[];
+		};
 
 		if (!Array.isArray(lookups)) {
 			return json({ error: 'lookups must be an array' }, { status: 400 });
@@ -47,9 +49,9 @@ export const POST: RequestHandler = async ({ request }) => {
 		// Bulk lookup for pending beatmaps
 		if (pendingLookups.length) {
 			try {
-				const beatmaps = await getBeatmaps(pendingLookups.map(p => p.id));
+				const beatmaps = await getBeatmaps(pendingLookups.map((p) => p.id));
 				for (const { key, id } of pendingLookups) {
-					const beatmap = beatmaps.find(b => b.id === id) || null;
+					const beatmap = beatmaps.find((b) => b.id === id) || null;
 					beatmapCache.set(key, { data: beatmap, expires: Date.now() + CACHE_TTL });
 					finalResults.push({ key, beatmap });
 				}
@@ -65,7 +67,15 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 };
 
-function handleError(err: unknown, key: string, finalResults: { key: string; beatmap: BeatmapExtended | null; error?: string }[]) {
+function handleError(
+	err: unknown,
+	key: string,
+	finalResults: {
+		key: string;
+		beatmap: BeatmapExtended | null;
+		error?: string;
+	}[]
+) {
 	if (err instanceof NotFoundError) {
 		beatmapCache.set(key, { data: null, expires: Date.now() + CACHE_TTL });
 		finalResults.push({ key, beatmap: null });
@@ -79,7 +89,15 @@ function handleError(err: unknown, key: string, finalResults: { key: string; bea
 	}
 }
 
-function handleBulkError(err: unknown, pendingLookups: { key: string; id: number }[], finalResults: { key: string; beatmap: BeatmapExtended | null; error?: string }[]) {
+function handleBulkError(
+	err: unknown,
+	pendingLookups: { key: string; id: number }[],
+	finalResults: {
+		key: string;
+		beatmap: BeatmapExtended | null;
+		error?: string;
+	}[]
+) {
 	console.error('❌ Failed to fetch beatmaps in bulk:', err);
 	for (const { key } of pendingLookups) {
 		finalResults.push({ key, beatmap: null, error: 'Bulk lookup failed' });
