@@ -9,6 +9,8 @@ const beatmapCache = new Map<string, { data: BeatmapExtended | null; expires: nu
 const hashToIdCache = await loadHashCache();
 
 export const POST: RequestHandler = async ({ request }) => {
+	const newHashes = new Set<string>();
+
 	try {
 		const { lookups } = (await request.json()) as {
 			lookups: { filename: string; hash?: string }[];
@@ -39,7 +41,10 @@ export const POST: RequestHandler = async ({ request }) => {
 				try {
 					const beatmap = await lookupBeatmap(filename, hash);
 					beatmapCache.set(key, { data: beatmap, expires: Date.now() + CACHE_TTL });
-					if (hash) hashToIdCache.set(hash, beatmap.id);
+					if (hash) {
+						hashToIdCache.set(hash, beatmap.id);
+						newHashes.add(hash);
+					}
 					finalResults.push({ key, beatmap });
 				} catch (err) {
 					handleError(err, key, finalResults);
@@ -48,7 +53,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 
 		// save cache only if there are new hashes
-		if (hashToIdCache.size > 0) {
+		if (newHashes.size > 0) {
 			await saveHashCache(hashToIdCache);
 		}
 
