@@ -2,10 +2,11 @@ import { getBeatmaps, lookupBeatmap, refreshTokenIfNeeded } from '$lib/services/
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { ApiError, MissingError, NotFoundError } from '$lib/services/errors/osuApiError';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
+import { loadHashCache, saveHashCache } from '$lib/services/cache/hashToId';
 
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 const beatmapCache = new Map<string, { data: BeatmapExtended | null; expires: number }>();
-const hashToIdCache = new Map<string, number>();
+const hashToIdCache = await loadHashCache();
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
@@ -44,6 +45,11 @@ export const POST: RequestHandler = async ({ request }) => {
 					handleError(err, key, finalResults);
 				}
 			}
+		}
+
+		// save cache only if there are new hashes
+		if (hashToIdCache.size > 0) {
+			await saveHashCache(hashToIdCache);
 		}
 
 		// Bulk lookup for pending beatmaps
