@@ -10,7 +10,7 @@
 		accuracy,
 		playcount
 	}: {
-		source: 'api' | 'scraper';
+		source: 'api' | 'scraper' | 'merged';
 		performancePoints: number;
 		score: number;
 		accuracy: number;
@@ -18,7 +18,7 @@
 	} = $props();
 
 	let formattedPerformancePoints = Math.round(performancePoints);
-	let calculatedAccuracy = source === 'api' ? (accuracy * 100).toFixed(2) : accuracy;
+	let calculatedAccuracy = (source === 'api' || source === 'merged') ? (accuracy * 100).toFixed(2) : accuracy;
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
 

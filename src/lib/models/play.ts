@@ -39,23 +39,29 @@ export interface ScraperPlayData {
 	hash: string;
 }
 
+export interface MergedPlay extends Play {
+	ScoreId: number;
+	MapGeki: number;
+	MapPerfect: number;
+	MapKatu: number;
+	MapGood: number;
+	MapBad: number;
+	PlayedDate: string;
+	Hash?: string;
+}
+
+export function mergePlays(api: ApiPlay, scraper?: ScraperPlay): MergedPlay {
+	return {
+		...api,
+		Hash: scraper?.Hash
+	};
+}
+
 export function parsePlayFromApi(data: ApiPlay): ApiPlay {
 	return {
-		ScoreId: data.ScoreId,
-		Filename: data.Filename,
+		...data,
 		Mods: Array.isArray(data.Mods) ? data.Mods : [],
-		MapScore: data.MapScore,
-		MapCombo: data.MapCombo,
-		MapRank: data.MapRank,
-		MapGeki: data.MapGeki,
-		MapPerfect: data.MapPerfect,
-		MapKatu: data.MapKatu,
-		MapGood: data.MapGood,
-		MapBad: data.MapBad,
-		MapMiss: data.MapMiss,
-		MapAccuracy: data.MapAccuracy,
-		MapPP: data.MapPP !== null ? data.MapPP : null,
-		PlayedDate: data.PlayedDate,
+		MapPP: data.MapPP !== null ? data.MapPP : null
 	};
 }
 
@@ -69,6 +75,6 @@ export function parsePlayFromScraper(data: ScraperPlayData): ScraperPlay {
 		MapMiss: data.miss,
 		MapAccuracy: data.accuracy / 100,
 		MapPP: data.pp,
-		Hash: data.hash,
+		Hash: data.hash
 	};
 }

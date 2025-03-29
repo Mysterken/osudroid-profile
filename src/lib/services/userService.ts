@@ -1,24 +1,28 @@
 import { fetchUserFromApi } from '$lib/services/osudroidApi';
-import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
-import { ApiError, NotFoundError } from '$lib/services/errors/userErrors';
 import { scrapeUserData } from '$lib/services/scraper/osudroidScraper';
+import {
+	type ApiPlayer,
+	type MergedPlayer,
+	mergePlayers,
+	type ScraperPlayer
+} from '$lib/models/player';
+import { NotFoundError } from '$lib/services/errors/userErrors';
 
-export async function getUserProfile(uid: string): Promise<ApiPlayer | ScraperPlayer> {
-	try {
-		// Try API first
-		return await fetchUserFromApi(uid);
-	} catch (error) {
-		if (error instanceof NotFoundError || error instanceof ApiError) {
-			console.log(`🔄 Fallback to web scraping for user ${uid}`);
+export async function getUserProfile(
+	uid: string
+): Promise<ApiPlayer | ScraperPlayer | MergedPlayer> {
+	const [apiResult, scraperResult] = await Promise.allSettled([
+		fetchUserFromApi(uid),
+		scrapeUserData(uid)
+	]);
 
-			try {
-				return await scrapeUserData(uid);
-			} catch (scraperError) {
-				console.error(`❌ Both API and Scraper failed for user ${uid}`, scraperError);
-				throw new NotFoundError(`User ${uid} not found in API or scraper`);
-			}
-		}
+	const api = apiResult.status === 'fulfilled' ? apiResult.value : null;
+	const scraper = scraperResult.status === 'fulfilled' ? scraperResult.value : null;
 
-		throw error;
-	}
+	if (!api && !scraper) throw new NotFoundError(`User ${uid} not found in API or scraper`);
+
+	if (api && !scraper) return api;
+	if (!api && scraper) return scraper;
+
+	return mergePlayers(api as ApiPlayer, scraper as ScraperPlayer);
 }

@@ -20,14 +20,14 @@
 		registered,
 		lastLogin
 	}: {
-		source: 'api' | 'scraper';
+		source: 'api' | 'scraper' | 'merged';
 		avatarLink: string;
 		username: string;
 		country: string;
-		globalRanking: number | null;
-		countryRanking: number | null;
-		scoreRanking: number | null;
-		ppRanking: number | null;
+		globalRanking?: number;
+		countryRanking?: number;
+		scoreRanking?: number;
+		ppRanking?: number;
 		performancePoints: number;
 		score: number;
 		accuracy: number;
@@ -70,16 +70,24 @@
 	</div>
 {/snippet}
 
+{#snippet userRanking(title = "", value = 0)}
+	<div class="global-ranking">
+		<h3 class="text-sm text-gray-400">{title}</h3>
+		<h1 class="font-bold text-lg">{value ? `#${value}` : 'N/A'}</h1>
+	</div>
+{/snippet}
+
 {#snippet userRankings()}
 	<div class="user-rankings flex gap-7 px-2 text-left">
-		<div class="global-ranking">
-			<h3 class="text-sm text-gray-400">{source === 'api' ? 'Global Ranking' : 'Score Ranking'}</h3>
-			<h1 class="font-bold text-lg">#{source === 'api' ? globalRanking : scoreRanking}</h1>
-		</div>
-		<div class="country-ranking">
-			<h3 class="text-sm text-gray-400">{source === 'api' ? 'Country Ranking' : 'PP Ranking'}</h3>
-			<h1 class="font-bold text-lg">#{source === 'api' ? countryRanking : ppRanking}</h1>
-		</div>
+		{#if (source === 'api' || source === 'merged')}
+			{@render userRanking('Global Ranking', globalRanking)}
+			{@render userRanking('Country Ranking', countryRanking)}
+		{:else if (source === 'scraper')}
+			{@render userRanking('Score Ranking', scoreRanking)}
+			{@render userRanking('PP Ranking', ppRanking)}
+		{:else}
+			{@render userRanking('No ranking data available')}
+		{/if}
 	</div>
 {/snippet}
 
@@ -112,10 +120,9 @@
 <ContentCard>
 	<div
 		class="
-			user-info
-			flex flex-col gap-2.5
-			tablet-sm:grid tablet-sm:grid-cols-[2fr_1fr_3fr] tablet-sm:gap-8
-		"
+		user-info
+		flex flex-col gap-2.5
+		tablet-sm:grid tablet-sm:grid-cols-[2fr_1fr_3fr] tablet-sm:gap-8"
 	>
 		<div class="flex flex-col gap-2.5">
 			{@render userIdentity()}
@@ -134,8 +141,7 @@
 		<div class="user-stats flex flex-col justify-center w-full px-2">
 			{@render userStats()}
 		</div>
-
-		{#if source === 'api'}
+		{#if source === 'api' || source === 'merged'}
 			<div class="tablet-sm:hidden justify-center items-center">
 				<hr class="hr w-full tablet-sm:invisible" />
 			</div>
@@ -145,7 +151,7 @@
 			</div>
 		{/if}
 	</div>
-	{#if source === 'api'}
+	{#if source === 'api' || source === 'merged'}
 		<div class="user-dates hidden tablet-sm:flex gap-7 px-2 pt-2 text-left">
 			{@render userDates()}
 		</div>

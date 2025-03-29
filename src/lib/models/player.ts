@@ -1,5 +1,7 @@
 import {
 	type ApiPlay,
+	type MergedPlay,
+	mergePlays,
 	parsePlayFromApi,
 	parsePlayFromScraper,
 	type Play,
@@ -17,7 +19,7 @@ export interface BasePlayer {
 	Region: string;
 	Top50Plays: Play[];
 	Last50Scores: Play[];
-	Source: "api" | "scraper";
+	Source: 'api' | 'scraper' | 'merged';
 }
 
 export interface ApiPlayer extends BasePlayer {
@@ -31,7 +33,7 @@ export interface ApiPlayer extends BasePlayer {
 	Contributor: boolean;
 	Top50Plays: ApiPlay[];
 	Last50Scores: ApiPlay[];
-	Source: "api";
+	Source: 'api';
 }
 
 export interface ScraperPlayer extends BasePlayer {
@@ -39,7 +41,7 @@ export interface ScraperPlayer extends BasePlayer {
 	PPRank: number;
 	Top50Plays: ScraperPlay[];
 	Last50Scores: ScraperPlay[];
-	Source: "scraper";
+	Source: 'scraper';
 }
 
 interface ScraperPlayerData {
@@ -56,26 +58,51 @@ interface ScraperPlayerData {
 	recentPlays: ScraperPlayData[];
 }
 
+export interface MergedPlayer extends BasePlayer {
+	GlobalRank: number;
+	CountryRank: number;
+	Registered: string;
+	LastLogin: string;
+	Supporter: boolean;
+	CoreDeveloper: boolean;
+	Developer: boolean;
+	Contributor: boolean;
+	ScoreRank: number;
+	PPRank: number;
+	Top50Plays: MergedPlay[];
+	Last50Scores: MergedPlay[];
+	Source: 'merged';
+}
+
+export function mergePlayers(api: ApiPlayer, scraper: ScraperPlayer): MergedPlayer {
+	const playMap = new Map(scraper.Top50Plays.map((play) => [play.Filename, play]));
+
+	const topPlays = api.Top50Plays.map((apiPlay) =>
+		mergePlays(apiPlay, playMap.get(apiPlay.Filename))
+	);
+	const recentPlays = api.Last50Scores.map((apiPlay) =>
+		mergePlays(
+			apiPlay,
+			scraper.Last50Scores.find((p) => p.Filename === apiPlay.Filename)
+		)
+	);
+
+	return {
+		...api,
+		ScoreRank: scraper.ScoreRank,
+		PPRank: scraper.PPRank,
+		Top50Plays: topPlays,
+		Last50Scores: recentPlays,
+		Source: 'merged'
+	};
+}
+
 export function parsePlayerFromApi(data: ApiPlayer): ApiPlayer {
 	return {
-		UserId: data.UserId,
-		Username: data.Username,
-		GlobalRank: data.GlobalRank,
-		CountryRank: data.CountryRank,
-		OverallScore: data.OverallScore,
-		OverallPP: data.OverallPP,
-		OverallPlaycount: data.OverallPlaycount,
-		OverallAccuracy: data.OverallAccuracy,
-		Registered: data.Registered,
-		LastLogin: data.LastLogin,
-		Supporter: data.Supporter,
-		CoreDeveloper: data.CoreDeveloper,
-		Developer: data.Developer,
-		Contributor: data.Contributor,
-		Region: data.Region,
+		...data,
 		Top50Plays: data.Top50Plays.map(parsePlayFromApi),
 		Last50Scores: data.Last50Scores?.map(parsePlayFromApi) ?? [],
-		Source: "api"
+		Source: 'api'
 	};
 }
 

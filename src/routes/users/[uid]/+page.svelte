@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { ApiPlayer, ScraperPlayer } from '$lib/models/player';
+	import type { ApiPlayer, MergedPlayer, ScraperPlayer } from '$lib/models/player';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 	import ProfileInfoMobile from '$lib/components/users/profile-info/ProfileInfoMobile.svelte';
@@ -16,7 +16,7 @@
 	import UserNotFound from '$lib/components/users/not-found/UserNotFound.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
 
-	let user = $state<ApiPlayer | ScraperPlayer | null>(null);
+	let user = $state<ApiPlayer | ScraperPlayer | MergedPlayer | null>(null);
 	let globalRank = $state(0);
 	let countryRank = $state(0);
 	let scoreRank = $state(0);
@@ -30,11 +30,11 @@
 	let recentPlaysToShow = 5;
 	let isFetchingMore = false;
 
-	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | null> {
+	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | MergedPlayer | null> {
 		try {
 			const response = await fetch(`/api/users/${userId}`);
 			if (!response.ok) return null;
-			return (await response.json()) as ApiPlayer | ScraperPlayer;
+			return (await response.json()) as ApiPlayer | ScraperPlayer | MergedPlayer;
 		} catch (error) {
 			console.error('Error fetching user:', error);
 			return null;
@@ -86,7 +86,16 @@
 		const userId = window.location.pathname.split('/').pop() || '';
 		user = await fetchUser(userId);
 
-		if (user?.Source === 'api') {
+		if (user?.Source === 'merged') {
+			({
+				GlobalRank: globalRank,
+				CountryRank: countryRank,
+				Registered: registered,
+				LastLogin: lastLogin,
+				ScoreRank: scoreRank,
+				PPRank: ppRank
+			} = user);
+		} else if (user?.Source === 'api') {
 			({
 				GlobalRank: globalRank,
 				CountryRank: countryRank,
@@ -150,7 +159,7 @@
 						accuracy={user.OverallAccuracy}
 						playcount={user.OverallPlaycount}
 					/>
-					{#if user.Source === 'api'}
+					{#if user.Source === 'api' || user.Source === 'merged'}
 						<UserInfoPanel
 							registered={registered}
 							lastLogin={lastLogin}
