@@ -40,6 +40,8 @@
 	let tooltipText = $state(songTitle);
 	let titleElement: HTMLHeadingElement;
 
+	let backgroundImg = $state('url(/backgrounds/black_cube_pattern.webp)');
+
 	function checkOverflow(el: HTMLElement) {
 		if (!el) return;
 		const showTooltip = el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth;
@@ -50,9 +52,11 @@
 		}
 	}
 
-	let backgroundImg = beatmap?.beatmapset?.covers?.cover ?
-		`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})` :
-		'url(/backgrounds/black_cube_pattern.webp)';
+	$effect(() => {
+		if (beatmap?.beatmapset?.covers?.cover) {
+			backgroundImg = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`;
+		}
+	});
 </script>
 
 <div
