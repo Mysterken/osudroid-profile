@@ -15,6 +15,7 @@
 	import UserIsLoading from '$lib/components/skeletons/UserIsLoading.svelte';
 	import UserNotFound from '$lib/components/users/not-found/UserNotFound.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
+	import { SvelteMap } from 'svelte/reactivity';
 
 	let user = $state<ApiPlayer | ScraperPlayer | MergedPlayer | null>(null);
 	let globalRank = $state(0);
@@ -23,7 +24,7 @@
 	let ppRank = $state(0);
 	let registered = $state('');
 	let lastLogin = $state('');
-	let beatmaps = $state([] as (BeatmapExtended | null)[]);
+	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
 
 	let isLoading = $state(true);
 	let topPlaysToShow = $state(5);
@@ -41,7 +42,7 @@
 		}
 	}
 
-	async function fetchBeatmapsBatch(topPlays: Play[]): Promise<(BeatmapExtended | null)[]> {
+	async function fetchBeatmapsBatch(topPlays: Play[]) {
 		try {
 			const lookups = topPlays.map(play => ({
 				filename: play.Filename,
@@ -54,33 +55,27 @@
 				body: JSON.stringify({ lookups })
 			});
 
-			if (!response.ok) return Array(topPlays.length).fill(null);
+			if (!response.ok) return;
 			const data = await response.json();
 
-			return lookups.map(lk => data.find((item: {
-				key: string
-			}) => item.key === (lk.hash || lk.filename))?.beatmap ?? null);
+			for (const item of data) {
+				beatmaps.set(item.key, item.beatmap ?? null);
+			}
 		} catch (error) {
 			console.error('Error fetching beatmaps batch:', error);
-			return Array(topPlays.length).fill(null);
 		}
 	}
 
 	async function fetchBeatmapsInRange(topPlays: Play[], start: number, end: number) {
-		if (isFetchingMore || beatmaps.length >= topPlays.length) return;
+		if (isFetchingMore || beatmaps.size >= topPlays.length) return;
 
 		if (start >= 25) isFetchingMore = true;
 
 		const slice = topPlays.slice(start, end);
-		const fetched = await fetchBeatmapsBatch(slice);
-
-		beatmaps = start === 0
-			? fetched
-			: [...beatmaps, ...fetched];
+		await fetchBeatmapsBatch(slice);
 
 		if (start >= 25) isFetchingMore = false;
 	}
-
 
 	onMount(async () => {
 		const userId = window.location.pathname.split('/').pop() || '';
@@ -109,7 +104,7 @@
 		}
 
 		if (user?.Top50Plays) {
-			await fetchBeatmapsInRange(user.Top50Plays, 0, 5);   // initial
+			await fetchBeatmapsInRange(user.Top50Plays, 0, 5);
 			fetchBeatmapsInRange(user.Top50Plays, 5, 25);
 		}
 
@@ -131,7 +126,6 @@
 			document.title = 'User Not Found - osu!droid';
 		}
 	});
-
 </script>
 
 <SearchBar />

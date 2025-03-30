@@ -10,6 +10,7 @@ export interface Play {
 	MapAccuracy: number;
 	MapPP: number | null;
 	PlayedDate?: string;
+	Hash?: string;
 }
 
 export interface ApiPlay extends Play {

@@ -3,12 +3,12 @@
 	import { TrophyIcon } from 'lucide-svelte';
 	import TopPlayCardSmall from '$lib/components/users/top-plays/TopPlayCardSmall.svelte';
 	import TopPlayCardLarge from '$lib/components/users/top-plays/TopPlayCardLarge.svelte';
-	import type { Play } from '$lib/models/play';
+	import type { MergedPlay, Play } from '$lib/models/play';
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
 	let { topPlays, beatmaps, itemsToShow = $bindable(5) }:
-		{ topPlays: Play[], beatmaps: (BeatmapExtended | null)[], itemsToShow: number } = $props();
+		{ topPlays: Play[] | MergedPlay[], beatmaps: Map<string, BeatmapExtended | null>, itemsToShow: number } = $props();
 </script>
 
 <ContentCard
@@ -47,7 +47,7 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
-					beatmap={beatmaps ? beatmaps[index] : null}
+					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? null}
 				/>
 			{/each}
 		</div>
@@ -65,7 +65,7 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
-					beatmap={beatmaps ? beatmaps[index] : null}
+					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? null}
 				/>
 			{/each}
 		</div>

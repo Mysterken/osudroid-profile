@@ -44,9 +44,11 @@
 
 	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 
-	let backgroundImg = beatmap?.beatmapset?.covers?.cover ?
-		`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})` :
-		'url(/backgrounds/black_cube_pattern.webp)';
+	let backgroundImg = $derived(
+		beatmap?.beatmapset?.covers?.cover ?
+			`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`
+			: 'url(/backgrounds/black_cube_pattern.webp)'
+	);
 </script>
 
 {#snippet showoff()}
