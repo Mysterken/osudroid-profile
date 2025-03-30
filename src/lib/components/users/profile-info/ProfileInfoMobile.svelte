@@ -37,7 +37,7 @@
 	} = $props();
 
 	let formattedPerformancePoints = Math.round(performancePoints);
-	let calculatedAccuracy = source === 'api' ? (accuracy * 100).toFixed(2) : accuracy;
+	let calculatedAccuracy = (source === 'api' || source === 'merged') ? (accuracy * 100).toFixed(2) : accuracy;
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
