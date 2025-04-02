@@ -7,6 +7,17 @@
 	let isPlaying = $state(false);
 	let isDialogVisible = $state(false);
 
+	let bpm = $state(0);
+	let maxCombo = $state(0);
+
+	// fix type error
+	$effect(() => {
+		if (beatmap) {
+			bpm = beatmap.bpm ?? 0;
+			maxCombo = beatmap.max_combo ?? 0;
+		}
+	});
+
 	$effect(() => {
 		if (dialog) {
 			dialog.addEventListener('toggle', () => {
@@ -55,6 +66,34 @@
 	}
 </script>
 
+{#snippet metadata()}
+	<h1 class="text-base font-bold">{beatmap?.beatmapset?.title}</h1>
+	<h2 class="text-sm text-gray-500">{beatmap?.beatmapset?.artist}</h2>
+
+	<h2 class="text-sm">{beatmap?.version}</h2>
+
+	<div class="flex gap-5 mt-2.5 text-xs">
+		<p>Star Rating: {beatmap?.difficulty_rating}</p>
+		<p>Length: {beatmap?.total_length} seconds</p>
+	</div>
+
+	<p class="text-xs text-gray-500 mt-2.5">Mapped by {beatmap?.beatmapset?.creator}</p>
+{/snippet}
+
+{#snippet beatmapTable(title = '', stats = [{ id: 'id', label: 'label', value: 0 }])}
+	<h3 class="font-semibold mb-1 text-left">{title}</h3>
+
+	<table class="w-full text-left text-xs text-gray-300">
+		<tbody>
+		{#each stats as stat (stat.id)}
+			<tr>
+				<td class="pr-2">{stat.label}</td>
+				<td class="text-white font-bold">{stat.value}</td>
+			</tr>
+		{/each}
+		</tbody>
+	</table>
+{/snippet}
 
 <dialog
 	bind:this={dialog}
@@ -100,68 +139,26 @@
 				</div>
 
 				<div class="ml-2.5">
-					<h1 class="text-base font-bold">{beatmap?.beatmapset?.title}</h1>
-					<h2 class="text-sm text-gray-500">{beatmap?.beatmapset?.artist}</h2>
-
-					<h2 class="text-sm">{beatmap.version}</h2>
-
-					<div class="flex gap-5 mt-2.5 text-xs">
-						<p>Star Rating: {beatmap.difficulty_rating}</p>
-						<p>Length: {beatmap.total_length} seconds</p>
-					</div>
-
-					<p class="text-xs text-gray-500 mt-2.5">Mapped by {beatmap?.beatmapset?.creator}</p>
+					{@render metadata()}
 				</div>
 			</div>
 			<div class="mt-4 w-full text-sm grid grid-cols-2 gap-6 px-2.5">
 				<div>
-					<h3 class="font-semibold mb-1 text-left">Difficulty</h3>
-
-					<table class="w-full text-left text-xs text-gray-300">
-						<tbody>
-						<tr>
-							<td class="pr-2">CS</td>
-							<td class="text-white font-bold">{beatmap.cs}</td>
-						</tr>
-						<tr>
-							<td class="pr-2">HP</td>
-							<td class="text-white font-bold">{beatmap.drain}</td>
-						</tr>
-						<tr>
-							<td class="pr-2">OD</td>
-							<td class="text-white font-bold">{beatmap.accuracy}</td>
-						</tr>
-						<tr>
-							<td class="pr-2">AR</td>
-							<td class="text-white font-bold">{beatmap.ar}</td>
-						</tr>
-						</tbody>
-					</table>
+					{@render beatmapTable('Difficulty', [
+						{ id: 'cs', label: 'CS', value: beatmap.cs },
+						{ id: 'hp', label: 'HP', value: beatmap.drain },
+						{ id: 'od', label: 'OD', value: beatmap.accuracy },
+						{ id: 'ar', label: 'AR', value: beatmap.ar }
+					])}
 				</div>
 
 				<div>
-					<h3 class="font-semibold mb-1 text-left">Statistics</h3>
-
-					<table class="w-full text-left text-xs text-gray-300">
-						<tbody>
-						<tr>
-							<td class="pr-2">BPM</td>
-							<td class="text-white font-bold">{beatmap.bpm}</td>
-						</tr>
-						<tr>
-							<td class="pr-2">Circles</td>
-							<td class="text-white font-bold">{beatmap.count_circles}</td>
-						</tr>
-						<tr>
-							<td class="pr-2">Sliders</td>
-							<td class="text-white font-bold">{beatmap.count_sliders}</td>
-						</tr>
-						<tr>
-							<td class="pr-2">Max Combo</td>
-							<td class="text-white font-bold">{beatmap.max_combo}</td>
-						</tr>
-						</tbody>
-					</table>
+					{@render beatmapTable('Statistics', [
+						{ id: 'bpm', label: 'BPM', value: bpm },
+						{ id: 'circles', label: 'Circles', value: beatmap.count_circles },
+						{ id: 'sliders', label: 'Sliders', value: beatmap.count_sliders },
+						{ id: 'max_combo', label: 'Max Combo', value: maxCombo }
+					])}
 				</div>
 			</div>
 
