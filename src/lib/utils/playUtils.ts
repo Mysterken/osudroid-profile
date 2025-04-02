@@ -156,10 +156,19 @@ export function convertTitleToBeatmapMetadata(title: string): {
 	};
 }
 
+function formatLength(length?: number): string {
+	if (!length) return '0:00';
+
+	const minutes = Math.floor(length / 60);
+	const seconds = length % 60;
+	return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
 export const playUtils = {
 	calculateRawPP,
 	convertStringIntoPlayDetails,
 	convertLongModNameToAlias,
 	convertAliasToLongModName,
-	convertTitleToBeatmapMetadata
+	convertTitleToBeatmapMetadata,
+	formatLength
 };

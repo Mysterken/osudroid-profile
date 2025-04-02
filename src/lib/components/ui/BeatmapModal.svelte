@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 	import { ExternalLinkIcon, PlayIcon, SquareIcon } from 'lucide-svelte';
+	import { playUtils } from '$lib/utils/playUtils.js';
 
 	let { dialog = $bindable(), beatmap }: { dialog?: HTMLDialogElement, beatmap?: BeatmapExtended | null } = $props();
 	let audio: HTMLAudioElement | null = null;
@@ -74,7 +75,7 @@
 
 	<div class="flex gap-5 mt-2.5 text-xs">
 		<p>Star Rating: {beatmap?.difficulty_rating}</p>
-		<p>Length: {beatmap?.total_length} seconds</p>
+		<p>Length: {playUtils.formatLength(beatmap?.total_length)}</p>
 	</div>
 
 	<p class="text-xs text-gray-500 mt-2.5">Mapped by {beatmap?.beatmapset?.creator}</p>
