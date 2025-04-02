@@ -16,7 +16,8 @@
 		miss,
 		accuracy,
 		pp,
-		beatmap
+		beatmap,
+		openModal
 	}: {
 		index: number;
 		filename: string;
@@ -27,7 +28,8 @@
 		miss: number;
 		accuracy: number;
 		pp: number | null;
-		beatmap: BeatmapExtended | null;
+		beatmap?: BeatmapExtended | null;
+		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
 	} = $props();
 
 	let isOpen = $state(false);
@@ -65,14 +67,19 @@
 	</div>
 
 	<div class="flex flex-grow items-center" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
-		{#if !isOpen}
-			<LetterRank sx="text-2xl font-bold size-10" {rank} />
-		{/if}
+		<div class="flex flex-grow items-center" role="button"
+				 tabindex="0" onclick={() => openModal(beatmap)}
+				 onkeydown={(e) => (e.key === 'Enter') &&  openModal(beatmap)}
+		>
+			{#if !isOpen}
+				<LetterRank sx="text-2xl font-bold size-10" {rank} />
+			{/if}
 
-		<div class="text-left pl-2.5">
-			<h2>{songTitle}</h2>
-			<p class="leading-3.5 text-xs italic">{songArtist}</p>
-			<p class="leading-3.5 text-[#E69F00] text-xs italic">{difficulty}</p>
+			<div class="text-left pl-2.5">
+				<h2>{songTitle}</h2>
+				<p class="leading-3.5 text-xs italic">{songArtist}</p>
+				<p class="leading-3.5 text-[#E69F00] text-xs italic">{difficulty}</p>
+			</div>
 		</div>
 
 		<button

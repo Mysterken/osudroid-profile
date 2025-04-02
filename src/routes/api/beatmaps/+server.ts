@@ -9,6 +9,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 
 		const results = await batchFetchBeatmaps(lookups);
+
 		return json(results);
 	} catch (err) {
 		console.error('❌ Failed to process batch beatmap request:', err);

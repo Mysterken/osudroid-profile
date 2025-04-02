@@ -7,8 +7,13 @@
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
-	let { topPlays, beatmaps, itemsToShow = $bindable(5) }:
-		{ topPlays: Play[] | MergedPlay[], beatmaps: Map<string, BeatmapExtended | null>, itemsToShow: number } = $props();
+	let { topPlays, beatmaps, itemsToShow = $bindable(5), openModal }:
+		{
+			topPlays: Play[] | MergedPlay[],
+			beatmaps: Map<string, BeatmapExtended | null>,
+			itemsToShow: number,
+			openModal: (beatmap: BeatmapExtended | null | undefined) => void
+		} = $props();
 </script>
 
 <ContentCard
@@ -47,7 +52,8 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
-					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? null}
+					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? undefined}
+					{openModal}
 				/>
 			{/each}
 		</div>
@@ -65,7 +71,8 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
-					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? null}
+					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? undefined}
+					{openModal}
 				/>
 			{/each}
 		</div>

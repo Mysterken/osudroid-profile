@@ -16,6 +16,7 @@
 	import UserNotFound from '$lib/components/users/not-found/UserNotFound.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
 	import { SvelteMap } from 'svelte/reactivity';
+	import BeatmapModal from '$lib/components/ui/BeatmapModal.svelte';
 
 	let user = $state<ApiPlayer | ScraperPlayer | MergedPlayer | null>(null);
 	let globalRank = $state(0);
@@ -30,6 +31,9 @@
 	let topPlaysToShow = $state(5);
 	let recentPlaysToShow = 5;
 	let isFetchingMore = false;
+
+	let selectedBeatmap: BeatmapExtended | null | undefined = $state();
+	let dialog: HTMLDialogElement | undefined = $state();
 
 	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | MergedPlayer | null> {
 		try {
@@ -75,6 +79,11 @@
 		await fetchBeatmapsBatch(slice);
 
 		if (start >= 25) isFetchingMore = false;
+	}
+
+	function openModal(beatmap: BeatmapExtended | null | undefined) {
+		selectedBeatmap = beatmap;
+		dialog?.showModal();
 	}
 
 	onMount(async () => {
@@ -135,6 +144,7 @@
 		<UserIsLoading />
 	{:else}
 		{#if user}
+			<BeatmapModal bind:dialog beatmap={selectedBeatmap} />
 			<!-- Desktop Layout -->
 			<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
 				<!-- Sidebar -->
@@ -168,7 +178,7 @@
 						username={user.Username}
 						country={user.Region}
 					/>
-					<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} />
+					<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} {openModal} />
 					<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
 				</div>
 			</div>
@@ -199,7 +209,7 @@
 					registered={registered}
 					lastLogin={lastLogin}
 				/>
-				<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} />
+				<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} {openModal} />
 				<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
 			</div>
 

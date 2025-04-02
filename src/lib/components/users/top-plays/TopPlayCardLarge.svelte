@@ -15,7 +15,8 @@
 		miss,
 		accuracy,
 		pp,
-		beatmap
+		beatmap,
+		openModal
 	}: {
 		index: number;
 		filename: string;
@@ -26,7 +27,8 @@
 		miss: number;
 		accuracy: number;
 		pp: number | null;
-		beatmap: BeatmapExtended | null;
+		beatmap?: BeatmapExtended | null;
+		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
 	} = $props();
 
 	let formattedScore = score.toLocaleString();
@@ -81,7 +83,10 @@
 		<span>{index + 1}</span>
 	</div>
 
-	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5">
+	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5" role="button"
+			 tabindex="0" onclick={() => openModal(beatmap)}
+			 onkeydown={(e) => (e.key === 'Enter') &&  openModal(beatmap)}
+	>
 		<LetterRank sx="text-5xl font-bold min-w-[60px]" {rank} />
 
 		<div class="text-left pl-2.5" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
