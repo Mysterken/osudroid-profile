@@ -19,3 +19,5 @@
     --breakpoint-desktop-sm: 80rem;
     --breakpoint-desktop-lg: 90rem;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
