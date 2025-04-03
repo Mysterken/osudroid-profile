@@ -29,7 +29,7 @@
 
 	let isLoading = $state(true);
 	let topPlaysToShow = $state(5);
-	let recentPlaysToShow = 5;
+	let recentPlaysToShow = $state(5);
 	let isFetchingMore = false;
 
 	let selectedBeatmap: BeatmapExtended | null | undefined = $state();
@@ -179,7 +179,7 @@
 						country={user.Region}
 					/>
 					<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} {openModal} />
-					<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
+					<RecentPlays recentPlays={user.Last50Scores} bind:itemsToShow={recentPlaysToShow} {openModal} />
 				</div>
 			</div>
 
@@ -210,7 +210,7 @@
 					lastLogin={lastLogin}
 				/>
 				<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} {openModal} />
-				<RecentPlays recentPlays={user.Last50Scores} itemsToShow={recentPlaysToShow} />
+				<RecentPlays recentPlays={user.Last50Scores} bind:itemsToShow={recentPlaysToShow} {openModal} />
 			</div>
 
 		{:else}
