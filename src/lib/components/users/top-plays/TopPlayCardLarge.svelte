@@ -37,7 +37,7 @@
 	let formattedPP = pp ? Math.round(pp) : 0;
 	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
 
-	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
+	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 
 	let tooltipText = $state(songTitle);
 	let titleElement: HTMLHeadingElement;
@@ -83,19 +83,19 @@
 		<span>{index + 1}</span>
 	</div>
 
-	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5" role="button"
-			 tabindex="0" onclick={() => openModal(beatmap)}
-			 onkeydown={(e) => (e.key === 'Enter') &&  openModal(beatmap)}
+	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5" onclick={() => openModal(beatmap)}
+			 onkeydown={(e) => (e.key === 'Enter') &&  openModal(beatmap)} role="button"
+			 tabindex="0"
 	>
-		<LetterRank sx="text-5xl font-bold min-w-[60px]" {rank} />
+		<LetterRank {rank} sx="text-5xl font-bold min-w-[60px]" />
 
 		<div class="text-left pl-2.5" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
 			<div class="flex h-14 items-center">
 				<h2
 					bind:this={titleElement}
+					class="text-xl line-clamp-2 break-words"
 					onmouseenter={() => checkOverflow(titleElement)}
 					use:tooltip={{text:tooltipText}}
-					class="text-xl line-clamp-2 break-words"
 				>
 					{songTitle}
 				</h2>

@@ -125,7 +125,7 @@
 						<img
 							src={beatmap?.beatmapset?.covers.list}
 							alt="Beatmap Cover"
-							class="w-[100px] h-[100px] rounded-[5px] bg-white"
+							class="w-[100px] h-[100px] rounded-[5px]"
 						/>
 					{/if}
 

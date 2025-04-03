@@ -3,27 +3,32 @@
 	import { playUtils } from '$lib/utils/playUtils';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
+	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
 	let {
 		filename,
+		hash,
 		mods,
 		score,
 		combo,
 		rank,
 		miss,
 		accuracy,
-		// pp,
-		date
+		date,
+		openModal,
+		beatmaps
 	}: {
 		filename: string;
+		hash?: string;
 		mods: string[];
 		score: number;
 		combo: number;
 		rank: string;
 		miss: number;
 		accuracy: number;
-		// pp: number | null;
 		date: string | null;
+		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+		beatmaps: Map<string, BeatmapExtended | null>;
 	} = $props();
 
 	let formattedScore = score.toLocaleString();
@@ -31,12 +36,38 @@
 	let calculatedAccuracy = (accuracy * 100).toFixed(2);
 	let formattedDate = date ? new Date(date).toLocaleString() : '';
 
-	let {
-		songArtist,
-		songTitle,
-		mapper,
-		difficulty
-	} = playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '));
+	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '));
+
+	let beatmap: BeatmapExtended | null | undefined = $state(beatmaps.get(hash ?? filename));
+
+	function loadBeatmapModal() {
+		beatmap = beatmaps.get(hash ?? filename);
+		openModal(beatmap);
+
+		if (beatmap === undefined) {
+			getBeatmap(filename, hash).then((data) => {
+				beatmap = data;
+				openModal(beatmap);
+			});
+		}
+	}
+
+	async function getBeatmap(filename?: string, hash?: string) {
+		const response = await fetch('/api/beatmaps', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ lookups: [{ filename, hash }] })
+		});
+
+		if (!response.ok) return null;
+
+		const data = await response.json();
+		const beatmap = data.length > 0 ? data[0].beatmap : null;
+
+		beatmaps.set(data[0]?.key ?? '', beatmap);
+
+		return beatmap;
+	}
 </script>
 
 <div
@@ -54,6 +85,7 @@
 >
 
 	<LetterRank
+		{rank}
 		sx="
 		flex
 		size-[50px]
@@ -62,10 +94,13 @@
 		bg-[#2A2A2A]
 		border-[#3C3C3C] border-[1px] rounded-[5px]
 		items-center justify-center"
-		{rank}
 	/>
 
-	<div class="text-left">
+	<div class="text-left flex-grow"
+			 onclick={() => loadBeatmapModal()}
+			 onkeydown={(e) => (e.key === 'Enter') && loadBeatmapModal()} role="button"
+			 tabindex="0"
+	>
 		<h2 class="text-base leading-4">{songArtist} - {songTitle}</h2>
 		<p class="text-[#505050] text-sm italic leading-3.5">{difficulty}</p>
 		<div class="mods flex gap-[1px]">

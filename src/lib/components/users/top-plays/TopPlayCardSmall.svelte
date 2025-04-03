@@ -44,7 +44,7 @@
 	let formattedPP = pp ? Math.round(pp) : 0;
 	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
 
-	let { songArtist, songTitle, mapper, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
+	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 
 	let backgroundImg = $derived(
 		beatmap?.beatmapset?.covers?.cover ?

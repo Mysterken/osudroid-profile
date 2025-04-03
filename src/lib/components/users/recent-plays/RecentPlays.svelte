@@ -5,9 +5,17 @@
 	import RecentPlayCardLarge from '$lib/components/users/recent-plays/RecentPlayCardLarge.svelte';
 	import type { ApiPlay, ScraperPlay } from '$lib/models/play.js';
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
+	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
+	import { SvelteMap } from 'svelte/reactivity';
 
-	let { recentPlays, itemsToShow = $bindable(5) }:
-		{ recentPlays: ApiPlay[] | ScraperPlay[], itemsToShow: number } = $props();
+	let { recentPlays, itemsToShow = $bindable(5), openModal }:
+		{
+			recentPlays: ApiPlay[] | ScraperPlay[];
+			itemsToShow: number;
+			openModal: (beatmap: BeatmapExtended | null | undefined) => void
+		} = $props();
+
+	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
 </script>
 
 <ContentCard
@@ -38,6 +46,7 @@
 			{#each recentPlays.slice(0, itemsToShow) as recentPlay, index (index)}
 				<RecentPlayCardSmall
 					filename={recentPlay.Filename}
+					hash={recentPlay.Hash}
 					mods={recentPlay.Mods}
 					score={recentPlay.MapScore}
 					combo={recentPlay.MapCombo}
@@ -45,6 +54,8 @@
 					miss={recentPlay.MapMiss}
 					accuracy={recentPlay.MapAccuracy}
 					date={recentPlay.PlayedDate ?? null}
+					{openModal}
+					{beatmaps}
 				/>
 			{/each}
 		</div>
@@ -54,6 +65,7 @@
 			{#each recentPlays.slice(0, itemsToShow) as recentPlay, index (index)}
 				<RecentPlayCardLarge
 					filename={recentPlay.Filename}
+					hash={recentPlay.Hash}
 					mods={recentPlay.Mods}
 					score={recentPlay.MapScore}
 					combo={recentPlay.MapCombo}
@@ -61,10 +73,12 @@
 					miss={recentPlay.MapMiss}
 					accuracy={recentPlay.MapAccuracy}
 					date={recentPlay.PlayedDate ?? null}
+					{openModal}
+					{beatmaps}
 				/>
 			{/each}
 		</div>
 
-		<ShowMoreButton steps={[5, 25, 50]} totalItems={recentPlays.length} bind:itemsToShow />
+		<ShowMoreButton bind:itemsToShow steps={[5, 25, 50]} totalItems={recentPlays.length} />
 	</div>
 </ContentCard>
