@@ -15,7 +15,6 @@ services:
     labels:
       caddy: odp.mysterken.com
       caddy.reverse_proxy: "{{upstreams 3000}}"
-      caddy.tls: internal
     restart: unless-stopped
 
 volumes:
