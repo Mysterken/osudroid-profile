@@ -10,16 +10,8 @@ services:
       - NODE_ENV=production
     volumes:
       - data-cache:/app/data
-    networks:
-      - caddy
-    labels:
-      caddy: odp.mysterken.com
-      caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
 
 volumes:
   data-cache:
 
-networks:
-  caddy:
-    external: true
