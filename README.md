@@ -14,7 +14,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/mysterken/osudroid-profile/badge)](https://www.codefactor.io/repository/github/mysterken/osudroid-profile)
 ![Language](https://img.shields.io/github/languages/top/Mysterken/osudroid-profile)
 [![GitHub](https://img.shields.io/github/license/Mysterken/osudroid-profile)](https://github.com/Mysterken/osudroid-profile/blob/master/LICENSE)  
-![GitHub stars](https://img.shields.io/github/stars/Mysterken/osudroid-profile?style=social)
+![GitHub stars](https://img.shields.io/github/stars/Mysterken/osudroid-profile)
 </div>
 
 ## 🚀 Getting Started
