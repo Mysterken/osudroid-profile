@@ -17,16 +17,12 @@
 ![GitHub stars](https://img.shields.io/github/stars/Mysterken/osudroid-profile?style=social)
 </div>
 
----
-
 ## 🚀 Getting Started
 
 You can run this project in two ways:
 
 - 🔧 **Locally using Node.js + Yarn**
 - 🐳 **Using Docker (dev or production)**
-
----
 
 ## ✅ Prerequisites
 
@@ -50,8 +46,6 @@ Once you have the key, create a `.env` file in the root directory and add the fo
 OSU_CLIENT_SECRET={YOUR_CLIENT_SECRET}
 OSU_CLIENT_ID={YOUR_CLIENT_ID}
 ```
-
----
 
 ## 📦 Local Setup
 
@@ -77,8 +71,6 @@ yarn build
 node build/index.js
 ```
 
----
-
 ## 🐳 Docker Setup
 
 ### 🔧 Development
@@ -93,8 +85,6 @@ docker compose up -d
 docker compose -f compose.prod.yml up --build -d
 ```
 
----
-
 ## 🛠 Tech Stack
 
 - [SvelteKit](https://svelte.dev/)
@@ -103,14 +93,10 @@ docker compose -f compose.prod.yml up --build -d
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Lucide Icons](https://lucide.dev/)
 
----
-
 ## 🖼️ Screenshots
 
 <!-- Add images/screenshots here -->
 <img src="images/screenshot.png" alt="osu!droid Profile Viewer UI" width="100%"/>
-
----
 
 ## 📌 Features
 
@@ -120,13 +106,9 @@ docker compose -f compose.prod.yml up --build -d
 - Beatmap preview with audio and metadata
 - Responsive and mobile-friendly
 
----
-
 ## 📄 License
 
 MIT © [Mysterken](https://github.com/Mysterken)
-
----
 
 ## 🙌 Credits
 
