@@ -93,11 +93,6 @@ docker compose -f compose.prod.yml up --build -d
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Lucide Icons](https://lucide.dev/)
 
-## 🖼️ Screenshots
-
-<!-- Add images/screenshots here -->
-<img src="images/screenshot.png" alt="osu!droid Profile Viewer UI" width="100%"/>
-
 ## 📌 Features
 
 - osu!droid user lookup by UID
