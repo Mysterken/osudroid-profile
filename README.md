@@ -59,7 +59,7 @@ yarn install
 yarn dev
 ```
 
-App will be available at `http://localhost:3000`
+App will be available at `http://localhost:5173`
 
 ### ⚙️ Production
 
@@ -71,6 +71,8 @@ yarn build
 node build/index.js
 ```
 
+App will be available at `http://127.0.0.1:3000`
+
 ## 🐳 Docker Setup
 
 ### 🔧 Development
@@ -79,11 +81,15 @@ node build/index.js
 docker compose up -d
 ```
 
+App will be available at `http://localhost:5173`
+
 ### ⚙️ Production
 
 ```bash
 docker compose -f compose.prod.yml up --build -d
 ```
+
+App will be available at `http://127.0.0.1:3000`
 
 ## 🛠 Tech Stack
 
