@@ -19,6 +19,7 @@
 	import BeatmapModal from '$lib/components/ui/BeatmapModal.svelte';
 	import type { PageProps } from './$types';
 	import { getUserField } from '$lib/utils/user';
+	import { playUtils } from '$lib/utils/playUtils';
 
 	let { data }: PageProps = $props();
 
@@ -96,17 +97,30 @@
 		if (!user) return '';
 
 		const rank = globalRank
-			? `Global Rank #${globalRank}`
+			? `#${globalRank} Global`
 			: countryRank
-				? `Country Rank #${countryRank}`
+				? `#${countryRank} Country`
 				: '';
 
-		const accuracy =
-			user.Source === 'scraper'
-				? `${user.OverallAccuracy}% Accuracy`
-				: `${(user.OverallAccuracy * 100).toFixed(2)}% Accuracy`;
+		const accuracy = `${(user.OverallAccuracy * (user.Source === 'scraper' ? 1 : 100)).toFixed(2)}%`;
 
-		return `${rank} • ${accuracy} • ${Math.round(user.OverallPP)} PP`;
+		let description = `${rank} • ${accuracy} • ${Math.round(user.OverallPP)} PP`;
+
+		if (user.Top50Plays?.length) {
+			const topPlaysInfo = user.Top50Plays.slice(0, 3)
+				.map((play, index) => {
+					const { songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(play.Filename);
+					const ppValue = play.MapPP ? Math.round(play.MapPP) : 'N/A';
+					const mods = play.Mods.join('') || 'NM';
+
+					return `${index + 1}. ${songTitle} [${difficulty}] +${mods} • ${ppValue}pp`;
+				})
+				.join('\n');
+
+			description += `\n\n${topPlaysInfo}`;
+		}
+
+		return description;
 	}
 
 	onMount(async () => {
@@ -162,6 +176,7 @@
 	{:else if user?.Username}
 		<title>{user.Username} - osu!droid Profile</title>
 		<meta property="og:title" content="{user.Username} - osu!droid Profile" />
+		<meta property="profile:username" content="{user.Username}">
 		<meta property="og:description"
 					content="{getDescription()}" />
 		<meta property="og:image" content="https://osudroid.moe/user/avatar/{user.UserId}.png" />
