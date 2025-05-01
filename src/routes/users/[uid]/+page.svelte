@@ -17,17 +17,23 @@
 	import Footer from '$lib/components/layouts/Footer.svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 	import BeatmapModal from '$lib/components/ui/BeatmapModal.svelte';
+	import type { PageProps } from './$types';
+	import { getUserField } from '$lib/utils/user';
 
-	let user = $state<ApiPlayer | ScraperPlayer | MergedPlayer | null>(null);
-	let globalRank = $state(0);
-	let countryRank = $state(0);
-	let scoreRank = $state(0);
-	let ppRank = $state(0);
-	let registered = $state('');
-	let lastLogin = $state('');
+	let { data }: PageProps = $props();
+
+	let user = $state<ApiPlayer | ScraperPlayer | MergedPlayer | null>(data?.user);
+
+	let globalRank = $state(getUserField(data?.user, 'GlobalRank', 0)) as number;
+	let countryRank = $state(getUserField(data?.user, 'CountryRank', 0)) as number;
+	let scoreRank = $state(getUserField(data?.user, 'ScoreRank', 0)) as number;
+	let ppRank = $state(getUserField(data?.user, 'PPRank', 0)) as number;
+	let registered = $state(getUserField(data?.user, 'Registered', '')) as string;
+	let lastLogin = $state(getUserField(data?.user, 'LastLogin', '')) as string;
+
 	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
 
-	let isLoading = $state(true);
+	let isLoading = $state(!data?.user);
 	let topPlaysToShow = $state(5);
 	let recentPlaysToShow = $state(5);
 	let isFetchingMore = false;
@@ -86,7 +92,29 @@
 		dialog?.showModal();
 	}
 
+	function getDescription() {
+		if (!user) return '';
+
+		const rank = globalRank
+			? `Global Rank #${globalRank}`
+			: countryRank
+				? `Country Rank #${countryRank}`
+				: '';
+
+		const accuracy =
+			user.Source === 'scraper'
+				? `${user.OverallAccuracy}% Accuracy`
+				: `${(user.OverallAccuracy * 100).toFixed(2)}% Accuracy`;
+
+		return `${rank} • ${accuracy} • ${Math.round(user.OverallPP)} PP`;
+	}
+
 	onMount(async () => {
+
+		if (user) {
+			return;
+		}
+
 		const userId = window.location.pathname.split('/').pop() || '';
 		user = await fetchUser(userId);
 
@@ -126,16 +154,23 @@
 		}
 	});
 
-	$effect(() => {
-		if (isLoading) {
-			document.title = 'Loading... - osu!droid';
-		} else if (user?.Username) {
-			document.title = `${user.Username}'s Profile - osu!droid`;
-		} else {
-			document.title = 'User Not Found - osu!droid';
-		}
-	});
 </script>
+
+<svelte:head>
+	{#if isLoading }
+		<title>Loading... - osu!droid</title>
+	{:else if user?.Username}
+		<title>{user.Username} - osu!droid Profile</title>
+		<meta property="og:title" content="{user.Username} - osu!droid Profile" />
+		<meta property="og:description"
+					content="{getDescription()}" />
+		<meta property="og:image" content="https://osudroid.moe/user/avatar/{user.UserId}.png" />
+	{:else}
+		<title>User Not Found - osu!droid</title>
+		<meta property="og:title" content="User Not Found - osu!droid" />
+		<meta property="og:description" content="User not found on osu!droid." />
+	{/if}
+</svelte:head>
 
 <SearchBar />
 
