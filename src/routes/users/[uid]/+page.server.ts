@@ -9,7 +9,6 @@ export const load: PageServerLoad = async ({ params }) => {
 	const { request } = getRequestEvent();
 
 	// fetch user data directly from the API if the request is from a crawler
-
 	if (isCrawler(request)) {
 		try {
 			const user = await getUserProfile(params.uid);
@@ -25,7 +24,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			}
 
 			console.error(`❌ Unexpected error in user route:`, err);
-
 			error(500, 'Internal server error');
 		}
 	}

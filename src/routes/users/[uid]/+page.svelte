@@ -177,8 +177,7 @@
 		<title>{user.Username} - osu!droid Profile</title>
 		<meta property="og:title" content="{user.Username} - osu!droid Profile" />
 		<meta property="profile:username" content="{user.Username}">
-		<meta property="og:description"
-					content="{getDescription()}" />
+		<meta property="og:description" content="{getDescription()}" />
 		<meta property="og:image" content="https://osudroid.moe/user/avatar/{user.UserId}.png" />
 	{:else}
 		<title>User Not Found - osu!droid</title>
