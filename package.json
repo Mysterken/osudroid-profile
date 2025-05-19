@@ -39,7 +39,7 @@
 	},
 	"dependencies": {
 		"@fontsource/quicksand": "^5.2.5",
-		"@inlang/paraglide-sveltekit": "^0.16.1",
+		"@inlang/paraglide-js": "^2.0.12",
 		"@tailwindcss/vite": "^4.0.9",
 		"axios": "^1.7.9",
 		"cheerio": "^1.0.0",
