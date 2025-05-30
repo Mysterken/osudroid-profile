@@ -2309,10 +2309,10 @@ loupe@^3.1.0, loupe@^3.1.3:
   resolved "https://registry.yarnpkg.com/loupe/-/loupe-3.1.3.tgz#042a8f7986d77f3d0f98ef7990a2b2fef18b0fd2"
   integrity sha512-kkIp7XSkP78ZxJEsSxW3712C6teJVoeHHwgo9zJ380de7IYyJ2ISlxojcH2pC5OFLewESmnRi/+XCDIEEVyoug==
 
-lucide-svelte@^0.482.0:
-  version "0.482.0"
-  resolved "https://registry.yarnpkg.com/lucide-svelte/-/lucide-svelte-0.482.0.tgz#46301592172e7349e79b5151473f9f583a941ca5"
-  integrity sha512-C8JbaG0ZW6ap65xyUGlbp/1iOxVlSHhmLHp1lqP7AZu2gX/OoB7FjBroSOR8MTL3HjG4PrL+o0I50Yj6Tqh0iA==
+lucide-svelte@^0.509.0:
+  version "0.509.0"
+  resolved "https://registry.yarnpkg.com/lucide-svelte/-/lucide-svelte-0.509.0.tgz#ff4ee6c6f0c30d558d61c50d2392b3d139800fe7"
+  integrity sha512-6U83jZ0RKvLYLGdx/hTqZyWcquwApQ2Q1E5bKFELXtOw7g8dk1P0qwbAQqs1fqWAtpNevtXTpgShHv/yWAcbjQ==
 
 magic-string@^0.30.11, magic-string@^0.30.15, magic-string@^0.30.17, magic-string@^0.30.3, magic-string@^0.30.5:
   version "0.30.17"
