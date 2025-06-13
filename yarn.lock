@@ -281,13 +281,13 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.3.tgz#c2b9d2e374ee62c586d3adbea87199b1d7a7a6ba"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
-"@inlang/paraglide-js@^2.0.12":
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/@inlang/paraglide-js/-/paraglide-js-2.0.12.tgz#6d96f7df31f47e8efe955d12a553f1870bb91043"
-  integrity sha512-DL8yZ7Kh35+kRwfj/bZF0OAAHGpPBbj6Ku8JxGc/nOKYw7LKCMrRa5byqQcdM0tTBq0C6WCAVFxUu/vi83oJzQ==
+"@inlang/paraglide-js@^2.0.13":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@inlang/paraglide-js/-/paraglide-js-2.1.0.tgz#b2ff31dac523aab82b9359a56a5c83c1554e6795"
+  integrity sha512-hpj5AglQphR91IH2qXPRp78fTkRVdhlNl09rZZBTtB18fcmJpCScDFckUEaR0UhOARySd4SiH/7/GbVenFcrbQ==
   dependencies:
     "@inlang/recommend-sherlock" "0.2.1"
-    "@inlang/sdk" "2.4.8"
+    "@inlang/sdk" "2.4.9"
     commander "11.1.0"
     consola "3.4.0"
     json5 "2.2.3"
@@ -301,10 +301,10 @@
   dependencies:
     comment-json "^4.2.3"
 
-"@inlang/sdk@2.4.8":
-  version "2.4.8"
-  resolved "https://registry.yarnpkg.com/@inlang/sdk/-/sdk-2.4.8.tgz#8111ffcd17bd93f9bee0fffcc647e70879475152"
-  integrity sha512-tyXNe/5+1Vn/eDt3mVklVjZh5qxFwqdF9+hdB6wRUCexVRw6w/w854TIRFrHuaAwFq/0N/ij/yXzll9oScAB+Q==
+"@inlang/sdk@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@inlang/sdk/-/sdk-2.4.9.tgz#27d39cf077dc5616d304378307136b3b212fbd1c"
+  integrity sha512-cvz/C1rF5WBxzHbEoiBoI6Sz6q6M+TdxfWkEGBYTD77opY8i8WN01prUWXEM87GPF4SZcyIySez9U0Ccm12oFQ==
   dependencies:
     "@lix-js/sdk" "0.4.7"
     "@sinclair/typebox" "^0.31.17"
