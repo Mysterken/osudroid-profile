@@ -2,7 +2,7 @@ import axios from 'axios';
 import { parsePlayerFromApi } from '$lib/models/player';
 import { ApiError, NotFoundError } from '$lib/services/errors/userErrors';
 
-const API_BASE_URL = 'https://new.osudroid.moe/apitest';
+const API_BASE_URL = 'https://new.osudroid.moe/api2/frontend';
 
 export async function fetchUserFromApi(uid: string) {
 	try {
