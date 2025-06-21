@@ -223,7 +223,7 @@
 				<!-- Main Content -->
 				<div class="flex flex-col gap-8">
 					<ProfileInfoDesktop
-						avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
+						avatarLink="https://new.osudroid.moe/api2/frontend/avatar/userid/{user.UserId}?size=256"
 						username={user.Username}
 						country={user.Region}
 					/>
@@ -246,7 +246,7 @@
 					source={user.Source}
 					username={user.Username}
 					country={user.Region}
-					avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
+					avatarLink="https://new.osudroid.moe/api2/frontend/avatar/userid/{user.UserId}?size=256"
 					globalRanking={globalRank}
 					countryRanking={countryRank}
 					scoreRanking={scoreRank}
