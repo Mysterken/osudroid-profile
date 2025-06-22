@@ -178,7 +178,7 @@
 		<meta property="og:title" content="{user.Username} - osu!droid Profile" />
 		<meta property="profile:username" content="{user.Username}">
 		<meta property="og:description" content="{getDescription()}" />
-		<meta property="og:image" content="https://new.osudroid.moe/api2/frontend/avatar/userid/{user.UserId}?size=256" />
+		<meta property="og:image" content="https://osudroid.moe/user/avatar/{user.UserId}.png" />
 	{:else}
 		<title>User Not Found - osu!droid</title>
 		<meta property="og:title" content="User Not Found - osu!droid" />
@@ -223,7 +223,7 @@
 				<!-- Main Content -->
 				<div class="flex flex-col gap-8">
 					<ProfileInfoDesktop
-						avatarLink="https://new.osudroid.moe/api2/frontend/avatar/userid/{user.UserId}?size=256"
+						avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
 						username={user.Username}
 						country={user.Region}
 					/>
@@ -246,7 +246,7 @@
 					source={user.Source}
 					username={user.Username}
 					country={user.Region}
-					avatarLink="https://new.osudroid.moe/api2/frontend/avatar/userid/{user.UserId}?size=256"
+					avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
 					globalRanking={globalRank}
 					countryRanking={countryRank}
 					scoreRanking={scoreRank}
