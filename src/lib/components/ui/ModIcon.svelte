@@ -7,8 +7,16 @@
 	let imgSrc = `/modicons/${mod}.webp`;
 	let modName = playUtils.convertAliasToLongModName(mod);
 
+	const supportedMods = [
+		'AP', 'AT', 'CM', 'DT', 'EZ',
+		'FL', 'HD', 'HF', 'HR', 'HT',
+		'NC', 'NF', 'PF', 'PR', 'RX',
+		'SD', 'SO', 'TD', 'TP', 'NM',
+		'None'
+	];
+
 	function shouldDisplayModIcon(mod: string): boolean {
-		return !(mod === 'NM' || mod === 'None' || mod.startsWith('x'));
+		return supportedMods.includes(mod) && !mod.startsWith('x');
 	}
 </script>
 

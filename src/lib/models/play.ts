@@ -2,7 +2,7 @@ import { playUtils } from '$lib/utils/playUtils';
 
 export interface Play {
 	Filename: string;
-	Mods: string[];
+	Mods: (string | { acronym: string })[];
 	MapScore: number;
 	MapCombo: number;
 	MapRank: string;
@@ -59,9 +59,39 @@ export function mergePlays(api: ApiPlay, scraper?: ScraperPlay): MergedPlay {
 }
 
 export function parsePlayFromApi(data: ApiPlay): ApiPlay {
+	const mods = Array.isArray(data.Mods)
+		? (data.Mods as (string | { acronym: string; settings?: Record<string, any> })[]).map((mod) => {
+				if (typeof mod === 'object' && mod !== null) {
+					const acronym = mod.acronym;
+					if (acronym === 'CS') {
+						if (mod.settings && typeof mod.settings === 'object') {
+							const settingValues = Object.values(mod.settings);
+							return 'x' + settingValues.map(String).join('');
+						}
+						return 'x';
+					}
+					if (mod.settings && typeof mod.settings === 'object') {
+						const settingValues = Object.values(mod.settings);
+						return acronym + settingValues.map(String).join('');
+					}
+					return acronym;
+				}
+				if (typeof mod === 'string' && mod.startsWith('CS')) {
+					const value = mod.slice(2);
+					return value ? 'x' + value : 'x';
+				}
+				return mod;
+			})
+		: [];
+
+	// Move all mods starting with 'x' to the end
+	const xMods = mods.filter((m) => typeof m === 'string' && m.startsWith('x'));
+	const otherMods = mods.filter((m) => !(typeof m === 'string' && m.startsWith('x')));
+	const orderedMods = [...otherMods, ...xMods];
+
 	return {
 		...data,
-		Mods: Array.isArray(data.Mods) ? data.Mods : [],
+		Mods: orderedMods,
 		MapPP: data.MapPP !== null ? data.MapPP : null
 	};
 }
