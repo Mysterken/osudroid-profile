@@ -19,7 +19,7 @@
 {#snippet userRanking(title = "", value = 0)}
 	<tr>
 		<td class="pb-1 text-left">{title}</td>
-		<td class="pb-1 text-right font-bold">{value ? `#${value}` : 'N/A'}</td>
+		<td class="pb-1 text-right font-bold">{isNaN(Number(value)) ? 'N/A' : `#${value ?? 0}`}</td>
 	</tr>
 {/snippet}
 

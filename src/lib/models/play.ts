@@ -2,7 +2,7 @@ import { playUtils } from '$lib/utils/playUtils';
 
 export interface Play {
 	Filename: string;
-	Mods: string[];
+	Mods: (string | { acronym: string })[];
 	MapScore: number;
 	MapCombo: number;
 	MapRank: string;
@@ -59,10 +59,47 @@ export function mergePlays(api: ApiPlay, scraper?: ScraperPlay): MergedPlay {
 }
 
 export function parsePlayFromApi(data: ApiPlay): ApiPlay {
+	type ModSettingValue = string | number | boolean;
+
+	const mods = Array.isArray(data.Mods)
+		? (
+				data.Mods as (string | { acronym: string; settings?: Record<string, ModSettingValue> })[]
+			).map((mod) => {
+				// Default to "NM" if mod is null
+				if (mod === null) {
+					return 'NM';
+				}
+
+				// Handle acronyms or objects with acronym and settings
+				if (typeof mod === 'object') {
+					if (mod.acronym === 'CS') {
+						const value = mod.settings ? Object.values(mod.settings).map(String).join('') : '';
+						return `x${value}`;
+					}
+					const value = mod.settings ? Object.values(mod.settings).map(String).join('') : '';
+					return `${mod.acronym}${value}`;
+				}
+
+				// Handle custom speed mod
+				if (mod.startsWith('CS')) {
+					const value = mod.slice(2);
+					return value ? `x${value}` : 'x';
+				}
+
+				return mod;
+			})
+		: [];
+
+	// Ensure speed mod is always at the end
+	const orderedMods = [
+		...mods.filter((m) => !m.startsWith('x')),
+		...mods.filter((m) => m.startsWith('x'))
+	];
+
 	return {
 		...data,
-		Mods: Array.isArray(data.Mods) ? data.Mods : [],
-		MapPP: data.MapPP !== null ? data.MapPP : null
+		Mods: orderedMods,
+		MapPP: data.MapPP ?? null
 	};
 }
 

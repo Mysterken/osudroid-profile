@@ -73,7 +73,7 @@
 {#snippet userRanking(title = "", value = 0)}
 	<div class="global-ranking">
 		<h3 class="text-sm text-gray-400">{title}</h3>
-		<h1 class="font-bold text-lg">{value ? `#${value}` : 'N/A'}</h1>
+		<h1 class="font-bold text-lg">{isNaN(Number(value)) ? 'N/A' : `#${value ?? 0}`}</h1>
 	</div>
 {/snippet}
 
