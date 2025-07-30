@@ -59,40 +59,47 @@ export function mergePlays(api: ApiPlay, scraper?: ScraperPlay): MergedPlay {
 }
 
 export function parsePlayFromApi(data: ApiPlay): ApiPlay {
+	type ModSettingValue = string | number | boolean;
+
 	const mods = Array.isArray(data.Mods)
-		? (data.Mods as (string | { acronym: string; settings?: Record<string, any> })[]).map((mod) => {
-				if (typeof mod === 'object' && mod !== null) {
-					const acronym = mod.acronym;
-					if (acronym === 'CS') {
-						if (mod.settings && typeof mod.settings === 'object') {
-							const settingValues = Object.values(mod.settings);
-							return 'x' + settingValues.map(String).join('');
-						}
-						return 'x';
-					}
-					if (mod.settings && typeof mod.settings === 'object') {
-						const settingValues = Object.values(mod.settings);
-						return acronym + settingValues.map(String).join('');
-					}
-					return acronym;
+		? (
+				data.Mods as (string | { acronym: string; settings?: Record<string, ModSettingValue> })[]
+			).map((mod) => {
+				// Default to "NM" if mod is null
+				if (mod === null) {
+					return 'NM';
 				}
-				if (typeof mod === 'string' && mod.startsWith('CS')) {
+
+				// Handle acronyms or objects with acronym and settings
+				if (typeof mod === 'object') {
+					if (mod.acronym === 'CS') {
+						const value = mod.settings ? Object.values(mod.settings).map(String).join('') : '';
+						return `x${value}`;
+					}
+					const value = mod.settings ? Object.values(mod.settings).map(String).join('') : '';
+					return `${mod.acronym}${value}`;
+				}
+
+				// Handle custom speed mod
+				if (mod.startsWith('CS')) {
 					const value = mod.slice(2);
-					return value ? 'x' + value : 'x';
+					return value ? `x${value}` : 'x';
 				}
+
 				return mod;
 			})
 		: [];
 
-	// Move all mods starting with 'x' to the end
-	const xMods = mods.filter((m) => typeof m === 'string' && m.startsWith('x'));
-	const otherMods = mods.filter((m) => !(typeof m === 'string' && m.startsWith('x')));
-	const orderedMods = [...otherMods, ...xMods];
+	// Ensure speed mod is always at the end
+	const orderedMods = [
+		...mods.filter((m) => !m.startsWith('x')),
+		...mods.filter((m) => m.startsWith('x'))
+	];
 
 	return {
 		...data,
 		Mods: orderedMods,
-		MapPP: data.MapPP !== null ? data.MapPP : null
+		MapPP: data.MapPP ?? null
 	};
 }
 
