@@ -45,7 +45,7 @@
 		"cheerio": "^1.1.2",
 		"crawler-user-agents": "^1.15.0",
 		"flag-icons": "^7.5.0",
-		"lucide-svelte": "^0.534.0",
+		"lucide-svelte": "^0.535.0",
 		"tailwindcss": "^4.1.11"
 	}
 }
