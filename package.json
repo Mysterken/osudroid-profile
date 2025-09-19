@@ -40,7 +40,7 @@
 	"dependencies": {
 		"@fontsource/quicksand": "^5.2.8",
 		"@inlang/paraglide-js": "^2.2.0",
-		"@tailwindcss/vite": "^4.1.11",
+		"@tailwindcss/vite": "^4.1.12",
 		"axios": "^1.11.0",
 		"cheerio": "^1.1.2",
 		"crawler-user-agents": "^1.15.0",
