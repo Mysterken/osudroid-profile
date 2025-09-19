@@ -46,6 +46,6 @@
 		"crawler-user-agents": "^1.15.0",
 		"flag-icons": "^7.5.0",
 		"lucide-svelte": "^0.534.0",
-		"tailwindcss": "^4.1.11"
+		"tailwindcss": "^4.1.12"
 	}
 }
