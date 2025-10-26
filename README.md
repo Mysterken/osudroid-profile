@@ -102,7 +102,7 @@ App will be available at `http://127.0.0.1:3000`
 
 ## 📌 Features
 
-- osu!droid user lookup by UID
+- osu!droid user lookup by UID and username
 - Top 50 plays with detailed breakdown
 - Recent scores display
 - Beatmap preview with audio and metadata
