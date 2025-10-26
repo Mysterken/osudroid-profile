@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Search } from 'lucide-svelte';
+	import { LoaderCircle, Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	let searchQuery = $state('');
@@ -15,7 +15,7 @@
 				const response = await fetch(`/api/users/search/${username}`);
 
 				if (!response.ok) {
-					alert('User not found');
+					location.replace('/users/not-found');
 					return;
 				}
 
@@ -56,9 +56,15 @@
 	phone-sm:h16 tablet-sm:h-20 h-16"
 >
 	<div class="max-w-[1200px] mx-auto size-full">
-		<div class="input-group grid-cols-[auto_1fr_auto] size-full max-w-3xl bg-[#565656] rounded-[10px]">
+		<div
+			class="input-group grid-cols-[auto_1fr_auto] size-full max-w-3xl bg-[#565656] rounded-[10px]"
+		>
 			<div class="ig-cell preset-tonal">
-				<Search size={16} />
+				{#if isSearching}
+					<LoaderCircle size={16} class="animate-spin" />
+				{:else}
+					<Search size={16} />
+				{/if}
 			</div>
 			<input
 				class="ig-input text-white shadow-inner"

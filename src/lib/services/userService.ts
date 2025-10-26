@@ -30,9 +30,11 @@ export async function getUserProfile(
 export async function searchUserByUsername(
 	username: string
 ): Promise<ApiPlayer | ScraperPlayer | MergedPlayer> {
+	const apiUser = await fetchUserFromApiByUsername(username);
+
 	const [apiResult, scraperResult] = await Promise.allSettled([
-		fetchUserFromApiByUsername(username),
-		scrapeUserData((await fetchUserFromApiByUsername(username)).UserId.toString())
+		Promise.resolve(apiUser),
+		scrapeUserData(apiUser.UserId.toString())
 	]);
 
 	const api = apiResult.status === 'fulfilled' ? apiResult.value : null;
