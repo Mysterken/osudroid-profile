@@ -26,3 +26,25 @@ export async function fetchUserFromApi(uid: string) {
 		throw new ApiError(`Unexpected error fetching user ${uid}`);
 	}
 }
+
+export async function fetchUserFromApiByUsername(username: string) {
+	try {
+		const response = await axios.get(`${API_BASE_URL}/profile-username/${username}`);
+		return parsePlayerFromApi(response.data);
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			const status = error.response?.status;
+
+			if (status === 404) {
+				console.warn(`🔍 User ${username} not found in API.`);
+				throw new NotFoundError(`User ${username} not found in API`);
+			}
+
+			console.error(`❌ osu! API error (Status ${status}):`, error.message);
+			throw new ApiError(`osu! API request failed with status ${status}`);
+		}
+
+		console.error(`❌ Unexpected error fetching user ${username}:`, error);
+		throw new ApiError(`Unexpected error fetching user ${username}`);
+	}
+}

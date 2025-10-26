@@ -44,6 +44,17 @@
 
 	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | MergedPlayer | null> {
 		try {
+
+			// Check if we have cached data from search
+			const cachedData = typeof sessionStorage !== 'undefined'
+				? sessionStorage.getItem(`user_${userId}`)
+				: null;
+
+			if (cachedData) {
+				sessionStorage.removeItem(`user_${userId}`);
+				return JSON.parse(cachedData) as ApiPlayer | ScraperPlayer | MergedPlayer;
+			}
+
 			const response = await fetch(`/api/users/${userId}`);
 			if (!response.ok) return null;
 			return (await response.json()) as ApiPlayer | ScraperPlayer | MergedPlayer;

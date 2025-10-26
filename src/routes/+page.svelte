@@ -27,7 +27,7 @@
 	</p>
 
 	<p class="text-sm text-gray-500 mt-4">
-		Try searching for a UID like <span class="font-mono bg-gray-800 text-white px-2 py-1 rounded">33306</span>
+		Try searching for a username
 	</p>
 </section>
 
