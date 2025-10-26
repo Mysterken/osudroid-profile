@@ -8,10 +8,26 @@
 	let modName = playUtils.convertAliasToLongModName(mod);
 
 	const supportedMods = [
-		'AP', 'AT', 'CM', 'DT', 'EZ',
-		'FL', 'HD', 'HF', 'HR', 'HT',
-		'NC', 'NF', 'PF', 'PR', 'RX',
-		'SD', 'SO', 'TD', 'TP', 'NM',
+		'AP',
+		'AT',
+		'CM',
+		'DT',
+		'EZ',
+		'FL',
+		'HD',
+		'HF',
+		'HR',
+		'HT',
+		'NC',
+		'NF',
+		'PF',
+		'PR',
+		'RX',
+		'SD',
+		'SO',
+		'TD',
+		'TP',
+		'NM',
 		'None'
 	];
 
@@ -21,8 +37,13 @@
 </script>
 
 {#if shouldDisplayModIcon(mod)}
-	<img class=" h-auto object-contain" src={imgSrc} alt={`${mod} mod icon`} style="max-width: {size}px"
-			 use:tooltip={{text: modName}} />
+	<img
+		class=" h-auto object-contain"
+		src={imgSrc}
+		alt={`${mod} mod icon`}
+		style="max-width: {size}px"
+		use:tooltip={{ text: modName }}
+	/>
 {/if}
 
 {#if mod.startsWith('x')}

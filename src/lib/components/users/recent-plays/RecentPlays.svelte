@@ -8,12 +8,15 @@
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 	import { SvelteMap } from 'svelte/reactivity';
 
-	let { recentPlays, itemsToShow = $bindable(5), openModal }:
-		{
-			recentPlays: ApiPlay[] | ScraperPlay[];
-			itemsToShow: number;
-			openModal: (beatmap: BeatmapExtended | null | undefined) => void
-		} = $props();
+	let {
+		recentPlays,
+		itemsToShow = $bindable(5),
+		openModal
+	}: {
+		recentPlays: ApiPlay[] | ScraperPlay[];
+		itemsToShow: number;
+		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+	} = $props();
 
 	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
 </script>

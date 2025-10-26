@@ -2,6 +2,7 @@ import { OSU_CLIENT_ID, OSU_CLIENT_SECRET } from '$env/static/private';
 import { ApiError, MissingError, NotFoundError } from '$lib/services/errors/osuApiError';
 import axios from 'axios';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
+import logger from '$lib/utils/logger';
 
 const API_BASE_URL = 'https://osu.ppy.sh/api/v2';
 const TOKEN_URL = 'https://osu.ppy.sh/oauth/token';
@@ -26,7 +27,7 @@ async function callApi(url: string) {
  * Get a new osu! API token and store it.
  */
 async function fetchNewToken(): Promise<string> {
-	console.log('Fetching new osu! API token...');
+	logger.info('Fetching new osu! API token...');
 
 	const params = new URLSearchParams({
 		grant_type: 'client_credentials',
@@ -45,7 +46,7 @@ async function fetchNewToken(): Promise<string> {
 	osuAccessToken = response.data.access_token;
 	tokenExpiry = Date.now() + response.data.expires_in * 1000; // Convert seconds to milliseconds
 
-	console.log('New osu! API token acquired.');
+	logger.info('New osu! API token acquired.');
 
 	return osuAccessToken!;
 }
@@ -80,6 +81,7 @@ export async function lookupBeatmap(filename?: string, hash?: string): Promise<B
 	}
 
 	try {
+		logger.info(`Looking up beatmap with ${hash ? 'checksum' : 'filename'}: ${hash || filename}`);
 		const response = await callApi(`${API_BASE_URL}/beatmaps/lookup?${query}`);
 		return response.data;
 	} catch (error: unknown) {
@@ -87,15 +89,15 @@ export async function lookupBeatmap(filename?: string, hash?: string): Promise<B
 			const status = error.response?.status;
 
 			if (status === 404) {
-				console.warn(`🔍 Beatmap ${filename || hash} not found.`);
+				logger.warn('`🔍 Beatmap ${filename || hash} not found.`');
 				throw new NotFoundError(`Beatmap ${filename || hash} not found`);
 			}
 
-			console.error(`❌ osu! API error (Status ${status}):`, error.message);
+			logger.error({ error }, '❌ osu! API error');
 			throw new ApiError(`osu! API request failed with status ${status}`);
 		}
 
-		console.error(`❌ Unexpected error fetching beatmap ${filename || hash}:`, error);
+		logger.error({ error }, '❌ Unexpected error fetching beatmap');
 		throw new ApiError(`Unexpected error fetching beatmap ${filename || hash}`);
 	}
 }
@@ -120,11 +122,11 @@ export async function getBeatmaps(ids: number[]): Promise<BeatmapExtended[]> {
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
 			const status = error.response?.status;
-			console.error(`❌ osu! API error (Status ${status}):`, error.message);
+			logger.error({ error }, '❌ osu! API error');
 			throw new ApiError(`osu! API request failed with status ${status}`);
 		}
 
-		console.error(`❌ Unexpected error fetching beatmaps:`, error);
+		logger.error({ error }, '❌ Unexpected error fetching beatmaps');
 		throw new ApiError(`Unexpected error fetching beatmaps`);
 	}
 }

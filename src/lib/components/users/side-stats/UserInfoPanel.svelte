@@ -4,8 +4,7 @@
 	import { InfoIcon } from 'lucide-svelte';
 	import { timeAgo } from '$lib/utils/timeago';
 
-	let { registered, lastLogin }:
-		{ registered: string | null; lastLogin: string | null; } = $props();
+	let { registered, lastLogin }: { registered: string | null; lastLogin: string | null } = $props();
 
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
 	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
@@ -19,14 +18,18 @@
 	<div class="user-info flex flex-col justify-center w-full px-2">
 		<table class="w-full text-sm max-w-[400px]">
 			<tbody>
-			<tr>
-				<td class="pb-1 text-left">Registered</td>
-				<td class="pb-1 text-right font-bold" use:tooltip={{text: registered}}>{formattedRegistered}</td>
-			</tr>
-			<tr>
-				<td class="pb-1 text-left">Last Login</td>
-				<td class="pb-1 text-right font-bold" use:tooltip={{text: lastLogin}}>{formattedLastLogin}</td>
-			</tr>
+				<tr>
+					<td class="pb-1 text-left">Registered</td>
+					<td class="pb-1 text-right font-bold" use:tooltip={{ text: registered }}
+						>{formattedRegistered}</td
+					>
+				</tr>
+				<tr>
+					<td class="pb-1 text-left">Last Login</td>
+					<td class="pb-1 text-right font-bold" use:tooltip={{ text: lastLogin }}
+						>{formattedLastLogin}</td
+					>
+				</tr>
 			</tbody>
 		</table>
 	</div>

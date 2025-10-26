@@ -47,8 +47,8 @@
 	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
 
 	let backgroundImg = $derived(
-		beatmap?.beatmapset?.covers?.cover ?
-			`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`
+		beatmap?.beatmapset?.covers?.cover
+			? `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`
 			: 'url(/backgrounds/black_cube_pattern.webp)'
 	);
 </script>
@@ -67,9 +67,12 @@
 	</div>
 
 	<div class="flex flex-grow items-center" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
-		<div class="flex flex-grow items-center" role="button"
-				 tabindex="0" onclick={() => openModal(beatmap)}
-				 onkeydown={(e) => (e.key === 'Enter') &&  openModal(beatmap)}
+		<div
+			class="flex flex-grow items-center"
+			role="button"
+			tabindex="0"
+			onclick={() => openModal(beatmap)}
+			onkeydown={(e) => e.key === 'Enter' && openModal(beatmap)}
 		>
 			{#if !isOpen}
 				<LetterRank sx="text-2xl font-bold size-10" {rank} />
@@ -83,7 +86,8 @@
 		</div>
 
 		<button
-			onclick={toggleDetails} class="transition-transform duration-300 ml-auto"
+			onclick={toggleDetails}
+			class="transition-transform duration-300 ml-auto"
 			aria-label="Toggle Details"
 			style="transform: rotate({isOpen ? '180deg' : '0deg'})"
 		>
@@ -104,7 +108,6 @@
 				bg-[#2A2A2A]
 				border-[#3C3C3C] border-[1px] rounded-[5px]
 				items-center justify-center"
-
 				{rank}
 			/>
 		{:else}
@@ -115,7 +118,7 @@
 			</div>
 		{/if}
 		<p>{calculatedAccuracy}%</p>
-		<p class="ml-auto" use:tooltip={{text: pp?.toFixed(2) + 'pp'}}>
+		<p class="ml-auto" use:tooltip={{ text: pp?.toFixed(2) + 'pp' }}>
 			{formattedPP}<span class="text-[#505050]">pp</span>
 		</p>
 	</div>
@@ -127,7 +130,10 @@
 				{/each}
 			</div>
 			<p>{formattedScore} / {formattedCombo}x / {miss} miss</p>
-			<p class="ml-auto" use:tooltip={{text: playUtils.calculateRawPP(pp, index + 1).toFixed(2) + 'pp'}}>
+			<p
+				class="ml-auto"
+				use:tooltip={{ text: playUtils.calculateRawPP(pp, index + 1).toFixed(2) + 'pp' }}
+			>
 				({rawPP}<span class="text-[#505050]">pp</span>)
 			</p>
 		</div>
@@ -143,15 +149,15 @@
  	w-full
  	transition-transform transform hover:scale-[1.01] hover:opacity-95 duration-200"
 >
-	<div class="showoff flex pr-5 min-h-[70px] rounded-t-[5px]"
-			 style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
+	<div
+		class="showoff flex pr-5 min-h-[70px] rounded-t-[5px]"
+		style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 	>
 		{@render showoff()}
 	</div>
 
 	<div
-		class={
-			`details
+		class={`details
 			flex flex-col
 			text-black
 			bg-[#E5E5E5]
@@ -159,8 +165,7 @@
 			px-2.5
 			py-auto
 			justify-center
-			${isOpen ? 'min-h-[50px]' : 'min-h-[30px]'}`
-		}
+			${isOpen ? 'min-h-[50px]' : 'min-h-[30px]'}`}
 	>
 		{@render details()}
 	</div>

@@ -42,8 +42,19 @@
 	let selectedBeatmap: BeatmapExtended | null | undefined = $state();
 	let dialog: HTMLDialogElement | undefined = $state();
 
-	async function fetchUser(userId: string): Promise<ApiPlayer | ScraperPlayer | MergedPlayer | null> {
+	async function fetchUser(
+		userId: string
+	): Promise<ApiPlayer | ScraperPlayer | MergedPlayer | null> {
 		try {
+			// Check if we have cached data from search
+			const cachedData =
+				typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(`user_${userId}`) : null;
+
+			if (cachedData) {
+				sessionStorage.removeItem(`user_${userId}`);
+				return JSON.parse(cachedData) as ApiPlayer | ScraperPlayer | MergedPlayer;
+			}
+
 			const response = await fetch(`/api/users/${userId}`);
 			if (!response.ok) return null;
 			return (await response.json()) as ApiPlayer | ScraperPlayer | MergedPlayer;
@@ -55,7 +66,7 @@
 
 	async function fetchBeatmapsBatch(topPlays: Play[]) {
 		try {
-			const lookups = topPlays.map(play => ({
+			const lookups = topPlays.map((play) => ({
 				filename: play.Filename,
 				hash: (play as ScraperPlay)?.Hash
 			}));
@@ -124,7 +135,6 @@
 	}
 
 	onMount(async () => {
-
 		if (user) {
 			return;
 		}
@@ -167,17 +177,16 @@
 			fetchBeatmapsInRange(user.Top50Plays, 25, 50);
 		}
 	});
-
 </script>
 
 <svelte:head>
-	{#if isLoading }
+	{#if isLoading}
 		<title>Loading... - osu!droid</title>
 	{:else if user?.Username}
 		<title>{user.Username} - osu!droid Profile</title>
 		<meta property="og:title" content="{user.Username} - osu!droid Profile" />
-		<meta property="profile:username" content="{user.Username}">
-		<meta property="og:description" content="{getDescription()}" />
+		<meta property="profile:username" content={user.Username} />
+		<meta property="og:description" content={getDescription()} />
 		<meta property="og:image" content="https://osudroid.moe/user/avatar/{user.UserId}.png" />
 	{:else}
 		<title>User Not Found - osu!droid</title>
@@ -191,80 +200,92 @@
 <ContentLayout>
 	{#if isLoading}
 		<UserIsLoading />
-	{:else}
-		{#if user}
-			<BeatmapModal bind:dialog beatmap={selectedBeatmap} />
-			<!-- Desktop Layout -->
-			<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
-				<!-- Sidebar -->
-				<div class="flex flex-col gap-4 w-[300px] sticky top-28 self-start">
-					<RankingPanel
-						source={user.Source}
-						globalRanking={globalRank}
-						countryRanking={countryRank}
-						scoreRanking={scoreRank}
-						ppRanking={ppRank}
-					/>
-					<StatisticsPanel
-						source={user.Source}
-						performancePoints={user.OverallPP}
-						score={user.OverallScore}
-						accuracy={user.OverallAccuracy}
-						playcount={user.OverallPlaycount}
-					/>
-					{#if user.Source === 'api' || user.Source === 'merged'}
-						<UserInfoPanel
-							registered={registered}
-							lastLogin={lastLogin}
-						/>
-					{/if}
-				</div>
-
-				<!-- Main Content -->
-				<div class="flex flex-col gap-8">
-					<ProfileInfoDesktop
-						avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
-						username={user.Username}
-						country={user.Region}
-					/>
-					<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} {openModal} />
-					<RecentPlays recentPlays={user.Last50Scores} bind:itemsToShow={recentPlaysToShow} {openModal} />
-				</div>
+	{:else if user}
+		<BeatmapModal bind:dialog beatmap={selectedBeatmap} />
+		<!-- Desktop Layout -->
+		<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
+			<!-- Sidebar -->
+			<div class="flex flex-col gap-4 w-[300px] sticky top-28 self-start">
+				<RankingPanel
+					source={user.Source}
+					globalRanking={globalRank}
+					countryRanking={countryRank}
+					scoreRanking={scoreRank}
+					ppRanking={ppRank}
+				/>
+				<StatisticsPanel
+					source={user.Source}
+					performancePoints={user.OverallPP}
+					score={user.OverallScore}
+					accuracy={user.OverallAccuracy}
+					playcount={user.OverallPlaycount}
+				/>
+				{#if user.Source === 'api' || user.Source === 'merged'}
+					<UserInfoPanel {registered} {lastLogin} />
+				{/if}
 			</div>
 
-			<!-- Mobile/Tablet Layout -->
-			<div
-				class="
+			<!-- Main Content -->
+			<div class="flex flex-col gap-8">
+				<ProfileInfoDesktop
+					avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
+					username={user.Username}
+					country={user.Region}
+				/>
+				<TopPlays
+					topPlays={user.Top50Plays}
+					bind:itemsToShow={topPlaysToShow}
+					{beatmaps}
+					{openModal}
+				/>
+				<RecentPlays
+					recentPlays={user.Last50Scores}
+					bind:itemsToShow={recentPlaysToShow}
+					{openModal}
+				/>
+			</div>
+		</div>
+
+		<!-- Mobile/Tablet Layout -->
+		<div
+			class="
 				desktop-sm:hidden
 				flex flex-col
 				phone-sm:gap-2.5 phone-sm:py-2.5
 				phone-lg:gap-3.5 phone-lg:py-3.5
 				tablet-sm:gap-5 tablet-sm:p-5
 				tablet-lg:gap-6 tablet-lg:p-6"
-			>
-				<ProfileInfoMobile
-					source={user.Source}
-					username={user.Username}
-					country={user.Region}
-					avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
-					globalRanking={globalRank}
-					countryRanking={countryRank}
-					scoreRanking={scoreRank}
-					ppRanking={ppRank}
-					performancePoints={user.OverallPP}
-					score={user.OverallScore}
-					accuracy={user.OverallAccuracy}
-					playcount={user.OverallPlaycount}
-					registered={registered}
-					lastLogin={lastLogin}
-				/>
-				<TopPlays topPlays={user.Top50Plays} bind:itemsToShow={topPlaysToShow} {beatmaps} {openModal} />
-				<RecentPlays recentPlays={user.Last50Scores} bind:itemsToShow={recentPlaysToShow} {openModal} />
-			</div>
-
-		{:else}
-			<UserNotFound />
-		{/if}
+		>
+			<ProfileInfoMobile
+				source={user.Source}
+				username={user.Username}
+				country={user.Region}
+				avatarLink="https://osudroid.moe/user/avatar/{user.UserId}.png"
+				globalRanking={globalRank}
+				countryRanking={countryRank}
+				scoreRanking={scoreRank}
+				ppRanking={ppRank}
+				performancePoints={user.OverallPP}
+				score={user.OverallScore}
+				accuracy={user.OverallAccuracy}
+				playcount={user.OverallPlaycount}
+				{registered}
+				{lastLogin}
+			/>
+			<TopPlays
+				topPlays={user.Top50Plays}
+				bind:itemsToShow={topPlaysToShow}
+				{beatmaps}
+				{openModal}
+			/>
+			<RecentPlays
+				recentPlays={user.Last50Scores}
+				bind:itemsToShow={recentPlaysToShow}
+				{openModal}
+			/>
+		</div>
+	{:else}
+		<UserNotFound />
 	{/if}
 </ContentLayout>
 

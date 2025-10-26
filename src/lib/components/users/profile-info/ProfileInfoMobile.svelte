@@ -37,7 +37,8 @@
 	} = $props();
 
 	let formattedPerformancePoints = Math.round(performancePoints);
-	let calculatedAccuracy = (source === 'api' || source === 'merged') ? (accuracy * 100).toFixed(2) : accuracy;
+	let calculatedAccuracy =
+		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy;
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
 	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
@@ -49,7 +50,12 @@
 	}
 
 	const stats = [
-		{ name: 'Performance Points', value: formattedPerformancePoints, id: 'pp', info: performancePoints },
+		{
+			name: 'Performance Points',
+			value: formattedPerformancePoints,
+			id: 'pp',
+			info: performancePoints
+		},
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
@@ -70,7 +76,7 @@
 	</div>
 {/snippet}
 
-{#snippet userRanking(title = "", value = 0)}
+{#snippet userRanking(title = '', value = 0)}
 	<div class="global-ranking">
 		<h3 class="text-sm text-gray-400">{title}</h3>
 		<h1 class="font-bold text-lg">{isNaN(Number(value)) ? 'N/A' : `#${value ?? 0}`}</h1>
@@ -79,10 +85,10 @@
 
 {#snippet userRankings()}
 	<div class="user-rankings flex gap-7 px-2 text-left">
-		{#if (source === 'api' || source === 'merged')}
+		{#if source === 'api' || source === 'merged'}
 			{@render userRanking('Global Ranking', globalRanking)}
 			{@render userRanking('Country Ranking', countryRanking)}
-		{:else if (source === 'scraper')}
+		{:else if source === 'scraper'}
 			{@render userRanking('Score Ranking', scoreRanking)}
 			{@render userRanking('PP Ranking', ppRanking)}
 		{:else}
@@ -94,14 +100,17 @@
 {#snippet userStats()}
 	<table class="w-full text-sm max-w-[400px]">
 		<tbody>
-		{#each stats as stat (stat.id)}
-			<tr>
-				<td class="py-0.5 tablet-sm:py-1 text-left">{stat.name}</td>
-				<td class="py-0.5 tablet-sm:py-1 text-right font-bold" use:tooltip={{text: String(stat.info ?? "")}}>
-					{stat.value}
-				</td>
-			</tr>
-		{/each}
+			{#each stats as stat (stat.id)}
+				<tr>
+					<td class="py-0.5 tablet-sm:py-1 text-left">{stat.name}</td>
+					<td
+						class="py-0.5 tablet-sm:py-1 text-right font-bold"
+						use:tooltip={{ text: String(stat.info ?? '') }}
+					>
+						{stat.value}
+					</td>
+				</tr>
+			{/each}
 		</tbody>
 	</table>
 {/snippet}
@@ -109,11 +118,11 @@
 {#snippet userDates()}
 	<div class="registered-date">
 		<h3 class="text-sm text-gray-400">Registered</h3>
-		<h1 class="font-bold text-xs" use:tooltip={{text: registered}}>{formattedRegistered}</h1>
+		<h1 class="font-bold text-xs" use:tooltip={{ text: registered }}>{formattedRegistered}</h1>
 	</div>
 	<div class="last-login">
 		<h3 class="text-sm text-gray-400">Last Login</h3>
-		<h1 class="font-bold text-xs" use:tooltip={{text: lastLogin}}>{formattedLastLogin}</h1>
+		<h1 class="font-bold text-xs" use:tooltip={{ text: lastLogin }}>{formattedLastLogin}</h1>
 	</div>
 {/snippet}
 

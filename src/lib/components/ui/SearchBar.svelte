@@ -1,15 +1,34 @@
 <script lang="ts">
-	import { Search } from 'lucide-svelte';
+	import { LoaderCircle, Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	let searchQuery = $state('');
 	let hidden = $state(false);
 	let lastScrollY = 0;
+	let isSearching = $state(false);
 
-	// TODO: optimize user search
-	function handleSearch(event: KeyboardEvent) {
-		if (event.key === 'Enter' && searchQuery.trim() !== '') {
-			location.replace(`/users/${encodeURIComponent(searchQuery.trim())}`);
+	async function handleSearch(event: KeyboardEvent) {
+		if (event.key === 'Enter' && searchQuery.trim() !== '' && !isSearching) {
+			isSearching = true;
+			try {
+				const username = encodeURIComponent(searchQuery.trim());
+				const response = await fetch(`/api/users/search/${username}`);
+
+				if (!response.ok) {
+					location.replace('/users/not-found');
+					return;
+				}
+
+				const userData = await response.json();
+				// Store the fetched data to avoid re-fetching
+				sessionStorage.setItem(`user_${userData.UserId}`, JSON.stringify(userData));
+				location.replace(`/users/${userData.UserId}`);
+			} catch (error) {
+				console.error('Search error:', error);
+				alert('An error occurred while searching');
+			} finally {
+				isSearching = false;
+			}
 		}
 	}
 
@@ -37,16 +56,23 @@
 	phone-sm:h16 tablet-sm:h-20 h-16"
 >
 	<div class="max-w-[1200px] mx-auto size-full">
-		<div class="input-group grid-cols-[auto_1fr_auto] size-full max-w-3xl bg-[#565656] rounded-[10px]">
+		<div
+			class="input-group grid-cols-[auto_1fr_auto] size-full max-w-3xl bg-[#565656] rounded-[10px]"
+		>
 			<div class="ig-cell preset-tonal">
-				<Search size={16} />
+				{#if isSearching}
+					<LoaderCircle size={16} class="animate-spin" />
+				{:else}
+					<Search size={16} />
+				{/if}
 			</div>
 			<input
 				class="ig-input text-white shadow-inner"
 				type="search"
-				placeholder="Search player uid..."
+				placeholder="Search player username..."
 				bind:value={searchQuery}
 				onkeydown={handleSearch}
+				disabled={isSearching}
 			/>
 		</div>
 	</div>

@@ -1,16 +1,14 @@
 {
-  "name": "osudroid-profile-devcontainer",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
-  "postCreateCommand": "yarn install",
-  "forwardPorts": [5173],
-  "remoteUser": "node",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "22"
-    },
-    "ghcr.io/devcontainers/features/git:1": {}
-  },
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
-  ]
+	"name": "osudroid-profile-devcontainer",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+	"postCreateCommand": "yarn install",
+	"forwardPorts": [5173],
+	"remoteUser": "node",
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "22"
+		},
+		"ghcr.io/devcontainers/features/git:1": {}
+	},
+	"mounts": ["source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"]
 }

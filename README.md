@@ -15,6 +15,7 @@
 ![Language](https://img.shields.io/github/languages/top/Mysterken/osudroid-profile)
 [![GitHub](https://img.shields.io/github/license/Mysterken/osudroid-profile)](https://github.com/Mysterken/osudroid-profile/blob/master/LICENSE)  
 ![GitHub stars](https://img.shields.io/github/stars/Mysterken/osudroid-profile)
+
 </div>
 
 ## 🚀 Getting Started

@@ -2,7 +2,7 @@ export interface Beatmap {
 	beatmapset_id: number;
 	difficulty_rating: number;
 	id: number;
-	mode: "osu" | "taiko" | "catch" | "mania";
+	mode: 'osu' | 'taiko' | 'catch' | 'mania';
 	status: -2 | -1 | 0 | 1 | 2 | 3 | 4; // Matches integer rank status
 	total_length: number;
 	user_id: number;
@@ -100,13 +100,13 @@ export interface BeatmapOwner {
 // Covers for beatmapset
 export interface Covers {
 	cover: string;
-	"cover@2x": string;
+	'cover@2x': string;
 	card: string;
-	"card@2x": string;
+	'card@2x': string;
 	list: string;
-	"list@2x": string;
+	'list@2x': string;
 	slimcover: string;
-	"slimcover@2x": string;
+	'slimcover@2x': string;
 }
 
 // Failtimes for a beatmap

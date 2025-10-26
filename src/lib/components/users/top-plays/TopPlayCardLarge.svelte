@@ -43,8 +43,8 @@
 	let titleElement: HTMLHeadingElement;
 
 	let backgroundImg = $derived(
-		beatmap?.beatmapset?.covers?.cover ?
-			`linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`
+		beatmap?.beatmapset?.covers?.cover
+			? `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`
 			: 'url(/backgrounds/black_cube_pattern.webp)'
 	);
 
@@ -57,7 +57,6 @@
 			tooltipText = '';
 		}
 	}
-
 </script>
 
 <div
@@ -83,9 +82,12 @@
 		<span>{index + 1}</span>
 	</div>
 
-	<div class="flex flex-grow items-center justify-center gap-2.5 mx-5" onclick={() => openModal(beatmap)}
-			 onkeydown={(e) => (e.key === 'Enter') &&  openModal(beatmap)} role="button"
-			 tabindex="0"
+	<div
+		class="flex flex-grow items-center justify-center gap-2.5 mx-5"
+		onclick={() => openModal(beatmap)}
+		onkeydown={(e) => e.key === 'Enter' && openModal(beatmap)}
+		role="button"
+		tabindex="0"
 	>
 		<LetterRank {rank} sx="text-5xl font-bold min-w-[60px]" />
 
@@ -95,11 +97,10 @@
 					bind:this={titleElement}
 					class="text-xl line-clamp-2 break-words"
 					onmouseenter={() => checkOverflow(titleElement)}
-					use:tooltip={{text:tooltipText}}
+					use:tooltip={{ text: tooltipText }}
 				>
 					{songTitle}
 				</h2>
-
 			</div>
 
 			<div class="mt-1">
@@ -124,11 +125,18 @@
 	</div>
 
 	<div
-		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-[120px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]">
-		<p class="absolute left-1/2 -translate-x-1/2 text-xl font-bold" use:tooltip={{text: pp?.toFixed(2) + 'pp'}}>
+		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-[120px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]"
+	>
+		<p
+			class="absolute left-1/2 -translate-x-1/2 text-xl font-bold"
+			use:tooltip={{ text: pp?.toFixed(2) + 'pp' }}
+		>
 			{formattedPP}<span class="text-[#A7A3A3]">pp</span>
 		</p>
-		<p class="mt-auto self-end" use:tooltip={{text: playUtils.calculateRawPP(pp, index + 1).toFixed(2) + 'pp'}}>
+		<p
+			class="mt-auto self-end"
+			use:tooltip={{ text: playUtils.calculateRawPP(pp, index + 1).toFixed(2) + 'pp' }}
+		>
 			({rawPP}<span class="text-[#A7A3A3]">pp</span>)
 		</p>
 	</div>

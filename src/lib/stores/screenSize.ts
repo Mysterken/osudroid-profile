@@ -1,5 +1,5 @@
-import { browser } from "$app/environment";
-import { writable } from "svelte/store";
+import { browser } from '$app/environment';
+import { writable } from 'svelte/store';
 
 function getScreenSizeInRem(): number {
 	if (!browser) return 0; // Return default value during SSR
@@ -15,7 +15,7 @@ export const breakpoints = {
 	tabletSm: 48,
 	tabletLg: 64,
 	desktopSm: 80,
-	desktopLg: 90,
+	desktopLg: 90
 };
 
 if (browser) {
@@ -23,5 +23,5 @@ if (browser) {
 		screenSize.set(getScreenSizeInRem());
 	}
 
-	window.addEventListener("resize", updateScreenSize);
+	window.addEventListener('resize', updateScreenSize);
 }

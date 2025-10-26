@@ -4,6 +4,7 @@ import { isCrawler } from '$lib/crawler/isCrawler';
 import { getUserProfile } from '$lib/services/userService';
 import { error } from '@sveltejs/kit';
 import { ApiError, NotFoundError, ScraperError } from '$lib/services/errors/userErrors';
+import logger from '$lib/utils/logger';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { request } = getRequestEvent();
@@ -20,10 +21,11 @@ export const load: PageServerLoad = async ({ params }) => {
 			}
 
 			if (err instanceof ApiError || err instanceof ScraperError) {
+				logger.error({ err }, '❌ External data source error in crawler request');
 				error(502, 'External data source failed');
 			}
 
-			console.error(`❌ Unexpected error in user route:`, err);
+			logger.error({ err }, '❌ Unexpected error in user route');
 			error(500, 'Internal server error');
 		}
 	}

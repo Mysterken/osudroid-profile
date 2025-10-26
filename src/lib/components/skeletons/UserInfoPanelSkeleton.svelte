@@ -11,18 +11,18 @@
 	<div class="user-info flex flex-col justify-center w-full px-2">
 		<table class="w-full text-sm max-w-[400px]">
 			<tbody>
-			<tr>
-				<td class="pb-1 text-left">Registered</td>
-				<td class="pb-1 text-right font-bold h-full">
-					<div class="placeholder animate-pulse w-24 h-2 ml-auto"></div>
-				</td>
-			</tr>
-			<tr>
-				<td class="pb-1 text-left">Last Login</td>
-				<td class="pb-1 text-right font-bold h-full">
-					<div class="placeholder animate-pulse w-20 h-2 ml-auto"></div>
-				</td>
-			</tr>
+				<tr>
+					<td class="pb-1 text-left">Registered</td>
+					<td class="pb-1 text-right font-bold h-full">
+						<div class="placeholder animate-pulse w-24 h-2 ml-auto"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="pb-1 text-left">Last Login</td>
+					<td class="pb-1 text-right font-bold h-full">
+						<div class="placeholder animate-pulse w-20 h-2 ml-auto"></div>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { children, sx = "" } = $props();
+	let { children, sx = '' } = $props();
 </script>
 
 <div
