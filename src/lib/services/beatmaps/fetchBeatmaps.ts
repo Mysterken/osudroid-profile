@@ -2,6 +2,7 @@ import { getBeatmaps, lookupBeatmap, refreshTokenIfNeeded } from '$lib/services/
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 import { ApiError, MissingError, NotFoundError } from '$lib/services/errors/osuApiError';
 import { loadHashCache, saveHashCache } from '$lib/services/cache/hashToId';
+import logger from '$lib/utils/logger';
 
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 const beatmapCache = new Map<string, { data: BeatmapExtended | null; expires: number }>();
@@ -77,7 +78,7 @@ function handleError(
 	} else if (err instanceof ApiError) {
 		finalResults.push({ key, beatmap: null, error: 'osu! API Error' });
 	} else {
-		console.error(`❌ Error fetching ${key}:`, err);
+		logger.error({ err }, `❌ Unexpected error fetching beatmap for key: ${key}`);
 		finalResults.push({ key, beatmap: null, error: 'Internal server error' });
 	}
 }
@@ -91,7 +92,7 @@ function handleBulkError(
 		error?: string;
 	}[]
 ) {
-	console.error('❌ Failed to fetch beatmaps in bulk:', err);
+	logger.error({ err }, '❌ Unexpected error during bulk beatmap fetch');
 	for (const { key } of pendingLookups) {
 		finalResults.push({ key, beatmap: null, error: 'Bulk lookup failed' });
 	}

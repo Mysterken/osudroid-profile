@@ -28,6 +28,7 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.12.5",
 		"globals": "^16.4.0",
+		"pino-pretty": "^13.1.2",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
 		"svelte": "^5.42.2",
@@ -46,6 +47,7 @@
 		"crawler-user-agents": "^1.21.0",
 		"flag-icons": "^7.5.0",
 		"lucide-svelte": "^0.548.0",
+		"pino": "^10.1.0",
 		"tailwindcss": "^4.1.16"
 	}
 }

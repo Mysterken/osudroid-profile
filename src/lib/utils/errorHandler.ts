@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { ApiError, NotFoundError, ScraperError } from '$lib/services/errors/userErrors';
+import logger from '$lib/utils/logger';
 
 export async function handleUserRequest<T>(handler: () => Promise<T>): Promise<Response> {
 	try {
@@ -11,10 +12,11 @@ export async function handleUserRequest<T>(handler: () => Promise<T>): Promise<R
 		}
 
 		if (error instanceof ApiError || error instanceof ScraperError) {
+			logger.error({ error }, '❌ External data source error');
 			return json({ error: 'External data source failed' }, { status: 502 });
 		}
 
-		console.error(`❌ Unexpected error in user route:`, error);
+		logger.error({ error }, '❌ Unexpected error in user route');
 		return json({ error: 'Internal server error' }, { status: 500 });
 	}
 }

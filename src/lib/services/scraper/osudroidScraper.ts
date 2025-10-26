@@ -3,6 +3,7 @@ import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import { parsePlayerFromScraper } from '$lib/models/player';
 import { NotFoundError, ScraperError } from '$lib/services/errors/userErrors';
+import logger from '$lib/utils/logger';
 
 const OSUDROID_PROFILE_URL = 'https://osudroid.moe/profile.php';
 
@@ -13,7 +14,7 @@ export async function scrapeUserData(uid: string) {
 
 		// Check if user does not exist
 		if ($('main.content-wrapper').text().includes('User not found.')) {
-			console.warn(`🔍 User ${uid} not found in scraper.`);
+			logger.warn(`🔍 User ${uid} not found in scraper.`);
 			// noinspection ExceptionCaughtLocallyJS
 			throw new NotFoundError(`User ${uid} not found in scraper`);
 		}
@@ -99,7 +100,7 @@ export async function scrapeUserData(uid: string) {
 
 		return parsePlayerFromScraper(returnData);
 	} catch (error) {
-		console.error(`❌ Error scraping user ${uid}:`, error);
+		logger.error(`❌ Error scraping user ${uid}: ${error}`);
 		throw new ScraperError(`Failed to fetch user data from scraper`);
 	}
 }
