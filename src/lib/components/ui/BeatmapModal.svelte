@@ -172,7 +172,8 @@
 				</div>
 			</div>
 
-			<a href={beatmap.url} target="_blank">
+			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+			<a href={beatmap.url} target="_blank" rel="noopener noreferrer">
 				<button type="button" class="btn preset-filled-primary-500 mt-6 w-full">
 					View on osu!
 					<ExternalLinkIcon size={16} />

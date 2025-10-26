@@ -4,6 +4,7 @@
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
 	import { AlertCircleIcon } from 'lucide-svelte';
+	import { resolve } from '$app/paths';
 
 	let status = page.status;
 	let message = page.error?.message || 'An unexpected error occurred.';
@@ -37,7 +38,8 @@
 		</p>
 
 		<a
-			href="/"
+			href={resolve('/')}
+			data-sveltekit-preload-data
 			class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
 		>
 			Back to Home

@@ -121,6 +121,7 @@ export async function getBeatmaps(ids: number[]): Promise<BeatmapExtended[]> {
 		return response.data.beatmaps;
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			const status = error.response?.status;
 			logger.error({ error }, '❌ osu! API error');
 			throw new ApiError(`osu! API request failed with status ${status}`);
 		}
