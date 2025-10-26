@@ -24,5 +24,4 @@
 			<span>View on GitHub</span>
 		</a>
 	</div>
-
 </footer>

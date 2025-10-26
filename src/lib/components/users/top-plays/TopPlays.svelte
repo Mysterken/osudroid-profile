@@ -7,13 +7,17 @@
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 
-	let { topPlays, beatmaps, itemsToShow = $bindable(5), openModal }:
-		{
-			topPlays: Play[] | MergedPlay[],
-			beatmaps: Map<string, BeatmapExtended | null>,
-			itemsToShow: number,
-			openModal: (beatmap: BeatmapExtended | null | undefined) => void
-		} = $props();
+	let {
+		topPlays,
+		beatmaps,
+		itemsToShow = $bindable(5),
+		openModal
+	}: {
+		topPlays: Play[] | MergedPlay[];
+		beatmaps: Map<string, BeatmapExtended | null>;
+		itemsToShow: number;
+		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+	} = $props();
 </script>
 
 <ContentCard

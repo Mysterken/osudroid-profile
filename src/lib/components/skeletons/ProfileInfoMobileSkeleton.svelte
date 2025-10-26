@@ -35,14 +35,14 @@
 {#snippet userStats()}
 	<table class="w-full text-sm max-w-[400px]">
 		<tbody>
-		{#each stats as stat (stat.id)}
-			<tr>
-				<td class="py-0.5 tablet-sm:py-1 text-left">{stat.name}</td>
-				<td class="py-0.5 tablet-sm:py-1 text-right font-bold">
-					<div class="placeholder animate-pulse ml-auto {stat.width}"></div>
-				</td>
-			</tr>
-		{/each}
+			{#each stats as stat (stat.id)}
+				<tr>
+					<td class="py-0.5 tablet-sm:py-1 text-left">{stat.name}</td>
+					<td class="py-0.5 tablet-sm:py-1 text-right font-bold">
+						<div class="placeholder animate-pulse ml-auto {stat.width}"></div>
+					</td>
+				</tr>
+			{/each}
 		</tbody>
 	</table>
 {/snippet}
@@ -52,7 +52,7 @@
 		<h3 class="text-sm text-gray-400">Registered</h3>
 		<div class="placeholder animate-pulse h-3 w-20"></div>
 	</div>
-	<div class="last-login flex flex-col ">
+	<div class="last-login flex flex-col">
 		<h3 class="text-sm text-gray-400">Last Login</h3>
 		<div class="placeholder animate-pulse h-3 w-16"></div>
 	</div>
@@ -91,7 +91,6 @@
 		<div class="user-dates tablet-sm:hidden flex gap-7 px-2 text-left">
 			{@render userDates()}
 		</div>
-
 	</div>
 
 	<div class="user-dates hidden tablet-sm:flex gap-7 px-2 pt-2 text-left">

@@ -48,24 +48,24 @@
 <Footer />
 
 <style>
-    @keyframes fade-in {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .animate-fade-in {
-        animation: fade-in 0.4s ease forwards;
-        opacity: 0;
-    }
-    .animate-fade-in.delay-100 {
-        animation-delay: 0.1s;
-    }
-    .animate-fade-in.delay-200 {
-        animation-delay: 0.2s;
-    }
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	.animate-fade-in {
+		animation: fade-in 0.4s ease forwards;
+		opacity: 0;
+	}
+	.animate-fade-in.delay-100 {
+		animation-delay: 0.1s;
+	}
+	.animate-fade-in.delay-200 {
+		animation-delay: 0.2s;
+	}
 </style>

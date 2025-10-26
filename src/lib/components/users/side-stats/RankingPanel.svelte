@@ -16,7 +16,7 @@
 	} = $props();
 </script>
 
-{#snippet userRanking(title = "", value = 0)}
+{#snippet userRanking(title = '', value = 0)}
 	<tr>
 		<td class="pb-1 text-left">{title}</td>
 		<td class="pb-1 text-right font-bold">{isNaN(Number(value)) ? 'N/A' : `#${value ?? 0}`}</td>
@@ -32,15 +32,15 @@
 	<div class="user-ranking flex flex-col justify-center w-full px-2">
 		<table class="w-full text-sm max-w-[400px]">
 			<tbody>
-			{#if (source === 'api' || source === 'merged')}
-				{@render userRanking('Global Ranking', globalRanking)}
-				{@render userRanking('Country Ranking', countryRanking)}
-			{:else if (source === 'scraper')}
-				{@render userRanking('Score Ranking', scoreRanking)}
-				{@render userRanking('PP Ranking', ppRanking)}
-			{:else}
-				{@render userRanking('No ranking data available')}
-			{/if}
+				{#if source === 'api' || source === 'merged'}
+					{@render userRanking('Global Ranking', globalRanking)}
+					{@render userRanking('Country Ranking', countryRanking)}
+				{:else if source === 'scraper'}
+					{@render userRanking('Score Ranking', scoreRanking)}
+					{@render userRanking('PP Ranking', ppRanking)}
+				{:else}
+					{@render userRanking('No ranking data available')}
+				{/if}
 			</tbody>
 		</table>
 	</div>

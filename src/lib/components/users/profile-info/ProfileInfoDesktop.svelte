@@ -2,8 +2,8 @@
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { getCountryName } from '$lib/utils/countries';
 
-	let { avatarLink, username, country }:
-		{ avatarLink: string; username: string; country: string; } = $props();
+	let { avatarLink, username, country }: { avatarLink: string; username: string; country: string } =
+		$props();
 
 	let countryName = getCountryName(country);
 
@@ -18,6 +18,8 @@
 	</div>
 	<div class="user-info flex flex-col justify-end text-left">
 		<h1 class="font-bold text-lg">{username}</h1>
-		<p class="text-sm text-gray-400"><span class="rounded-[2px] fi fi-{country.toLowerCase()} mr-2"></span>{countryName}</p>
+		<p class="text-sm text-gray-400">
+			<span class="rounded-[2px] fi fi-{country.toLowerCase()} mr-2"></span>{countryName}
+		</p>
 	</div>
 </ContentCard>

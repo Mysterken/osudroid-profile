@@ -18,12 +18,18 @@
 	} = $props();
 
 	let formattedPerformancePoints = Math.round(performancePoints);
-	let calculatedAccuracy = (source === 'api' || source === 'merged') ? (accuracy * 100).toFixed(2) : accuracy;
+	let calculatedAccuracy =
+		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy;
 	let formattedScore = score.toLocaleString();
 	let formattedPlaycount = playcount.toLocaleString();
 
 	let stats = [
-		{ name: 'Performance Points', value: formattedPerformancePoints, id: 'pp', info: performancePoints },
+		{
+			name: 'Performance Points',
+			value: formattedPerformancePoints,
+			id: 'pp',
+			info: performancePoints
+		},
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
@@ -35,7 +41,9 @@
 		{#each stats as stat (stat.id)}
 			<div class="flex justify-between items-center">
 				<span class="text-left whitespace-nowrap">{stat.name}</span>
-				<span class="text-right font-bold truncate" use:tooltip={{text: String(stat.info ?? "")}}>{stat.value}</span>
+				<span class="text-right font-bold truncate" use:tooltip={{ text: String(stat.info ?? '') }}
+					>{stat.value}</span
+				>
 			</div>
 		{/each}
 	</div>

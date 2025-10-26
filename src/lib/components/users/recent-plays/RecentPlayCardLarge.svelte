@@ -36,7 +36,9 @@
 	let calculatedAccuracy = (accuracy * 100).toFixed(2);
 	let formattedDate = date ? new Date(date).toLocaleString() : '';
 
-	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '));
+	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(
+		filename.replaceAll('_', ' ')
+	);
 
 	let beatmap: BeatmapExtended | null | undefined = $state(beatmaps.get(hash ?? filename));
 
@@ -83,7 +85,6 @@
 	w-full
 	transition-transform transform hover:scale-[1.01] hover:opacity-90 duration-200"
 >
-
 	<LetterRank
 		{rank}
 		sx="
@@ -96,10 +97,12 @@
 		items-center justify-center"
 	/>
 
-	<div class="text-left flex-grow"
-			 onclick={() => loadBeatmapModal()}
-			 onkeydown={(e) => (e.key === 'Enter') && loadBeatmapModal()} role="button"
-			 tabindex="0"
+	<div
+		class="text-left flex-grow"
+		onclick={() => loadBeatmapModal()}
+		onkeydown={(e) => e.key === 'Enter' && loadBeatmapModal()}
+		role="button"
+		tabindex="0"
 	>
 		<h2 class="text-base leading-4">{songArtist} - {songTitle}</h2>
 		<p class="text-[#505050] text-sm italic leading-3.5">{difficulty}</p>
@@ -113,6 +116,6 @@
 	<div class="text-right ml-auto min-w-max">
 		<h2 class="text-base font-bold leading-3.5">{calculatedAccuracy}%</h2>
 		<p class="text-sm italic">{formattedScore} / {formattedCombo}x / {miss} miss</p>
-		<p class="text-[#505050] text-xs leading-3" use:tooltip={{text: date}}>{formattedDate}</p>
+		<p class="text-[#505050] text-xs leading-3" use:tooltip={{ text: date }}>{formattedDate}</p>
 	</div>
 </div>

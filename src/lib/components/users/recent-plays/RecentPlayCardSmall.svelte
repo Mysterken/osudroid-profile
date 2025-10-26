@@ -42,11 +42,9 @@
 	let calculatedAccuracy = (accuracy * 100).toFixed(2);
 	let formattedDate = date ? new Date(date).toLocaleString() : '';
 
-	let {
-		songArtist,
-		songTitle,
-		difficulty
-	} = playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '));
+	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(
+		filename.replaceAll('_', ' ')
+	);
 
 	let beatmap: BeatmapExtended | null | undefined = $state(beatmaps.get(hash ?? filename));
 
@@ -106,17 +104,20 @@
 			/>
 		{/if}
 
-		<div class="text-left overflow-hidden flex-grow"
-				 onclick={() => loadBeatmapModal()}
-				 onkeydown={(e) => (e.key === 'Enter') && loadBeatmapModal()} role="button"
-				 tabindex="0"
+		<div
+			class="text-left overflow-hidden flex-grow"
+			onclick={() => loadBeatmapModal()}
+			onkeydown={(e) => e.key === 'Enter' && loadBeatmapModal()}
+			role="button"
+			tabindex="0"
 		>
 			<h2 class="text-sm leading-4">{songArtist} - {songTitle}</h2>
 			<p class="text-xs text-[#505050] italic leading-3.5">{difficulty}</p>
 		</div>
 
 		<button
-			aria-label="Toggle Details" class="transition-transform duration-300 ml-auto"
+			aria-label="Toggle Details"
+			class="transition-transform duration-300 ml-auto"
 			onclick={toggleDetails}
 			style="transform: rotate({isOpen ? '180deg' : '0deg'})"
 		>
@@ -134,9 +135,7 @@
 			px-2.5
 			min-h-[40px]"
 		>
-			<div
-				class="flex gap-1.5 items-center"
-			>
+			<div class="flex gap-1.5 items-center">
 				<LetterRank
 					sx="
 					flex
@@ -151,11 +150,13 @@
 				<p class="text-[#505050] text-xs italic">{mods.length ? `+${mods.join('')}` : 'NM'}</p>
 			</div>
 
-			<div
-				class="flex flex-col text-right"
-			>
-				<p class="text-sm italic">{formattedScore} / {formattedCombo}x / {calculatedAccuracy}% / {miss} m</p>
-				<p class="text-[0.5rem] text-[#505050] italic" use:tooltip={{text: date}}>{formattedDate}</p>
+			<div class="flex flex-col text-right">
+				<p class="text-sm italic">
+					{formattedScore} / {formattedCombo}x / {calculatedAccuracy}% / {miss} m
+				</p>
+				<p class="text-[0.5rem] text-[#505050] italic" use:tooltip={{ text: date }}>
+					{formattedDate}
+				</p>
 			</div>
 		</div>
 	{/if}

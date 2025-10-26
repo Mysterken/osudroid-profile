@@ -4,20 +4,20 @@
 @import '@skeletonlabs/skeleton-svelte';
 @import './lib/styles/osudroid.css';
 
-@import "@fontsource/quicksand";
-@import "../node_modules/flag-icons/css/flag-icons.min.css";
+@import '@fontsource/quicksand';
+@import '../node_modules/flag-icons/css/flag-icons.min.css';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
 @plugin '@tailwindcss/forms';
 
 @theme {
-    --breakpoint-phone-sm: 22.5rem;
-    --breakpoint-phone-lg: 30rem;
-    --breakpoint-tablet-sm: 48rem;
-    --breakpoint-tablet-lg: 64rem;
-    --breakpoint-desktop-sm: 80rem;
-    --breakpoint-desktop-lg: 90rem;
+	--breakpoint-phone-sm: 22.5rem;
+	--breakpoint-phone-lg: 30rem;
+	--breakpoint-tablet-sm: 48rem;
+	--breakpoint-tablet-lg: 64rem;
+	--breakpoint-desktop-sm: 80rem;
+	--breakpoint-desktop-lg: 90rem;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

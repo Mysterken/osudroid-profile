@@ -3,7 +3,10 @@
 	import { ExternalLinkIcon, PlayIcon, SquareIcon } from 'lucide-svelte';
 	import { playUtils } from '$lib/utils/playUtils.js';
 
-	let { dialog = $bindable(), beatmap }: { dialog?: HTMLDialogElement, beatmap?: BeatmapExtended | null } = $props();
+	let {
+		dialog = $bindable(),
+		beatmap
+	}: { dialog?: HTMLDialogElement; beatmap?: BeatmapExtended | null } = $props();
 	let audio: HTMLAudioElement | null = null;
 	let isPlaying = $state(false);
 	let isDialogVisible = $state(false);
@@ -33,7 +36,10 @@
 			});
 
 			dialog.addEventListener('click', (event) => {
-				if (event.target instanceof Node && !dialog?.querySelector('.modal-content')?.contains(event.target)) {
+				if (
+					event.target instanceof Node &&
+					!dialog?.querySelector('.modal-content')?.contains(event.target)
+				) {
 					dialog?.close();
 				}
 			});
@@ -45,7 +51,7 @@
 
 		if (!audio) {
 			audio = new Audio(beatmap.beatmapset.preview_url);
-			audio.addEventListener('ended', () => isPlaying = false);
+			audio.addEventListener('ended', () => (isPlaying = false));
 		}
 
 		if (isPlaying) {
@@ -86,12 +92,12 @@
 
 	<table class="w-full text-left text-xs text-gray-300">
 		<tbody>
-		{#each stats as stat (stat.id)}
-			<tr>
-				<td class="pr-2">{stat.label}</td>
-				<td class="text-white font-bold">{stat.value}</td>
-			</tr>
-		{/each}
+			{#each stats as stat (stat.id)}
+				<tr>
+					<td class="pr-2">{stat.label}</td>
+					<td class="text-white font-bold">{stat.value}</td>
+				</tr>
+			{/each}
 		</tbody>
 	</table>
 {/snippet}
@@ -129,8 +135,11 @@
 						/>
 					{/if}
 
-					<button type="button" class="bg-[#3C4345] text-sm font-bold btn preset-filled w-[100px] mt-2.5 p-1"
-									onclick={playPreview}>
+					<button
+						type="button"
+						class="bg-[#3C4345] text-sm font-bold btn preset-filled w-[100px] mt-2.5 p-1"
+						onclick={playPreview}
+					>
 						{#if isPlaying}
 							<SquareIcon class="invert" fill="" size={18} />
 						{:else}
