@@ -6,9 +6,10 @@ import logger from '$lib/utils/logger';
 
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 const beatmapCache = new Map<string, { data: BeatmapExtended | null; expires: number }>();
-const hashToIdCache = await loadHashCache();
 
 export async function batchFetchBeatmaps(lookups: { filename: string; hash?: string }[]) {
+	const hashToIdCache = await loadHashCache()
+
 	const newHashes = new Set<string>();
 	const finalResults: { key: string; beatmap: BeatmapExtended | null; error?: string }[] = [];
 	const pendingLookups: { key: string; id: number }[] = [];
