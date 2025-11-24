@@ -89,7 +89,7 @@ export async function lookupBeatmap(filename?: string, hash?: string): Promise<B
 			const status = error.response?.status;
 
 			if (status === 404) {
-				logger.warn('`🔍 Beatmap ${filename || hash} not found.`');
+				logger.warn(`🔍 Beatmap ${filename || hash} not found.`);
 				throw new NotFoundError(`Beatmap ${filename || hash} not found`);
 			}
 
