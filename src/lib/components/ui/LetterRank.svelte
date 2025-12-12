@@ -1,6 +1,6 @@
 <script lang="ts">
 	let { sx, rank }: { sx: string; rank: string } = $props();
-	let letterRank = rank?.toUpperCase();
+	let letterRank = $derived(rank?.toUpperCase());
 
 	function getRankColor(rank: string): { color: string; displayLetter: string } {
 		const rankMap: Record<string, { color: string; displayLetter: string }> = {
@@ -17,7 +17,7 @@
 		return rankMap[rank] || { color: '#FFFFFF', displayLetter: rank };
 	}
 
-	const { color, displayLetter } = getRankColor(letterRank);
+	const { color, displayLetter } = $derived(getRankColor(letterRank));
 </script>
 
 <div class={sx} style="color: {color};">

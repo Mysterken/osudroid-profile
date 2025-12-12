@@ -16,7 +16,8 @@
 		ppRanking?: number;
 	} = $props();
 
-	const fixedGlobalRanking = $derived(globalRanking ? (globalRanking + 1) : globalRanking);
+	// temporary fix for 0-based ranking from API
+	const fixedGlobalRanking = $derived(globalRanking != null ? (globalRanking + 1) : globalRanking);
 </script>
 
 {#snippet userRanking(title = '', value = 0)}

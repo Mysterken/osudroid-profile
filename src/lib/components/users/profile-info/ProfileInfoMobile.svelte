@@ -1,4 +1,5 @@
 <script lang="ts">
+	import defaultAvatarImg from '$lib/assets/default/avatar.webp';
 	import { tooltip } from '$lib/actions/tooltip';
 	import ContentCard from '$lib/components/layouts/ContentCard.svelte';
 	import { timeAgo } from '$lib/utils/timeago';
@@ -36,20 +37,20 @@
 		lastLogin: string | null;
 	} = $props();
 
-	let formattedPerformancePoints = Math.round(performancePoints);
+	let formattedPerformancePoints = $derived(Math.round(performancePoints));
 	let calculatedAccuracy =
-		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy;
-	let formattedScore = score.toLocaleString();
-	let formattedPlaycount = playcount.toLocaleString();
-	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
-	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
-	let countryName = getCountryName(country);
+		$derived(source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy);
+	let formattedScore = $derived(score.toLocaleString());
+	let formattedPlaycount = $derived(playcount.toLocaleString());
+	let formattedRegistered = $derived(registered ? new Date(registered).toLocaleDateString() : 'N/A');
+	let formattedLastLogin = $derived(lastLogin ? timeAgo(lastLogin) : 'N/A');
+	let countryName = $derived(getCountryName(country));
 
 	function defaultAvatar(event: Event) {
-		(event.target as HTMLInputElement).src = '/default/avatar.webp';
+		(event.target as HTMLInputElement).src = defaultAvatarImg;
 	}
 
-	const stats = [
+	const stats = $derived([
 		{
 			name: 'Performance Points',
 			value: formattedPerformancePoints,
@@ -59,18 +60,21 @@
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
-	];
+	]);
+
+	// temporary fix for 0-based ranking from API
+	const fixedGlobalRanking = $derived(globalRanking != null ? (globalRanking + 1) : globalRanking);
 </script>
 
 {#snippet userIdentity()}
 	<div class="user-identity flex gap-3.5">
-		<div class="user-avatar size-[80px] rounded-[10px] overflow-hidden">
+		<div class="user-avatar size-20 rounded-[10px] overflow-hidden">
 			<img src={avatarLink} onerror={defaultAvatar} alt="User Avatar" />
 		</div>
 		<div class="user-info flex flex-col justify-end text-left">
 			<h1 class="font-bold text-lg">{username}</h1>
 			<p class="text-sm text-gray-400">
-				<span class="rounded-[2px] fi fi-{country.toLowerCase()} mr-2"></span>{countryName}
+				<span class="rounded-xs fi fi-{country.toLowerCase()} mr-2"></span>{countryName}
 			</p>
 		</div>
 	</div>
@@ -86,7 +90,7 @@
 {#snippet userRankings()}
 	<div class="user-rankings flex gap-7 px-2 text-left">
 		{#if source === 'api' || source === 'merged'}
-			{@render userRanking('Global Ranking', globalRanking)}
+			{@render userRanking('Global Ranking', fixedGlobalRanking)}
 			{@render userRanking('Country Ranking', countryRanking)}
 		{:else if source === 'scraper'}
 			{@render userRanking('Score Ranking', scoreRanking)}
@@ -98,7 +102,7 @@
 {/snippet}
 
 {#snippet userStats()}
-	<table class="w-full text-sm max-w-[400px]">
+	<table class="w-full text-sm max-w-100">
 		<tbody>
 			{#each stats as stat (stat.id)}
 				<tr>
