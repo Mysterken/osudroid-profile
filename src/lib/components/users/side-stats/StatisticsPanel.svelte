@@ -17,13 +17,14 @@
 		playcount: number;
 	} = $props();
 
-	let formattedPerformancePoints = Math.round(performancePoints);
-	let calculatedAccuracy =
-		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy;
-	let formattedScore = score.toLocaleString();
-	let formattedPlaycount = playcount.toLocaleString();
+	let formattedPerformancePoints = $derived(Math.round(performancePoints));
+	let calculatedAccuracy = $derived(
+		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy
+	);
+	let formattedScore = $derived(score.toLocaleString());
+	let formattedPlaycount = $derived(playcount.toLocaleString());
 
-	let stats = [
+	let stats = $derived([
 		{
 			name: 'Performance Points',
 			value: formattedPerformancePoints,
@@ -33,7 +34,7 @@
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
-	];
+	]);
 </script>
 
 {#snippet userStats()}
