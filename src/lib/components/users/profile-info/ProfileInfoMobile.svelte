@@ -15,6 +15,7 @@
 		scoreRanking,
 		ppRanking,
 		performancePoints,
+		simulatedPerformancePoints = performancePoints,
 		score,
 		accuracy,
 		playcount,
@@ -30,6 +31,7 @@
 		scoreRanking?: number;
 		ppRanking?: number;
 		performancePoints: number;
+		simulatedPerformancePoints?: number;
 		score: number;
 		accuracy: number;
 		playcount: number;
@@ -37,7 +39,13 @@
 		lastLogin: string | null;
 	} = $props();
 
-	let formattedPerformancePoints = $derived(Math.round(performancePoints));
+	let displayedPerformancePoints = $derived(
+		performancePoints === 0 && simulatedPerformancePoints !== 0
+			? simulatedPerformancePoints
+			: performancePoints
+	);
+	let isSimulated = $derived(performancePoints === 0 && simulatedPerformancePoints !== 0);
+	let formattedPerformancePoints = $derived(Math.round(displayedPerformancePoints));
 	let calculatedAccuracy =
 		$derived(source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy);
 	let formattedScore = $derived(score.toLocaleString());
@@ -55,7 +63,8 @@
 			name: 'Performance Points',
 			value: formattedPerformancePoints,
 			id: 'pp',
-			info: performancePoints
+			info: isSimulated ? 'simulated PP' : performancePoints,
+			isSimulated
 		},
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
@@ -109,6 +118,7 @@
 					<td class="py-0.5 tablet-sm:py-1 text-left">{stat.name}</td>
 					<td
 						class="py-0.5 tablet-sm:py-1 text-right font-bold"
+						class:opacity-70={stat.isSimulated}
 						use:tooltip={{ text: String(stat.info ?? '') }}
 					>
 						{stat.value}

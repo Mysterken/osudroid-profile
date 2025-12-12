@@ -6,18 +6,26 @@
 	let {
 		source,
 		performancePoints,
+		simulatedPerformancePoints = performancePoints,
 		score,
 		accuracy,
 		playcount
 	}: {
 		source: 'api' | 'scraper' | 'merged';
 		performancePoints: number;
+		simulatedPerformancePoints?: number;
 		score: number;
 		accuracy: number;
 		playcount: number;
 	} = $props();
 
-	let formattedPerformancePoints = $derived(Math.round(performancePoints));
+	let displayedPerformancePoints = $derived(
+		performancePoints === 0 && simulatedPerformancePoints !== 0
+			? simulatedPerformancePoints
+			: performancePoints
+	);
+	let isSimulated = $derived(performancePoints === 0 && simulatedPerformancePoints !== 0);
+	let formattedPerformancePoints = $derived(Math.round(displayedPerformancePoints));
 	let calculatedAccuracy = $derived(
 		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy
 	);
@@ -29,7 +37,8 @@
 			name: 'Performance Points',
 			value: formattedPerformancePoints,
 			id: 'pp',
-			info: performancePoints
+			info: isSimulated ? 'simulated PP' : performancePoints,
+			isSimulated
 		},
 		{ name: 'Score', value: formattedScore, id: 'score' },
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
@@ -42,9 +51,13 @@
 		{#each stats as stat (stat.id)}
 			<div class="flex justify-between items-center">
 				<span class="text-left whitespace-nowrap">{stat.name}</span>
-				<span class="text-right font-bold truncate" use:tooltip={{ text: String(stat.info ?? '') }}
-					>{stat.value}</span
+				<span
+					class="text-right font-bold truncate"
+					class:opacity-70={stat.isSimulated}
+					use:tooltip={{ text: String(stat.info ?? '') }}
 				>
+					{stat.value}
+				</span>
 			</div>
 		{/each}
 	</div>

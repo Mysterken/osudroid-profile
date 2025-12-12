@@ -32,6 +32,8 @@
 	let registered = $derived(getUserField(data?.user, 'Registered', '')) as string;
 	let lastLogin = $derived(getUserField(data?.user, 'LastLogin', '')) as string;
 
+	let simulatedPP = $state(0)
+
 	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
 
 	let isLoading = $derived(!data?.user);
@@ -165,6 +167,8 @@
 		}
 
 		if (user?.Top50Plays) {
+			simulatedPP = playUtils.getSimulatedPerformancePoints(user.Top50Plays)
+
 			await fetchBeatmapsInRange(user.Top50Plays, 0, 5);
 			fetchBeatmapsInRange(user.Top50Plays, 5, 25);
 		}
@@ -216,6 +220,7 @@
 				<StatisticsPanel
 					source={user.Source}
 					performancePoints={user.OverallPP}
+					simulatedPerformancePoints={simulatedPP}
 					score={user.OverallScore}
 					accuracy={user.OverallAccuracy}
 					playcount={user.OverallPlaycount}
@@ -266,6 +271,7 @@
 				scoreRanking={scoreRank}
 				ppRanking={ppRank}
 				performancePoints={user.OverallPP}
+				simulatedPerformancePoints={simulatedPP}
 				score={user.OverallScore}
 				accuracy={user.OverallAccuracy}
 				playcount={user.OverallPlaycount}
