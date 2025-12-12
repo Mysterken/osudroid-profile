@@ -1,5 +1,5 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -13,8 +13,4 @@ export default defineConfig({
 			strategy: ['url', 'cookie', 'baseLocale']
 		})
 	],
-
-	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
-	}
 });

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import blackCubePattern from '$lib/assets/backgrounds/black_cube_pattern.webp';
 	import { tooltip } from '$lib/actions/tooltip';
 	import { playUtils } from '$lib/utils/playUtils';
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
@@ -31,21 +32,21 @@
 		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
 	} = $props();
 
-	let formattedScore = score.toLocaleString();
-	let formattedCombo = combo.toLocaleString();
-	let calculatedAccuracy = (accuracy * 100).toFixed(2);
-	let formattedPP = pp ? Math.round(pp) : 0;
-	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
+	let formattedScore = $derived(score.toLocaleString());
+	let formattedCombo = $derived(combo.toLocaleString());
+	let calculatedAccuracy = $derived((accuracy * 100).toFixed(2));
+	let formattedPP = $derived(pp ? Math.round(pp) : 0);
+	let rawPP = $derived(Math.round(playUtils.calculateRawPP(pp, index + 1)));
 
-	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
+	let { songArtist, songTitle, difficulty } = $derived(playUtils.convertTitleToBeatmapMetadata(filename));
 
-	let tooltipText = $state(songTitle);
+	let tooltipText = $derived(songTitle);
 	let titleElement: HTMLHeadingElement;
 
 	let backgroundImg = $derived(
 		beatmap?.beatmapset?.covers?.cover
 			? `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${beatmap.beatmapset.covers.cover})`
-			: 'url(/backgrounds/black_cube_pattern.webp)'
+			: `url(${blackCubePattern})`
 	);
 
 	function checkOverflow(el: HTMLElement) {
@@ -64,8 +65,8 @@
 	top-play
 	flex
 	card
-	border-color rounded-[5px] border-[1px] border-[#E5E5E5]
-	w-full h-[120px]
+	border-color rounded-[5px] border border-[#E5E5E5]
+	w-full h-30
 	transition-transform transform hover:scale-[1.01] hover:opacity-95 duration-200"
 	style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 >
@@ -83,7 +84,7 @@
 	</div>
 
 	<div
-		class="flex flex-grow items-center justify-center gap-2.5 mx-5"
+		class="flex grow items-center justify-center gap-2.5 mx-5"
 		onclick={() => openModal(beatmap)}
 		onkeydown={(e) => e.key === 'Enter' && openModal(beatmap)}
 		role="button"
@@ -95,7 +96,7 @@
 			<div class="flex h-14 items-center">
 				<h2
 					bind:this={titleElement}
-					class="text-xl line-clamp-2 break-words"
+					class="text-xl line-clamp-2 wrap-break-word"
 					onmouseenter={() => checkOverflow(titleElement)}
 					use:tooltip={{ text: tooltipText }}
 				>
@@ -116,7 +117,7 @@
 		<div class="flex flex-col text-right h-full items-center justify-center py-2.5 ml-auto">
 			<p class="absolute text-xl font-bold self-end">{calculatedAccuracy}%</p>
 
-			<div class="flex gap-[1px] mt-auto">
+			<div class="flex gap-px mt-auto">
 				{#each mods as mod (mod)}
 					<ModIcon size={42} length={mods.length} {mod} />
 				{/each}
@@ -125,7 +126,7 @@
 	</div>
 
 	<div
-		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-[120px] bg-[#000000]/[.40] rounded-tr-[5px] rounded-br-[5px]"
+		class="relative flex flex-col justify-center p-2.5 ml-auto min-w-30 bg-[#000000]/40 rounded-tr-[5px] rounded-br-[5px]"
 	>
 		<p
 			class="absolute left-1/2 -translate-x-1/2 text-xl font-bold"

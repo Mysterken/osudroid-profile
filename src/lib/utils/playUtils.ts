@@ -1,3 +1,5 @@
+import type { Play } from '$lib/models/play';
+
 /**
  * Function to calculate raw PP
  * Formula: Total PP = p * 0.95^(n-1)
@@ -164,11 +166,23 @@ function formatLength(length?: number): string {
 	return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
+/**
+ * Calculates the simulated performance points (PP) of a set of plays.
+ * @param plays
+ */
+function getSimulatedPerformancePoints(plays: Play[]): number {
+	return plays.reduce((total, play, index) => {
+		return total + calculateRawPP(play.MapPP, index + 1);
+	}, 0);
+}
+
+
 export const playUtils = {
 	calculateRawPP,
 	convertStringIntoPlayDetails,
 	convertLongModNameToAlias,
 	convertAliasToLongModName,
 	convertTitleToBeatmapMetadata,
-	formatLength
+	formatLength,
+	getSimulatedPerformancePoints
 };

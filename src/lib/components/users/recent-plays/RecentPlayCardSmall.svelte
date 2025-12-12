@@ -37,16 +37,16 @@
 		isOpen = !isOpen;
 	}
 
-	let formattedScore = score.toLocaleString();
-	let formattedCombo = combo.toLocaleString();
-	let calculatedAccuracy = (accuracy * 100).toFixed(2);
-	let formattedDate = date ? new Date(date).toLocaleString() : '';
+	let formattedScore = $derived(score.toLocaleString());
+	let formattedCombo = $derived(combo.toLocaleString());
+	let calculatedAccuracy = $derived((accuracy * 100).toFixed(2));
+	let formattedDate = $derived(date ? new Date(date).toLocaleString() : '');
 
-	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(
+	let { songArtist, songTitle, difficulty } = $derived(playUtils.convertTitleToBeatmapMetadata(
 		filename.replaceAll('_', ' ')
-	);
+	));
 
-	let beatmap: BeatmapExtended | null | undefined = $state(beatmaps.get(hash ?? filename));
+	let beatmap: BeatmapExtended | null | undefined = $derived((beatmaps.get(hash ?? filename)));
 
 	function loadBeatmapModal() {
 		beatmap = beatmaps.get(hash ?? filename);
@@ -88,7 +88,7 @@
 	w-full
 	transition-transform transform hover:scale-[1.01] hover:opacity-90 duration-200"
 >
-	<div class="showoff flex px-2.5 py-1 gap-1.5 min-h-[40px]">
+	<div class="showoff flex px-2.5 py-1 gap-1.5 min-h-10">
 		{#if !isOpen}
 			<LetterRank
 				sx="
@@ -105,7 +105,7 @@
 		{/if}
 
 		<div
-			class="text-left overflow-hidden flex-grow"
+			class="text-left overflow-hidden grow"
 			onclick={() => loadBeatmapModal()}
 			onkeydown={(e) => e.key === 'Enter' && loadBeatmapModal()}
 			role="button"
@@ -133,7 +133,7 @@
 			border-t border-[#2A2A2A] border-dashed
 			rounded-b-[4px]
 			px-2.5
-			min-h-[40px]"
+			min-h-10"
 		>
 			<div class="flex gap-1.5 items-center">
 				<LetterRank

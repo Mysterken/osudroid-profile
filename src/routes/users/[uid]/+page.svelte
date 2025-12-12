@@ -23,18 +23,20 @@
 
 	let { data }: PageProps = $props();
 
-	let user = $state<ApiPlayer | ScraperPlayer | MergedPlayer | null>(data?.user);
+	let user = $derived<ApiPlayer | ScraperPlayer | MergedPlayer | null>(data?.user);
 
-	let globalRank = $state(getUserField(data?.user, 'GlobalRank', 0)) as number;
-	let countryRank = $state(getUserField(data?.user, 'CountryRank', 0)) as number;
-	let scoreRank = $state(getUserField(data?.user, 'ScoreRank', 0)) as number;
-	let ppRank = $state(getUserField(data?.user, 'PPRank', 0)) as number;
-	let registered = $state(getUserField(data?.user, 'Registered', '')) as string;
-	let lastLogin = $state(getUserField(data?.user, 'LastLogin', '')) as string;
+	let globalRank = $derived(getUserField(data?.user, 'GlobalRank', 0)) as number;
+	let countryRank = $derived(getUserField(data?.user, 'CountryRank', 0)) as number;
+	let scoreRank = $derived(getUserField(data?.user, 'ScoreRank', 0)) as number;
+	let ppRank = $derived(getUserField(data?.user, 'PPRank', 0)) as number;
+	let registered = $derived(getUserField(data?.user, 'Registered', '')) as string;
+	let lastLogin = $derived(getUserField(data?.user, 'LastLogin', '')) as string;
+
+	let simulatedPP = $state(0)
 
 	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
 
-	let isLoading = $state(!data?.user);
+	let isLoading = $derived(!data?.user);
 	let topPlaysToShow = $state(5);
 	let recentPlaysToShow = $state(5);
 	let isFetchingMore = false;
@@ -165,6 +167,8 @@
 		}
 
 		if (user?.Top50Plays) {
+			simulatedPP = playUtils.getSimulatedPerformancePoints(user.Top50Plays)
+
 			await fetchBeatmapsInRange(user.Top50Plays, 0, 5);
 			fetchBeatmapsInRange(user.Top50Plays, 5, 25);
 		}
@@ -205,7 +209,7 @@
 		<!-- Desktop Layout -->
 		<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
 			<!-- Sidebar -->
-			<div class="flex flex-col gap-4 w-[300px] sticky top-28 self-start">
+			<div class="flex flex-col gap-4 w-75 sticky top-28 self-start">
 				<RankingPanel
 					source={user.Source}
 					globalRanking={globalRank}
@@ -216,6 +220,7 @@
 				<StatisticsPanel
 					source={user.Source}
 					performancePoints={user.OverallPP}
+					simulatedPerformancePoints={simulatedPP}
 					score={user.OverallScore}
 					accuracy={user.OverallAccuracy}
 					playcount={user.OverallPlaycount}
@@ -266,6 +271,7 @@
 				scoreRanking={scoreRank}
 				ppRanking={ppRank}
 				performancePoints={user.OverallPP}
+				simulatedPerformancePoints={simulatedPP}
 				score={user.OverallScore}
 				accuracy={user.OverallAccuracy}
 				playcount={user.OverallPlaycount}

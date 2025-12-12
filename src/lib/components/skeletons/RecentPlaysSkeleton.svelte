@@ -29,19 +29,19 @@
 		<!-- Small Screen -->
 		<div class="tablet-sm:hidden flex flex-col gap-1 phone-sm:gap-1.5">
 			{#each { length: 5 } as _, index (index)}
-				<div class="placeholder animate-pulse w-full h-[40px]">{_}</div>
+				<div class="placeholder animate-pulse w-full h-10">{_}</div>
 			{/each}
 		</div>
 
 		<!-- Large Screen -->
 		<div class="hidden tablet-sm:flex flex-col gap-2">
 			{#each { length: 5 } as _, index (index)}
-				<div class="placeholder animate-pulse w-full h-[80px]">{_}</div>
+				<div class="placeholder animate-pulse w-full h-20">{_}</div>
 			{/each}
 		</div>
 
 		<div
-			class="placeholder animate-pulse flex justify-center mt-2 mx-auto w-[115px] h-[30px]"
+			class="placeholder animate-pulse flex justify-center mt-2 mx-auto w-28.75 h-7.5"
 		></div>
 	</div>
 </ContentCard>

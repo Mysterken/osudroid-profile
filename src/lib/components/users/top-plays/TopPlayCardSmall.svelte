@@ -38,13 +38,13 @@
 		isOpen = !isOpen;
 	}
 
-	let formattedScore = score.toLocaleString();
-	let formattedCombo = combo.toLocaleString();
-	let calculatedAccuracy = (accuracy * 100).toFixed(2);
-	let formattedPP = pp ? Math.round(pp) : 0;
-	let rawPP = Math.round(playUtils.calculateRawPP(pp, index + 1));
+	let formattedScore = $derived(score.toLocaleString());
+	let formattedCombo = $derived(combo.toLocaleString());
+	let calculatedAccuracy = $derived((accuracy * 100).toFixed(2));
+	let formattedPP = $derived(pp ? Math.round(pp) : 0);
+	let rawPP = $derived(Math.round(playUtils.calculateRawPP(pp, index + 1)));
 
-	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(filename);
+	let { songArtist, songTitle, difficulty } = $derived(playUtils.convertTitleToBeatmapMetadata(filename));
 
 	let backgroundImg = $derived(
 		beatmap?.beatmapset?.covers?.cover
@@ -66,9 +66,9 @@
 		<span>{index + 1}</span>
 	</div>
 
-	<div class="flex flex-grow items-center" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
+	<div class="flex grow items-center" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
 		<div
-			class="flex flex-grow items-center"
+			class="flex grow items-center"
 			role="button"
 			tabindex="0"
 			onclick={() => openModal(beatmap)}
@@ -111,7 +111,7 @@
 				{rank}
 			/>
 		{:else}
-			<div class="mods flex gap-[1px]">
+			<div class="mods flex gap-px">
 				{#each mods as mod, i (i)}
 					<ModIcon length={mods.length} {mod} />
 				{/each}
@@ -124,7 +124,7 @@
 	</div>
 	{#if isOpen}
 		<div class="flex text-xs italic text-left gap-1.5">
-			<div class="mods flex gap-[1px]">
+			<div class="mods flex gap-px">
 				{#each mods as mod, i (i)}
 					<ModIcon {mod} />
 				{/each}
@@ -144,13 +144,13 @@
 	class="
 	top-play card
 	border-color
- 	border-[1px] border-[#E5E5E5]
+ 	border border-[#E5E5E5]
  	rounded-[5px]
  	w-full
  	transition-transform transform hover:scale-[1.01] hover:opacity-95 duration-200"
 >
 	<div
-		class="showoff flex pr-5 min-h-[70px] rounded-t-[5px]"
+		class="showoff flex pr-5 min-h-17.5 rounded-t-[5px]"
 		style="background-image: {backgroundImg}; background-size: cover; background-position: center;"
 	>
 		{@render showoff()}
@@ -165,7 +165,7 @@
 			px-2.5
 			py-auto
 			justify-center
-			${isOpen ? 'min-h-[50px]' : 'min-h-[30px]'}`}
+			${isOpen ? 'min-h-12.5' : 'min-h-7.5'}`}
 	>
 		{@render details()}
 	</div>

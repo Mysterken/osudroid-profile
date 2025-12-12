@@ -1,4 +1,5 @@
 <script lang="ts">
+	import githubIcon from '$lib/assets/icons/github.svg';
 	const year = new Date().getFullYear();
 </script>
 
@@ -20,7 +21,7 @@
 			rel="noopener noreferrer"
 			class="flex items-center gap-1 text-blue-400 hover:underline hover:text-blue-300"
 		>
-			<img src="/icons/github.svg" class="size-4 invert" alt="github icon" />
+			<img src={githubIcon} class="size-4 invert" alt="github icon" />
 			<span>View on GitHub</span>
 		</a>
 	</div>

@@ -31,16 +31,16 @@
 		beatmaps: Map<string, BeatmapExtended | null>;
 	} = $props();
 
-	let formattedScore = score.toLocaleString();
-	let formattedCombo = combo.toLocaleString();
-	let calculatedAccuracy = (accuracy * 100).toFixed(2);
-	let formattedDate = date ? new Date(date).toLocaleString() : '';
+	let formattedScore = $derived(score.toLocaleString());
+	let formattedCombo = $derived(combo.toLocaleString());
+	let calculatedAccuracy = $derived((accuracy * 100).toFixed(2));
+	let formattedDate = $derived(date ? new Date(date).toLocaleString() : '');
 
-	let { songArtist, songTitle, difficulty } = playUtils.convertTitleToBeatmapMetadata(
+	let { songArtist, songTitle, difficulty } = $derived(playUtils.convertTitleToBeatmapMetadata(
 		filename.replaceAll('_', ' ')
-	);
+	));
 
-	let beatmap: BeatmapExtended | null | undefined = $state(beatmaps.get(hash ?? filename));
+	let beatmap: BeatmapExtended | null | undefined = $derived(beatmaps.get(hash ?? filename));
 
 	function loadBeatmapModal() {
 		beatmap = beatmaps.get(hash ?? filename);
@@ -80,7 +80,7 @@
 	border-color rounded-[5px]
 	bg-[#E5E5E5] hover:bg-[#d5d5d5]
 	text-black
-	min-h-[80px]
+	min-h-20
 	px-4 py-2 gap-5
 	w-full
 	transition-transform transform hover:scale-[1.01] hover:opacity-90 duration-200"
@@ -98,7 +98,7 @@
 	/>
 
 	<div
-		class="text-left flex-grow"
+		class="text-left grow"
 		onclick={() => loadBeatmapModal()}
 		onkeydown={(e) => e.key === 'Enter' && loadBeatmapModal()}
 		role="button"
@@ -106,7 +106,7 @@
 	>
 		<h2 class="text-base leading-4">{songArtist} - {songTitle}</h2>
 		<p class="text-[#505050] text-sm italic leading-3.5">{difficulty}</p>
-		<div class="mods flex gap-[1px]">
+		<div class="mods flex gap-px">
 			{#each mods as mod, i (i)}
 				<ModIcon size={28} length={mods.length} {mod} />
 			{/each}

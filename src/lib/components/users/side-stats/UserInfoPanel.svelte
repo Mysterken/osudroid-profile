@@ -6,8 +6,8 @@
 
 	let { registered, lastLogin }: { registered: string | null; lastLogin: string | null } = $props();
 
-	let formattedRegistered = registered ? new Date(registered).toLocaleDateString() : 'N/A';
-	let formattedLastLogin = lastLogin ? timeAgo(lastLogin) : 'N/A';
+	let formattedRegistered = $derived(registered ? new Date(registered).toLocaleDateString() : 'N/A');
+	let formattedLastLogin = $derived(lastLogin ? timeAgo(lastLogin) : 'N/A');
 </script>
 
 <ContentCard sx="!p-2.5 flex flex-col gap-2.5">
@@ -16,7 +16,7 @@
 		<h1 class="font-bold text-lg">User Info</h1>
 	</div>
 	<div class="user-info flex flex-col justify-center w-full px-2">
-		<table class="w-full text-sm max-w-[400px]">
+		<table class="w-full text-sm max-w-100">
 			<tbody>
 				<tr>
 					<td class="pb-1 text-left">Registered</td>
