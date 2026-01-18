@@ -6,7 +6,9 @@
 
 	let { registered, lastLogin }: { registered: string | null; lastLogin: string | null } = $props();
 
-	let formattedRegistered = $derived(registered ? new Date(registered).toLocaleDateString() : 'N/A');
+	let formattedRegistered = $derived(
+		registered ? new Date(registered).toLocaleDateString() : 'N/A'
+	);
 	let formattedLastLogin = $derived(lastLogin ? timeAgo(lastLogin) : 'N/A');
 </script>
 

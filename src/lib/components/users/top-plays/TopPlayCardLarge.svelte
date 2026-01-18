@@ -21,7 +21,7 @@
 	}: {
 		index: number;
 		filename: string;
-		mods: string[];
+		mods: (string | { acronym: string })[];
 		score: number;
 		combo: number;
 		rank: string;
@@ -38,7 +38,9 @@
 	let formattedPP = $derived(pp ? Math.round(pp) : 0);
 	let rawPP = $derived(Math.round(playUtils.calculateRawPP(pp, index + 1)));
 
-	let { songArtist, songTitle, difficulty } = $derived(playUtils.convertTitleToBeatmapMetadata(filename));
+	let { songArtist, songTitle, difficulty } = $derived(
+		playUtils.convertTitleToBeatmapMetadata(filename)
+	);
 
 	let tooltipText = $derived(songTitle);
 	let titleElement: HTMLHeadingElement;

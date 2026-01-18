@@ -40,8 +40,6 @@
 			{/each}
 		</div>
 
-		<div
-			class="placeholder animate-pulse flex justify-center mt-2 mx-auto w-28.75 h-7.5"
-		></div>
+		<div class="placeholder animate-pulse flex justify-center mt-2 mx-auto w-28.75 h-7.5"></div>
 	</div>
 </ContentCard>

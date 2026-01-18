@@ -20,7 +20,7 @@
 	}: {
 		filename: string;
 		hash?: string;
-		mods: string[];
+		mods: (string | { acronym: string })[];
 		score: number;
 		combo: number;
 		rank: string;
@@ -36,9 +36,9 @@
 	let calculatedAccuracy = $derived((accuracy * 100).toFixed(2));
 	let formattedDate = $derived(date ? new Date(date).toLocaleString() : '');
 
-	let { songArtist, songTitle, difficulty } = $derived(playUtils.convertTitleToBeatmapMetadata(
-		filename.replaceAll('_', ' ')
-	));
+	let { songArtist, songTitle, difficulty } = $derived(
+		playUtils.convertTitleToBeatmapMetadata(filename.replaceAll('_', ' '))
+	);
 
 	let beatmap: BeatmapExtended | null | undefined = $derived(beatmaps.get(hash ?? filename));
 
