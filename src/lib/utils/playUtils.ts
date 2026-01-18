@@ -176,7 +176,6 @@ function getSimulatedPerformancePoints(plays: Play[]): number {
 	}, 0);
 }
 
-
 export const playUtils = {
 	calculateRawPP,
 	convertStringIntoPlayDetails,

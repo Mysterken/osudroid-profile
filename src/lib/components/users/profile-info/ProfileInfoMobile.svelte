@@ -46,11 +46,14 @@
 	);
 	let isSimulated = $derived(performancePoints === 0 && simulatedPerformancePoints !== 0);
 	let formattedPerformancePoints = $derived(Math.round(displayedPerformancePoints));
-	let calculatedAccuracy =
-		$derived(source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy);
+	let calculatedAccuracy = $derived(
+		source === 'api' || source === 'merged' ? (accuracy * 100).toFixed(2) : accuracy
+	);
 	let formattedScore = $derived(score.toLocaleString());
 	let formattedPlaycount = $derived(playcount.toLocaleString());
-	let formattedRegistered = $derived(registered ? new Date(registered).toLocaleDateString() : 'N/A');
+	let formattedRegistered = $derived(
+		registered ? new Date(registered).toLocaleDateString() : 'N/A'
+	);
 	let formattedLastLogin = $derived(lastLogin ? timeAgo(lastLogin) : 'N/A');
 	let countryName = $derived(getCountryName(country));
 
@@ -72,7 +75,7 @@
 	]);
 
 	// temporary fix for 0-based ranking from API
-	const fixedGlobalRanking = $derived(globalRanking != null ? (globalRanking + 1) : globalRanking);
+	const fixedGlobalRanking = $derived(globalRanking != null ? globalRanking + 1 : globalRanking);
 </script>
 
 {#snippet userIdentity()}

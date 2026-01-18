@@ -2,11 +2,20 @@
 	import { tooltip } from '$lib/actions/tooltip';
 	import { playUtils } from '$lib/utils/playUtils';
 
-	let { mod, size = 24, length = 1 }: { mod: string; size?: number; length?: number } = $props();
+	let {
+		mod,
+		size = 24,
+		length = 1
+	}: { mod: string | { acronym: string }; size?: number; length?: number } = $props();
 
-	const modIcons = import.meta.glob('$lib/assets/modicons/*.webp', { eager: true, import: 'default' });
+	let normalizedMod = $derived(typeof mod === 'object' ? mod.acronym : String(mod));
+
+	const modIcons = import.meta.glob('$lib/assets/modicons/*.webp', {
+		eager: true,
+		import: 'default'
+	});
 	const imgSrc = $derived(modIcons[`/src/lib/assets/modicons/${mod}.webp`] as string);
-	let modName = $derived(playUtils.convertAliasToLongModName(mod));
+	let modName = $derived(playUtils.convertAliasToLongModName(normalizedMod));
 
 	const supportedMods = [
 		'AP',
@@ -37,7 +46,7 @@
 	}
 </script>
 
-{#if shouldDisplayModIcon(mod)}
+{#if shouldDisplayModIcon(normalizedMod)}
 	<img
 		class=" h-auto object-contain"
 		src={imgSrc}
@@ -47,7 +56,7 @@
 	/>
 {/if}
 
-{#if mod.startsWith('x')}
+{#if normalizedMod.startsWith('x')}
 	<div
 		class="
 		flex items-center justify-center

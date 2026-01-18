@@ -20,7 +20,7 @@ export async function loadHashCache(): Promise<Map<string, number>> {
 		memoryCache = new Map(Object.entries(json));
 		logger.info(`✅ Loaded ${memoryCache.size} hash mappings from cache`);
 	} catch (error) {
-		logger.warn({error}, '⚠️ No hash cache found, starting fresh.');
+		logger.warn({ error }, '⚠️ No hash cache found, starting fresh.');
 		memoryCache = new Map();
 	}
 
