@@ -42,7 +42,7 @@
 		"@fontsource/quicksand": "^5.2.10",
 		"@inlang/paraglide-js": "^2.15.1",
 		"@tailwindcss/vite": "^4.2.2",
-		"axios": "^1.13.6",
+		"axios": "^1.15.0",
 		"cheerio": "^1.2.0",
 		"crawler-user-agents": "^1.36.0",
 		"flag-icons": "^7.5.0",
