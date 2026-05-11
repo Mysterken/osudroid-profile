@@ -51,3 +51,23 @@ export async function fetchUserFromApiByUsername(username: string) {
 		throw new ApiError(`Unexpected error fetching user ${username}`);
 	}
 }
+
+export async function fetchLeaderboardFromApi(type: string, region: string, page: number, limit: number) {
+	try {
+		logger.debug(`Fetching leaderboard from osu!droid API: ${type}, ${region}, ${page}, ${limit}`);
+			const response = await axios.get(`${API_BASE_URL}/leaderboard/type=${type}/region=${region}/page=${page}/limit=${limit}`);
+			return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			const status = error.response?.status;
+
+			if (status === 404) {
+				logger.warn(`🔍 Leaderboard not found for type ${type}, region ${region}, page ${page}, limit ${limit}`);
+				throw new NotFoundError(`Leaderboard not found for type ${type}, region ${region}, page ${page}, limit ${limit}`);
+			}
+
+			logger.error({ error }, `❌ osu!droid API error`);
+			throw new ApiError(`osu!droid API request failed with status ${status}`);
+		}
+	}
+}

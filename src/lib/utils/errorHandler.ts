@@ -20,3 +20,17 @@ export async function handleUserRequest<T>(handler: () => Promise<T>): Promise<R
 		return json({ error: 'Internal server error' }, { status: 500 });
 	}
 }
+
+export async function handleLeaderboardRequest<T>(handler: () => Promise<T>): Promise<Response> {
+	try {
+		const result = await handler();
+		return json(result);
+	} catch (error) {
+		if (error instanceof NotFoundError) {
+			return json({ error: error.message }, { status: 404 });
+		}
+
+		logger.error({ error }, '❌ Unexpected error in leaderboard route');
+		return json({ error: 'Internal server error' }, { status: 500 });
+	}
+}
