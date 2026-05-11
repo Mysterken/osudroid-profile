@@ -12,11 +12,11 @@
 		border-t border-[#3C3C3C]
 	"
 >
-	<p>&copy; {year} osudroid-profile.</p>
+	<p>&copy; {year} osudroid-hub.</p>
 
 	<div class="flex flex-row mt-2 gap-10">
 		<a
-			href="https://github.com/Mysterken/osudroid-profile"
+			href="https://github.com/Mysterken/osudroid-hub"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="flex items-center gap-1 text-blue-400 hover:underline hover:text-blue-300"

@@ -1,5 +1,5 @@
 {
-	"name": "osudroid-profile-devcontainer",
+	"name": "osudroid-hub-devcontainer",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:22",
 	"postCreateCommand": "yarn install",
 	"forwardPorts": [5173],

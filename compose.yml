@@ -1,6 +1,6 @@
 services:
-  osudroid-profile-dev:
-    container_name: osudroid_profile_dev
+  osudroid-hub-dev:
+    container_name: osudroid_hub_dev
     build:
       context: .
       dockerfile: docker/dev/Dockerfile

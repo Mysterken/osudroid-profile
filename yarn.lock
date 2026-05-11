@@ -3922,9 +3922,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"osudroid-profile@workspace:.":
+"osudroid-hub@workspace:.":
   version: 0.0.0-use.local
-  resolution: "osudroid-profile@workspace:."
+  resolution: "osudroid-hub@workspace:."
   dependencies:
     "@eslint/compat": "npm:^2.1.0"
     "@eslint/js": "npm:^10.0.1"
