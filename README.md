@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <img src=".documentation/banner.png" alt="Logo" width="100%" height="auto" />
-  <h3 align="center">osu!droid Profile Viewer</h3>
+  <h3 align="center">osu!droid Hub</h3>
 
   <p align="center">
     View detailed stats, top plays, and recent scores for any osu!droid player.

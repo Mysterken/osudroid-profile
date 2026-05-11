@@ -74,8 +74,6 @@
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
 	]);
 
-	// temporary fix for 0-based ranking from API
-	const fixedGlobalRanking = $derived(globalRanking != null ? globalRanking + 1 : globalRanking);
 </script>
 
 {#snippet userIdentity()}
@@ -102,7 +100,7 @@
 {#snippet userRankings()}
 	<div class="user-rankings flex gap-7 px-2 text-left">
 		{#if source === 'api' || source === 'merged'}
-			{@render userRanking('Global Ranking', fixedGlobalRanking)}
+			{@render userRanking('Global Ranking', globalRanking)}
 			{@render userRanking('Country Ranking', countryRanking)}
 		{:else if source === 'scraper'}
 			{@render userRanking('Score Ranking', scoreRanking)}
