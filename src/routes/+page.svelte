@@ -3,6 +3,11 @@
 	import Footer from '$lib/components/layouts/Footer.svelte';
 	import { resolve } from '$app/paths';
 </script>
+<svelte:head>
+	<title>osu!droid Hub</title>
+	<meta property="og:title" content="osu!droid Hub" />
+	<meta property="og:description" content="The central hub for osu!droid. View detailed player statistics, leaderboards, and more." />
+</svelte:head>
 
 <SearchBar />
 
