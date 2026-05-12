@@ -13,6 +13,7 @@
 		currentPage: number;
 		totalPages: number;
 		playersPerPage: number;
+		totalCount: number;
 		onPageChange: (page: number) => void;
 	}
 
@@ -23,6 +24,7 @@
 		currentPage,
 		totalPages,
 		playersPerPage,
+		totalCount,
 		onPageChange
 	}: Props = $props();
 
@@ -93,6 +95,12 @@
 	</div>
 
 	{#if hasPlayers}
-		<LeaderboardPagination {currentPage} {totalPages} {onPageChange} />
+		<LeaderboardPagination
+			{currentPage}
+			{totalPages}
+			{playersPerPage}
+			{totalCount}
+			{onPageChange}
+		/>
 	{/if}
 </div>

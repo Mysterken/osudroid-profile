@@ -1,59 +1,60 @@
 <script lang="ts">
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import { getPageNumbers, PAGINATION_ELLIPSIS } from '$lib/utils/leaderboard';
+	import { Pagination } from '@skeletonlabs/skeleton-svelte';
 
 	interface Props {
 		currentPage: number;
 		totalPages: number;
+		playersPerPage: number;
+		totalCount: number;
 		onPageChange: (page: number) => void;
 	}
 
-	let { currentPage, totalPages, onPageChange }: Props = $props();
-
-	const pages = $derived(getPageNumbers(currentPage, totalPages));
-
-	const navButtonClass =
-		'flex items-center gap-2 px-4 py-2 rounded-lg ' +
-		'bg-[#2A2A2A] hover:bg-[#333333] ' +
-		'disabled:opacity-50 disabled:cursor-not-allowed transition-colors';
+	let { currentPage, playersPerPage, totalCount, onPageChange }: Props = $props();
 </script>
 
 <div
-	class="bg-[#1A1A1A] px-4 py-4 md:px-6 flex items-center justify-between border-t border-gray-700"
+	class="bg-[#1A1A1A] px-4 py-4 md:px-6 flex items-center justify-center border-t border-gray-700"
 >
-	<button
-		onclick={() => onPageChange(currentPage - 1)}
-		disabled={currentPage === 1}
-		class={navButtonClass}
+	<Pagination
+		count={totalCount}
+		pageSize={playersPerPage}
+		page={currentPage}
+		onPageChange={(event) => onPageChange(event.page)}
 	>
-		<ChevronLeft size={20} class="text-white" />
-		<span class="text-white font-medium hidden sm:inline">Previous</span>
-	</button>
+		<Pagination.PrevTrigger
+			class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2A2A] hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-white"
+		>
+			<ChevronLeft size={20} />
+			<span class="font-medium hidden sm:inline">Previous</span>
+		</Pagination.PrevTrigger>
 
-	<div class="flex items-center gap-1 md:gap-2">
-		{#each pages as page (page)}
-			{#if page === PAGINATION_ELLIPSIS}
-				<span class="px-2 text-gray-400">...</span>
-			{:else}
-				<button
-					onclick={() => onPageChange(page)}
-					class="size-10 rounded-lg font-medium transition-colors
-						{currentPage === page
-						? 'bg-pink-600 text-white'
-						: 'bg-[#2A2A2A] text-gray-400 hover:bg-[#333333]'}"
-				>
-					{page}
-				</button>
-			{/if}
-		{/each}
-	</div>
+		<Pagination.Context>
+			{#snippet children(pagination)}
+				{#each pagination().pages as page, index (page)}
+					{#if page.type === 'page'}
+						<Pagination.Item
+							{...page}
+							class="size-10 rounded-lg font-medium transition-colors {currentPage === page.value
+								? 'bg-pink-600 text-white'
+								: 'bg-[#2A2A2A] text-gray-400 hover:bg-[#333333]'}"
+						>
+							{page.value}
+						</Pagination.Item>
+					{:else}
+						<Pagination.Ellipsis {index} class="px-2 text-gray-400">
+							&#8230;
+						</Pagination.Ellipsis>
+					{/if}
+				{/each}
+			{/snippet}
+		</Pagination.Context>
 
-	<button
-		onclick={() => onPageChange(currentPage + 1)}
-		disabled={currentPage === totalPages}
-		class={navButtonClass}
-	>
-		<span class="text-white font-medium hidden sm:inline">Next</span>
-		<ChevronRight size={20} class="text-white" />
-	</button>
+		<Pagination.NextTrigger
+			class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2A2A] hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-white"
+		>
+			<span class="font-medium hidden sm:inline">Next</span>
+			<ChevronRight size={20} />
+		</Pagination.NextTrigger>
+	</Pagination>
 </div>

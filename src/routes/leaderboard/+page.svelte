@@ -2,9 +2,10 @@
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
-	import LeaderboardTable, { type LeaderboardPlayer } from '$lib/components/leaderboard/LeaderboardTable.svelte';
 	import LeaderboardFilters from '$lib/components/leaderboard/LeaderboardFilters.svelte';
 	import { TrophyIcon } from 'lucide-svelte';
+	import LeaderboardTable from '$lib/components/leaderboard/LeaderboardTable.svelte';
+	import type { LeaderboardPlayer } from '$lib/services/leaderboardService';
 
 	let rankingType = $state<'pp' | 'score'>('pp');
 	let selectedCountry = $state<string>('all');
@@ -12,6 +13,7 @@
 	let isLoading = $state(true);
 	let players = $state<LeaderboardPlayer[]>([]);
 	let totalPages = $state(10);
+	let totalCount = $state(0);
 
 	const playersPerPage = 50;
 
@@ -22,7 +24,12 @@
 			let response = await fetch(`/api/leaderboard?type=${rankingType}&country=${selectedCountry}&page=${currentPage}&limit=${playersPerPage}`);
 			if (!response.ok) return null;
 
-			players = await response.json().then(res => res.players);
+			let data = await response.json();
+
+			players = data.players;
+			totalPages = data.totalPages;
+			totalCount = totalPages * playersPerPage;
+
 		} catch (error) {
 			console.error('Failed to fetch leaderboard:', error);
 			isLoading = false;
@@ -88,6 +95,7 @@
 			{currentPage}
 			{totalPages}
 			{playersPerPage}
+			{totalCount}
 			onPageChange={handlePageChange}
 		/>
 	</div>
