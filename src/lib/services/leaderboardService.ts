@@ -37,7 +37,7 @@ export async function getLeaderboard(
 			pp: result.OverallPP ?? 0,
 			score: result.OverallScore ?? 0,
 			playcount: result.OverallPlaycount,
-			accuracy: result.OverallAccuracy,
+			accuracy: result.OverallAccuracy * 100,
 			country: result.Region,
 		};
 
