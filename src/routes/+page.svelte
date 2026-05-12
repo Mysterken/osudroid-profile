@@ -2,8 +2,6 @@
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
 	import { resolve } from '$app/paths';
-
-	// TODO import a preview component here:
 </script>
 
 <SearchBar />
