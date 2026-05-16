@@ -28,7 +28,11 @@ export async function getLeaderboard(
 		throw new Error('Failed to fetch leaderboard');
 	}
 
-	const leaderboard = { players: [] as LeaderboardPlayer[], totalPages: leaderboardApi.TotalPages, currentPage: leaderboardApi.CurrentPage };
+	const leaderboard = {
+		players: [] as LeaderboardPlayer[],
+		totalPages: leaderboardApi.TotalPages,
+		currentPage: leaderboardApi.CurrentPage
+	};
 
 	for (const result of leaderboardApi.Results) {
 		const player: LeaderboardPlayer = {
@@ -38,7 +42,7 @@ export async function getLeaderboard(
 			score: result.OverallScore ?? 0,
 			playcount: result.OverallPlaycount,
 			accuracy: result.OverallAccuracy * 100,
-			country: result.Region,
+			country: result.Region
 		};
 
 		leaderboard.players.push(player);

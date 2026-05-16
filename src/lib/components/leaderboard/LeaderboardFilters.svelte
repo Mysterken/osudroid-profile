@@ -58,10 +58,12 @@
 	</div>
 {/snippet}
 
-<div class="
+<div
+	class="
 	bg-[#2A2A2A] rounded-2xl p-4 tablet-sm:p-6
 	flex flex-col tablet-sm:flex-row gap-4 tablet-sm:gap-6
-">
+"
+>
 	{#snippet rankingOptions()}
 		{#each rankingTypes as type (type.value)}
 			<option value={type.value}>{type.label}</option>
@@ -74,6 +76,18 @@
 		{/each}
 	{/snippet}
 
-	{@render selectField('ranking-type', 'Ranking Type', rankingType, handleRankingTypeChange, rankingOptions)}
-	{@render selectField('country-filter', 'Country Filter', selectedCountry, handleCountryChange, countryOptions)}
+	{@render selectField(
+		'ranking-type',
+		'Ranking Type',
+		rankingType,
+		handleRankingTypeChange,
+		rankingOptions
+	)}
+	{@render selectField(
+		'country-filter',
+		'Country Filter',
+		selectedCountry,
+		handleCountryChange,
+		countryOptions
+	)}
 </div>

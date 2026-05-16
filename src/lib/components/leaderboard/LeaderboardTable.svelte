@@ -43,36 +43,36 @@
 	<div class="hidden md:block overflow-x-auto">
 		<table class="w-full">
 			<thead class="bg-[#1A1A1A] border-b border-gray-700">
-			<tr>
-				<th class="px-6 py-4 text-left text-sm font-semibold text-gray-400 w-20">Rank</th>
-				<th class="px-6 py-4 text-left text-sm font-semibold text-gray-400">Player</th>
-				<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">
-					{rankingType === 'score' ? 'Score' : 'Performance'}
-				</th>
-				<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">Accuracy</th>
-				<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">Playcount</th>
-			</tr>
+				<tr>
+					<th class="px-6 py-4 text-left text-sm font-semibold text-gray-400 w-20">Rank</th>
+					<th class="px-6 py-4 text-left text-sm font-semibold text-gray-400">Player</th>
+					<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">
+						{rankingType === 'score' ? 'Score' : 'Performance'}
+					</th>
+					<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">Accuracy</th>
+					<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">Playcount</th>
+				</tr>
 			</thead>
 			<tbody>
-			{#if isLoading}
-				<tr>
-					<td colspan="5" class="px-6 py-16 text-center">
-						{@render loadingIndicator('Loading leaderboard...')}
-					</td>
-				</tr>
-			{:else if players.length === 0}
-				<tr>
-					<td colspan="5" class="px-6 py-16 text-center text-gray-400">No players found</td>
-				</tr>
-			{:else}
-				{#each players as player, i (player.userId)}
-					<LeaderboardRow
-						{player}
-						{rankingType}
-						rank={computeRank(currentPage, playersPerPage, i)}
-					/>
-				{/each}
-			{/if}
+				{#if isLoading}
+					<tr>
+						<td colspan="5" class="px-6 py-16 text-center">
+							{@render loadingIndicator('Loading leaderboard...')}
+						</td>
+					</tr>
+				{:else if players.length === 0}
+					<tr>
+						<td colspan="5" class="px-6 py-16 text-center text-gray-400">No players found</td>
+					</tr>
+				{:else}
+					{#each players as player, i (player.userId)}
+						<LeaderboardRow
+							{player}
+							{rankingType}
+							rank={computeRank(currentPage, playersPerPage, i)}
+						/>
+					{/each}
+				{/if}
 			</tbody>
 		</table>
 	</div>

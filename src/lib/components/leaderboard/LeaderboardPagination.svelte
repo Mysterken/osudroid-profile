@@ -42,9 +42,7 @@
 							{page.value}
 						</Pagination.Item>
 					{:else}
-						<Pagination.Ellipsis {index} class="px-2 text-gray-400">
-							&#8230;
-						</Pagination.Ellipsis>
+						<Pagination.Ellipsis {index} class="px-2 text-gray-400">&#8230;</Pagination.Ellipsis>
 					{/if}
 				{/each}
 			{/snippet}

@@ -73,7 +73,6 @@
 		{ name: 'Hit Accuracy', value: `${calculatedAccuracy}%`, id: 'accuracy' },
 		{ name: 'Play Count', value: formattedPlaycount, id: 'playcount' }
 	]);
-
 </script>
 
 {#snippet userIdentity()}

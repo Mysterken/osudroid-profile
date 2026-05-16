@@ -66,7 +66,9 @@
 		</a>
 
 		<!-- Search Bar -->
-		<div class="input-group grid-cols-[auto_1fr_auto] h-full grow max-w-3xl bg-[#565656] rounded-[10px]">
+		<div
+			class="input-group grid-cols-[auto_1fr_auto] h-full grow max-w-3xl bg-[#565656] rounded-[10px]"
+		>
 			<div class="ig-cell preset-tonal">
 				{#if isSearching}
 					<LoaderCircle size={16} class="animate-spin" />

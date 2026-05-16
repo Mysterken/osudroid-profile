@@ -15,10 +15,10 @@ Welcome to the 1.0.0 release! This update marks the milestone where the project 
 
 ### Added
 
-* **Global Leaderboards:** Introduced a brand-new leaderboard page to see how players stack up against each other.
-* **Leaderboard Filtering:** Added basic filtering options to the leaderboard, allowing users to sort rankings by **Type** (PP vs. Score) and by **Region/Country**.
+- **Global Leaderboards:** Introduced a brand-new leaderboard page to see how players stack up against each other.
+- **Leaderboard Filtering:** Added basic filtering options to the leaderboard, allowing users to sort rankings by **Type** (PP vs. Score) and by **Region/Country**.
 
 ### Changed
 
-* **Project Rebrand:** Officially renamed the project from `osudroid-profile` to `osudroid-hub` to better reflect its expanding scope.
-* **Documentation & Branding:** Updated all project documentation, readmes, and internal references to align with the new `osudroid-hub` identity.
+- **Project Rebrand:** Officially renamed the project from `osudroid-profile` to `osudroid-hub` to better reflect its expanding scope.
+- **Documentation & Branding:** Updated all project documentation, readmes, and internal references to align with the new `osudroid-hub` identity.

@@ -151,11 +151,7 @@
 			</div>
 		</div>
 
-		<LeaderboardFilters
-			bind:rankingType
-			bind:selectedCountry
-			onFilterChange={handleFilterChange}
-		/>
+		<LeaderboardFilters bind:rankingType bind:selectedCountry onFilterChange={handleFilterChange} />
 
 		<LeaderboardTable
 			{players}

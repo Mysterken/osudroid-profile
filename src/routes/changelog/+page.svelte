@@ -37,30 +37,30 @@
 <Footer />
 
 <style>
-    @reference "../../app.css";
+	@reference "../../app.css";
 
-    :global(.changelog-prose h1) {
-        @apply text-3xl font-bold text-white mb-4;
-    }
-    :global(.changelog-prose h2) {
-        @apply text-2xl font-bold text-white mt-8 mb-4 pb-2 border-b border-gray-700;
-    }
-    :global(.changelog-prose h3) {
-        @apply text-xl font-semibold text-pink-400 mt-6 mb-3;
-    }
-    :global(.changelog-prose h4) {
-        @apply text-lg font-semibold text-gray-300 mt-4 mb-2;
-    }
-    :global(.changelog-prose ul) {
-        @apply list-disc list-inside space-y-2 text-gray-300 ml-4;
-    }
-    :global(.changelog-prose p) {
-        @apply text-gray-400 leading-relaxed mb-4;
-    }
-    :global(.changelog-prose a) {
-        @apply text-blue-400 hover:underline;
-    }
-    :global(.changelog-prose code) {
-        @apply bg-[#1A1A1A] px-1.5 py-0.5 rounded text-pink-400 text-sm;
-    }
+	:global(.changelog-prose h1) {
+		@apply text-3xl font-bold text-white mb-4;
+	}
+	:global(.changelog-prose h2) {
+		@apply text-2xl font-bold text-white mt-8 mb-4 pb-2 border-b border-gray-700;
+	}
+	:global(.changelog-prose h3) {
+		@apply text-xl font-semibold text-pink-400 mt-6 mb-3;
+	}
+	:global(.changelog-prose h4) {
+		@apply text-lg font-semibold text-gray-300 mt-4 mb-2;
+	}
+	:global(.changelog-prose ul) {
+		@apply list-disc list-inside space-y-2 text-gray-300 ml-4;
+	}
+	:global(.changelog-prose p) {
+		@apply text-gray-400 leading-relaxed mb-4;
+	}
+	:global(.changelog-prose a) {
+		@apply text-blue-400 hover:underline;
+	}
+	:global(.changelog-prose code) {
+		@apply bg-[#1A1A1A] px-1.5 py-0.5 rounded text-pink-400 text-sm;
+	}
 </style>

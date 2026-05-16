@@ -21,9 +21,7 @@
 
 	const rankColor = $derived(getRankColor(rank));
 	const RankIcon = $derived(getRankIcon(rank));
-	const primaryValue = $derived(
-		rankingType === 'score' ? player.score ?? 0 : player.pp ?? 0
-	);
+	const primaryValue = $derived(rankingType === 'score' ? (player.score ?? 0) : (player.pp ?? 0));
 
 	function handleAvatarLoad() {
 		isAvatarLoading = false;
@@ -56,7 +54,9 @@
 				<img
 					src={getPlayerAvatarUrl(player.userId)}
 					alt={player.username}
-					class="size-10 rounded-full bg-gray-700 {isAvatarLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300"
+					class="size-10 rounded-full bg-gray-700 {isAvatarLoading
+						? 'opacity-0'
+						: 'opacity-100'} transition-opacity duration-300"
 					onload={handleAvatarLoad}
 					onerror={handleAvatarError}
 				/>
