@@ -1,77 +1,66 @@
 <script lang="ts">
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
-	import { ExternalLinkIcon, PlayIcon, SquareIcon } from 'lucide-svelte';
+	import { ExternalLinkIcon, PlayIcon, SquareIcon, TrophyIcon } from 'lucide-svelte';
 	import { playUtils } from '$lib/utils/playUtils.js';
 
 	let {
 		dialog = $bindable(),
 		beatmap
 	}: { dialog?: HTMLDialogElement; beatmap?: BeatmapExtended | null } = $props();
-	let audio: HTMLAudioElement | null = null;
+
+	let audioEl = $state<HTMLAudioElement>();
 	let isPlaying = $state(false);
-	let isDialogVisible = $state(false);
 
-	let bpm = $state(0);
-	let maxCombo = $state(0);
-
-	// fix type error
-	$effect(() => {
-		if (beatmap) {
-			bpm = beatmap.bpm ?? 0;
-			maxCombo = beatmap.max_combo ?? 0;
-		}
-	});
-
-	$effect(() => {
-		if (dialog) {
-			dialog.addEventListener('toggle', () => {
-				isDialogVisible = dialog?.open ?? false;
-				document.body.style.overflow = dialog?.open ? 'hidden' : '';
-			});
-
-			dialog.addEventListener('close', () => {
-				isDialogVisible = false;
-				document.body.style.overflow = '';
-				stopPreview();
-			});
-
-			dialog.addEventListener('click', (event) => {
-				if (
-					event.target instanceof Node &&
-					!dialog?.querySelector('.modal-content')?.contains(event.target)
-				) {
-					dialog?.close();
-				}
-			});
-		}
-	});
+	let bpm = $derived(beatmap?.bpm ?? 0);
+	let maxCombo = $derived(beatmap?.max_combo ?? 0);
 
 	function playPreview() {
-		if (!beatmap?.beatmapset?.preview_url) return;
-
-		if (!audio) {
-			audio = new Audio(beatmap.beatmapset.preview_url);
-			audio.addEventListener('ended', () => (isPlaying = false));
-		}
+		if (!audioEl) return;
 
 		if (isPlaying) {
-			audio.pause();
-			audio.currentTime = 0;
+			audioEl.pause();
+			audioEl.currentTime = 0;
 		} else {
-			audio.play();
+			audioEl.play();
 		}
 		isPlaying = !isPlaying;
 	}
 
 	function stopPreview() {
-		if (audio) {
-			audio.pause();
-			audio.currentTime = 0;
-			isPlaying = false;
-			audio = null;
+		if (audioEl) {
+			audioEl.pause();
+			audioEl.currentTime = 0;
+		}
+		isPlaying = false;
+	}
+
+	// Handle dialog close (either by clicking outside or pressing ESC)
+	function handleClose() {
+		stopPreview();
+		document.body.style.overflow = '';
+	}
+
+	// Handle clicking the backdrop to close the modal
+	function handleBackdropClick(event: MouseEvent) {
+		if (event.target === dialog) {
+			dialog?.close();
 		}
 	}
+
+	$effect(() => {
+		if (dialog?.open) {
+			document.body.style.overflow = 'hidden';
+		}
+	});
 </script>
+
+{#if beatmap?.beatmapset?.preview_url}
+	<audio
+		bind:this={audioEl}
+		src={beatmap.beatmapset.preview_url}
+		onended={() => (isPlaying = false)}
+	></audio>
+{/if}
 
 {#snippet metadata()}
 	<h1 class="text-base font-bold">{beatmap?.beatmapset?.title}</h1>
@@ -104,41 +93,37 @@
 
 <dialog
 	bind:this={dialog}
+	onclose={handleClose}
+	onclick={handleBackdropClick}
 	class="
-		modal
-		rounded-xl
-		shadow-lg
-		max-w-md w-full
-		backdrop:bg-black/50
-		top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-	"
+   modal
+   rounded-xl
+   shadow-lg
+   max-w-md w-full
+   backdrop:bg-black/50
+   top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+  "
 >
-	<div
-		class="
-		modal-content
-	bg-[#1E1E1E]
-		text-white
-		p-6"
-	>
+	<div class="modal-content bg-[#1E1E1E] text-white p-6">
 		{#if beatmap === undefined}
 			<p class="text-sm text-gray-400">Beatmap is loading...</p>
 		{:else if beatmap === null}
 			<p class="text-sm text-red-400">This beatmap could not be found.</p>
-		{:else if beatmap}
+		{:else}
 			<div class="flex text-left">
 				<div>
-					{#if isDialogVisible}
-						<img
-							src={beatmap?.beatmapset?.covers.list}
-							alt="Beatmap Cover"
-							class="w-[100px] h-[100px] rounded-[5px]"
-						/>
-					{/if}
+					<img
+						src={beatmap.beatmapset?.covers.list}
+						alt="Beatmap Cover"
+						class="w-[100px] h-[100px] rounded-[5px]"
+						loading="lazy"
+					/>
 
 					<button
 						type="button"
-						class="bg-[#3C4345] text-sm font-bold btn preset-filled w-[100px] mt-2.5 p-1"
+						class="bg-[#3C4345] text-sm font-bold btn preset-filled w-[100px] mt-2.5 p-1 flex justify-center"
 						onclick={playPreview}
+						disabled={!beatmap.beatmapset?.preview_url}
 					>
 						{#if isPlaying}
 							<SquareIcon class="invert" fill="" size={18} />
@@ -152,6 +137,7 @@
 					{@render metadata()}
 				</div>
 			</div>
+
 			<div class="mt-4 w-full text-sm grid grid-cols-2 gap-6 px-2.5">
 				<div>
 					{@render beatmapTable('Difficulty', [
@@ -172,15 +158,23 @@
 				</div>
 			</div>
 
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a href={beatmap.url} target="_blank" rel="noopener noreferrer">
-				<button type="button" class="btn preset-filled-primary-500 mt-6 w-full">
-					View on osu!
-					<ExternalLinkIcon size={16} />
-				</button>
-			</a>
-		{:else}
-			<p class="text-sm text-red-400">Beatmap is not available.</p>
+			<div class="flex flex-col gap-2 mt-6">
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+				<a href={`/leaderboard/beatmaps/${beatmap.id}`}>
+					<button type="button" class="btn preset-filled-primary-500 w-full">
+						View Map Leaderboard
+						<TrophyIcon size={16} />
+					</button>
+				</a>
+
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+				<a href={beatmap.url} target="_blank" rel="noopener noreferrer">
+					<button type="button" class="btn preset-filled-primary-500 w-full">
+						View on osu!
+						<ExternalLinkIcon size={16} />
+					</button>
+				</a>
+			</div>
 		{/if}
 	</div>
 </dialog>

@@ -20,6 +20,10 @@ export interface ApiPlay extends Play {
 	MapKatu: number;
 	MapGood: number;
 	MapBad: number;
+	SliderHeadHit: number | null;
+	SliderTickHit: number | null;
+	SliderRepeatHit: number | null;
+	SliderEndHit: number | null;
 	PlayedDate: string;
 }
 
@@ -47,6 +51,10 @@ export interface MergedPlay extends Play {
 	MapKatu: number;
 	MapGood: number;
 	MapBad: number;
+	SliderHeadHit: number | null;
+	SliderTickHit: number | null;
+	SliderRepeatHit: number | null;
+	SliderEndHit: number | null;
 	PlayedDate: string;
 	Hash?: string;
 }
