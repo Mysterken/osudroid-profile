@@ -16,7 +16,7 @@
 		topPlays: Play[] | MergedPlay[];
 		beatmaps: Map<string, BeatmapExtended | null>;
 		itemsToShow: number;
-		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+		openModal: (beatmap: BeatmapExtended | null | undefined, play?: Play | null) => void;
 	} = $props();
 </script>
 
@@ -56,6 +56,7 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
+					play={topPlay}
 					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? undefined}
 					{openModal}
 				/>
@@ -75,6 +76,7 @@
 					miss={topPlay.MapMiss}
 					accuracy={topPlay.MapAccuracy}
 					pp={topPlay.MapPP}
+					play={topPlay}
 					beatmap={beatmaps.get(topPlay.Hash ?? topPlay.Filename) ?? undefined}
 					{openModal}
 				/>

@@ -5,6 +5,7 @@
 	import ModIcon from '$lib/components/ui/ModIcon.svelte';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
+	import type { Play } from '$lib/models/play';
 
 	let {
 		index,
@@ -17,6 +18,7 @@
 		accuracy,
 		pp,
 		beatmap,
+		play,
 		openModal
 	}: {
 		index: number;
@@ -29,7 +31,8 @@
 		accuracy: number;
 		pp: number | null;
 		beatmap?: BeatmapExtended | null;
-		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+		play?: Play | null;
+		openModal: (beatmap: BeatmapExtended | null | undefined, play?: Play | null) => void;
 	} = $props();
 
 	let isOpen = $state(false);
@@ -73,8 +76,8 @@
 			class="flex grow items-center"
 			role="button"
 			tabindex="0"
-			onclick={() => openModal(beatmap)}
-			onkeydown={(e) => e.key === 'Enter' && openModal(beatmap)}
+			onclick={() => openModal(beatmap, play)}
+			onkeydown={(e) => e.key === 'Enter' && openModal(beatmap, play)}
 		>
 			{#if !isOpen}
 				<LetterRank sx="text-2xl font-bold size-10" {rank} />

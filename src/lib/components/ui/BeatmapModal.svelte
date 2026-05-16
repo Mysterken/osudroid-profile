@@ -1,18 +1,53 @@
 <script lang="ts">
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
-	import { ExternalLinkIcon, PlayIcon, SquareIcon, TrophyIcon } from 'lucide-svelte';
+	import type { Play } from '$lib/models/play';
+	import {
+		ExternalLinkIcon,
+		PlayIcon,
+		SquareIcon,
+		TrophyIcon,
+		ActivityIcon,
+		MapIcon
+	} from 'lucide-svelte';
+	import { SegmentedControl } from '@skeletonlabs/skeleton-svelte';
 	import { playUtils } from '$lib/utils/playUtils.js';
 
 	let {
 		dialog = $bindable(),
-		beatmap
-	}: { dialog?: HTMLDialogElement; beatmap?: BeatmapExtended | null } = $props();
+		beatmap,
+		play
+	}: {
+		dialog?: HTMLDialogElement;
+		beatmap?: BeatmapExtended | null;
+		play?: Play | null;
+	} = $props();
 
 	let audioEl = $state<HTMLAudioElement>();
 	let isPlaying = $state(false);
 
+	// Tab state to toggle between Beatmap info and Play info
+	let activeTab = $state<string | null>('play');
+
 	let bpm = $derived(beatmap?.bpm ?? 0);
 	let maxCombo = $derived(beatmap?.max_combo ?? 0);
+
+	let formattedPlayDate = $derived(
+		play?.PlayedDate ? new Date(play.PlayedDate).toLocaleString() : null
+	);
+	let formattedAccuracy = $derived(play ? (play.MapAccuracy * 100).toFixed(2) + '%' : null);
+	let formattedScore = $derived(play ? play.MapScore.toLocaleString() : null);
+
+	let extendedPlay = $derived(
+		play && 'MapPerfect' in play
+			? (play as Play & {
+					MapGeki: number;
+					MapPerfect: number;
+					MapKatu: number;
+					MapGood: number;
+					MapBad: number;
+				})
+			: null
+	);
 
 	function playPreview() {
 		if (!audioEl) return;
@@ -50,6 +85,7 @@
 	$effect(() => {
 		if (dialog?.open) {
 			document.body.style.overflow = 'hidden';
+			activeTab = play ? 'play' : 'beatmap';
 		}
 	});
 </script>
@@ -63,28 +99,33 @@
 {/if}
 
 {#snippet metadata()}
-	<h1 class="text-base font-bold">{beatmap?.beatmapset?.title}</h1>
-	<h2 class="text-sm text-gray-500">{beatmap?.beatmapset?.artist}</h2>
+	<h1 class="text-base font-bold leading-tight truncate" title={beatmap?.beatmapset?.title}>
+		{beatmap?.beatmapset?.title}
+	</h1>
+	<h2 class="text-sm text-gray-400 truncate">{beatmap?.beatmapset?.artist}</h2>
+	<h2 class="text-sm text-gray-300 mt-1">{beatmap?.version}</h2>
 
-	<h2 class="text-sm">{beatmap?.version}</h2>
-
-	<div class="flex gap-5 mt-2.5 text-xs">
-		<p>Star Rating: {beatmap?.difficulty_rating}</p>
-		<p>Length: {playUtils.formatLength(beatmap?.total_length)}</p>
+	<div class="flex gap-4 mt-2 text-xs">
+		<p>Stars: <span class="text-white font-semibold">{beatmap?.difficulty_rating.toFixed(2)}</span></p>
+		<p>
+			Length: <span class="text-white font-semibold"
+				>{playUtils.formatLength(beatmap?.total_length)}</span
+			>
+		</p>
 	</div>
-
-	<p class="text-xs text-gray-500 mt-2.5">Mapped by {beatmap?.beatmapset?.creator}</p>
 {/snippet}
 
-{#snippet beatmapTable(title = '', stats = [{ id: 'id', label: 'label', value: 0 }])}
-	<h3 class="font-semibold mb-1 text-left">{title}</h3>
-
-	<table class="w-full text-left text-xs text-gray-300">
+{#snippet dataTable(
+	title = '',
+	stats = [{ id: 'id', label: 'label', value: 0 as string | number }]
+)}
+	<h3 class="font-semibold mb-1.5 text-left text-gray-200">{title}</h3>
+	<table class="w-full text-left text-xs text-gray-400">
 		<tbody>
 			{#each stats as stat (stat.id)}
-				<tr>
-					<td class="pr-2">{stat.label}</td>
-					<td class="text-white font-bold">{stat.value}</td>
+				<tr class="border-b border-[#3C3C3C] last:border-0">
+					<td class="py-1 pr-2">{stat.label}</td>
+					<td class="py-1 text-white font-bold">{stat.value}</td>
 				</tr>
 			{/each}
 		</tbody>
@@ -95,73 +136,140 @@
 	bind:this={dialog}
 	onclose={handleClose}
 	onclick={handleBackdropClick}
-	class="
-   modal
-   rounded-xl
-   shadow-lg
-   max-w-md w-full
-   backdrop:bg-black/50
-   top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+	class="modal rounded-xl shadow-2xl max-w-md w-[95%] backdrop:bg-black/70
+	top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
   "
 >
-	<div class="modal-content bg-[#1E1E1E] text-white p-6">
+	<div class="modal-content bg-[#1E1E1E] text-white p-5 tablet-sm:p-6 border border-[#3C3C3C]">
 		{#if beatmap === undefined}
-			<p class="text-sm text-gray-400">Beatmap is loading...</p>
+			<p class="text-sm text-gray-400 text-center py-4">Loading beatmap...</p>
 		{:else if beatmap === null}
-			<p class="text-sm text-red-400">This beatmap could not be found.</p>
+			<p class="text-sm text-red-400 text-center py-4">This beatmap could not be found.</p>
 		{:else}
 			<div class="flex text-left">
-				<div>
+				<div class="shrink-0">
 					<img
 						src={beatmap.beatmapset?.covers.list}
 						alt="Beatmap Cover"
 						class="w-[100px] h-[100px] rounded-[5px]"
 						loading="lazy"
 					/>
-
 					<button
 						type="button"
-						class="bg-[#3C4345] text-sm font-bold btn preset-filled w-[100px] mt-2.5 p-1 flex justify-center"
+						class="bg-[#3C4345] transition-colors text-sm w-[100px] mt-2 p-1.5 flex justify-center rounded-md"
 						onclick={playPreview}
 						disabled={!beatmap.beatmapset?.preview_url}
 					>
 						{#if isPlaying}
-							<SquareIcon class="invert" fill="" size={18} />
+							<SquareIcon size={16} class="text-white" />
 						{:else}
-							<PlayIcon class="invert" fill="" size={18} />
+							<PlayIcon size={16} class="text-white" />
 						{/if}
 					</button>
 				</div>
-
-				<div class="ml-2.5">
+				<div class="ml-4 overflow-hidden flex flex-col justify-center">
 					{@render metadata()}
 				</div>
 			</div>
 
-			<div class="mt-4 w-full text-sm grid grid-cols-2 gap-6 px-2.5">
-				<div>
-					{@render beatmapTable('Difficulty', [
-						{ id: 'cs', label: 'CS', value: beatmap.cs },
-						{ id: 'hp', label: 'HP', value: beatmap.drain },
-						{ id: 'od', label: 'OD', value: beatmap.accuracy },
-						{ id: 'ar', label: 'AR', value: beatmap.ar }
-					])}
+			{#if play}
+				<div class="mt-5 mb-4">
+					<SegmentedControl
+						value={activeTab}
+						onValueChange={(details) => (activeTab = details.value)}
+					>
+						<SegmentedControl.Control class="bg-[#252525] p-1 rounded-lg">
+							<SegmentedControl.Indicator class="bg-[#3C4345] shadow-sm" />
+							<SegmentedControl.Item
+								value="play"
+								class="flex-1 data-selected:text-white text-gray-400 hover:text-gray-200"
+							>
+								<SegmentedControl.ItemText
+									class="flex items-center justify-center gap-2 py-1.5 text-xs font-semibold"
+								>
+									<ActivityIcon size={14} /> Play Stats
+								</SegmentedControl.ItemText>
+								<SegmentedControl.ItemHiddenInput />
+							</SegmentedControl.Item>
+							<SegmentedControl.Item
+								value="beatmap"
+								class="flex-1 data-selected:text-white text-gray-400 hover:text-gray-200"
+							>
+								<SegmentedControl.ItemText
+									class="flex items-center justify-center gap-2 py-1.5 text-xs font-semibold"
+								>
+									<MapIcon size={14} /> Map Info
+								</SegmentedControl.ItemText>
+								<SegmentedControl.ItemHiddenInput />
+							</SegmentedControl.Item>
+						</SegmentedControl.Control>
+					</SegmentedControl>
 				</div>
+			{:else}
+				<div class="mt-5 mb-2"><hr class="border-[#3C3C3C]" /></div>
+			{/if}
 
-				<div>
-					{@render beatmapTable('Statistics', [
-						{ id: 'bpm', label: 'BPM', value: bpm },
-						{ id: 'circles', label: 'Circles', value: beatmap.count_circles },
-						{ id: 'sliders', label: 'Sliders', value: beatmap.count_sliders },
-						{ id: 'max_combo', label: 'Max Combo', value: maxCombo }
-					])}
-				</div>
+			<div class="w-full text-sm grid grid-cols-2 gap-4 px-1 min-h-[150px]">
+				{#if activeTab === 'beatmap' || !play}
+					<div>
+						{@render dataTable('Difficulty', [
+							{ id: 'cs', label: 'CS', value: beatmap.cs },
+							{ id: 'hp', label: 'HP', value: beatmap.drain },
+							{ id: 'od', label: 'OD', value: beatmap.accuracy },
+							{ id: 'ar', label: 'AR', value: beatmap.ar }
+						])}
+					</div>
+					<div>
+						{@render dataTable('Statistics', [
+							{ id: 'bpm', label: 'BPM', value: bpm },
+							{ id: 'circles', label: 'Circles', value: beatmap.count_circles },
+							{ id: 'sliders', label: 'Sliders', value: beatmap.count_sliders },
+							{ id: 'max_combo', label: 'Max Combo', value: maxCombo }
+						])}
+					</div>
+				{:else}
+					<div>
+						{@render dataTable('Score', [
+							{ id: 'rank', label: 'Rank', value: play.MapRank },
+							{ id: 'score', label: 'Score', value: formattedScore ?? '—' },
+							{ id: 'accuracy', label: 'Accuracy', value: formattedAccuracy ?? '—' },
+							{ id: 'combo', label: 'Combo', value: `${play.MapCombo}x` },
+							{
+								id: 'pp',
+								label: 'PP',
+								value: play.MapPP != null ? `${Math.round(play.MapPP)}pp` : '—'
+							}
+						])}
+						{#if formattedPlayDate}
+							<p class="text-[10px] text-gray-500 mt-2 leading-tight">
+								Played on {formattedPlayDate}
+							</p>
+						{/if}
+					</div>
+					<div>
+						{@render dataTable('Hits', [
+							...(extendedPlay
+								? [
+										{ id: 'perfect', label: 'Perfect', value: extendedPlay.MapPerfect },
+										{ id: 'geki', label: 'Geki', value: extendedPlay.MapGeki },
+										{ id: 'katu', label: 'Katu', value: extendedPlay.MapKatu },
+										{ id: 'good', label: 'Good', value: extendedPlay.MapGood },
+										{ id: 'bad', label: 'Bad', value: extendedPlay.MapBad }
+									]
+								: []),
+							{ id: 'miss', label: 'Miss', value: play.MapMiss }
+						])}
+					</div>
+				{/if}
 			</div>
 
 			<div class="flex flex-col gap-2 mt-6">
 				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 				<a href={`/leaderboard/beatmaps/${beatmap.id}`}>
-					<button type="button" class="btn preset-filled-primary-500 w-full">
+					<button
+						type="button"
+						class="btn preset-filled-primary-500 text-white py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors w-full"
+					>
 						View Map Leaderboard
 						<TrophyIcon size={16} />
 					</button>
@@ -169,7 +277,10 @@
 
 				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 				<a href={beatmap.url} target="_blank" rel="noopener noreferrer">
-					<button type="button" class="btn preset-filled-primary-500 w-full">
+					<button
+						type="button"
+						class="preset-filled-primary-500 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors w-full"
+					>
 						View on osu!
 						<ExternalLinkIcon size={16} />
 					</button>

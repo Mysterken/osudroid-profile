@@ -42,6 +42,7 @@
 	let isFetchingMore = false;
 
 	let selectedBeatmap: BeatmapExtended | null | undefined = $state();
+	let selectedPlay: Play | null = $state(null);
 	let dialog: HTMLDialogElement | undefined = $state();
 
 	async function fetchUser(
@@ -101,8 +102,9 @@
 		if (start >= 25) isFetchingMore = false;
 	}
 
-	function openModal(beatmap: BeatmapExtended | null | undefined) {
+	function openModal(beatmap: BeatmapExtended | null | undefined, play?: Play | null) {
 		selectedBeatmap = beatmap;
+		selectedPlay = play ?? null;
 		dialog?.showModal();
 	}
 
@@ -205,7 +207,7 @@
 	{#if isLoading}
 		<UserIsLoading />
 	{:else if user}
-		<BeatmapModal bind:dialog beatmap={selectedBeatmap} />
+		<BeatmapModal bind:dialog beatmap={selectedBeatmap} play={selectedPlay} />
 		<!-- Desktop Layout -->
 		<div class="hidden desktop-sm:grid grid-cols-[1fr_3fr] gap-8">
 			<!-- Sidebar -->

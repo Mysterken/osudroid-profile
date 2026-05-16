@@ -3,7 +3,7 @@
 	import { Disc3Icon } from 'lucide-svelte';
 	import RecentPlayCardSmall from '$lib/components/users/recent-plays/RecentPlayCardSmall.svelte';
 	import RecentPlayCardLarge from '$lib/components/users/recent-plays/RecentPlayCardLarge.svelte';
-	import type { ApiPlay, ScraperPlay } from '$lib/models/play.js';
+	import type { ApiPlay, Play, ScraperPlay } from '$lib/models/play.js';
 	import ShowMoreButton from '$lib/components/ui/ShowMoreButton.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 	import { SvelteMap } from 'svelte/reactivity';
@@ -15,7 +15,7 @@
 	}: {
 		recentPlays: ApiPlay[] | ScraperPlay[];
 		itemsToShow: number;
-		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+		openModal: (beatmap: BeatmapExtended | null | undefined, play?: Play | null) => void;
 	} = $props();
 
 	let beatmaps = new SvelteMap<string, BeatmapExtended | null>();
@@ -57,6 +57,7 @@
 					miss={recentPlay.MapMiss}
 					accuracy={recentPlay.MapAccuracy}
 					date={recentPlay.PlayedDate ?? null}
+					play={recentPlay}
 					{openModal}
 					{beatmaps}
 				/>
@@ -76,6 +77,7 @@
 					miss={recentPlay.MapMiss}
 					accuracy={recentPlay.MapAccuracy}
 					date={recentPlay.PlayedDate ?? null}
+					play={recentPlay}
 					{openModal}
 					{beatmaps}
 				/>
