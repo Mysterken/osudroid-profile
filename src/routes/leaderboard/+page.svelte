@@ -3,16 +3,22 @@
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
 	import LeaderboardFilters from '$lib/components/leaderboard/LeaderboardFilters.svelte';
-	import { TrophyIcon } from 'lucide-svelte';
 	import LeaderboardTable from '$lib/components/leaderboard/LeaderboardTable.svelte';
+	import LeaderboardRow from '$lib/components/leaderboard/LeaderboardRow.svelte';
+	import LeaderboardCard from '$lib/components/leaderboard/LeaderboardCard.svelte';
+	import { TrophyIcon } from 'lucide-svelte';
 	import type { LeaderboardPlayer } from '$lib/services/leaderboardService';
+	import type { FilterDef } from '$lib/components/leaderboard/LeaderboardFilters.svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { getLeaderboardCountries } from '$lib/utils/countries';
+	import { computeRank } from '$lib/utils/leaderboard';
 
-	const playersPerPage = 50;
+	const PLAYERS_PER_PAGE = 50;
 
-	// Initialize state from URL parameters
+	const countries = getLeaderboardCountries();
+
 	let rankingType = $state<'pp' | 'score'>(
 		(page.url.searchParams.get('type') as 'pp' | 'score') || 'pp'
 	);
@@ -24,74 +30,85 @@
 	let totalPages = $state(10);
 	let totalCount = $state(0);
 
-	// Track the current fetch request to prevent race conditions
 	let fetchController: AbortController | null = null;
+
+	const filters = $derived<FilterDef[]>([
+		{
+			id: 'ranking-type',
+			label: 'Ranking Type',
+			value: rankingType,
+			options: [
+				{ value: 'pp', label: 'PP Ranking' },
+				{ value: 'score', label: 'Score Ranking' }
+			],
+			onChange: (v) => handleFilterChange(v as 'pp' | 'score', selectedCountry)
+		},
+		{
+			id: 'country-filter',
+			label: 'Country Filter',
+			value: selectedCountry,
+			options: countries.map((c) => ({ value: c.code, label: c.name })),
+			onChange: (v) => handleFilterChange(rankingType, v)
+		}
+	]);
+
+	const columns = $derived([
+		{ key: 'rank', label: 'Rank', align: 'left' as const, width: 'w-20' },
+		{ key: 'player', label: 'Player', align: 'left' as const },
+		{
+			key: 'primary',
+			label: rankingType === 'score' ? 'Score' : 'Performance',
+			align: 'right' as const
+		},
+		{ key: 'accuracy', label: 'Accuracy', align: 'right' as const },
+		{ key: 'playcount', label: 'Playcount', align: 'right' as const }
+	]);
 
 	async function fetchLeaderboard() {
 		// Cancel any pending request
-		if (fetchController) {
-			fetchController.abort();
-		}
-
+		if (fetchController) fetchController.abort();
 		fetchController = new AbortController();
 		const signal = fetchController.signal;
-
 		isLoading = true;
 
 		try {
-			let response = await fetch(
-				`/api/leaderboard?type=${rankingType}&country=${selectedCountry}&page=${currentPage}&limit=${playersPerPage}`,
+			const response = await fetch(
+				`/api/leaderboard?type=${rankingType}&country=${selectedCountry}&page=${currentPage}&limit=${PLAYERS_PER_PAGE}`,
 				{ signal }
 			);
-			if (!response.ok) return null;
-
-			let data = await response.json();
-
-			// Only update if this request wasn't aborted
+			if (!response.ok) return;
+			const data = await response.json();
 			if (!signal.aborted) {
 				players = data.players;
 				totalPages = data.totalPages;
-				totalCount = totalPages * playersPerPage;
+				totalCount = totalPages * PLAYERS_PER_PAGE;
 			}
 		} catch (error) {
-			// Ignore abort errors
-			if (error instanceof Error && error.name === 'AbortError') {
-				return;
-			}
+			if (error instanceof Error && error.name === 'AbortError') return;
 			console.error('Failed to fetch leaderboard:', error);
 		} finally {
-			if (!signal.aborted) {
-				isLoading = false;
-			}
+			if (!signal.aborted) isLoading = false;
 		}
 	}
 
-	// Update URL when state changes
 	function updateUrl() {
 		const params = new URL(page.url).searchParams;
-
-		// Clear existing params
 		params.delete('type');
 		params.delete('country');
 		params.delete('page');
-
-		// Set new params (only non-defaults)
 		if (rankingType !== 'pp') params.set('type', rankingType);
 		if (selectedCountry !== 'all') params.set('country', selectedCountry);
 		if (currentPage !== 1) params.set('page', currentPage.toString());
-
-		const queryString = params.toString();
-		const newUrl = queryString ? `?${queryString}` : resolve('/leaderboard');
-
+		const qs = params.toString();
 		// eslint-disable-next-line svelte/no-navigation-without-resolve
-		goto(newUrl, {
+		goto(qs ? `?${qs}` : resolve('/leaderboard'), {
 			keepFocus: true,
 			noScroll: true,
 			replaceState: false
 		});
 	}
 
-	function handleFilterChange(type: typeof rankingType, country: string) {
+	function handleFilterChange(type: 'pp' | 'score', country: string) {
 		rankingType = type;
 		selectedCountry = country;
 		currentPage = 1;
@@ -99,8 +116,8 @@
 		fetchLeaderboard();
 	}
 
-	function handlePageChange(page: number) {
-		currentPage = page;
+	function handlePageChange(p: number) {
+		currentPage = p;
 		updateUrl();
 		fetchLeaderboard();
 		window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -151,18 +168,46 @@
 			</div>
 		</div>
 
-		<LeaderboardFilters bind:rankingType bind:selectedCountry onFilterChange={handleFilterChange} />
+		<LeaderboardFilters {filters} />
 
 		<LeaderboardTable
-			{players}
-			{rankingType}
+			rows={players}
+			{columns}
 			{isLoading}
 			{currentPage}
 			{totalPages}
-			{playersPerPage}
+			pageSize={PLAYERS_PER_PAGE}
 			{totalCount}
+			emptyMessage="No players found"
+			loadingMessage="Loading leaderboard..."
 			onPageChange={handlePageChange}
-		/>
+			getRowKey={(player) => player.userId}
+		>
+			{#snippet row(player, i)}
+				<LeaderboardRow
+					userId={player.userId}
+					username={player.username}
+					country={player.country}
+					rank={computeRank(currentPage, PLAYERS_PER_PAGE, i)}
+					primaryValue={rankingType === 'score' ? (player.score ?? 0) : (player.pp ?? 0)}
+					primaryLabel={rankingType === 'score' ? 'score' : 'pp'}
+					accuracy={player.accuracy}
+					playcount={player.playcount}
+				/>
+			{/snippet}
+			{#snippet card(player, i)}
+				<LeaderboardCard
+					userId={player.userId}
+					username={player.username}
+					country={player.country}
+					rank={computeRank(currentPage, PLAYERS_PER_PAGE, i)}
+					primaryValue={rankingType === 'score' ? (player.score ?? 0) : (player.pp ?? 0)}
+					primaryLabel={rankingType === 'score' ? 'score' : 'pp'}
+					accuracy={player.accuracy}
+					playcount={player.playcount}
+				/>
+			{/snippet}
+		</LeaderboardTable>
 	</div>
 </ContentLayout>
 

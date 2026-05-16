@@ -1,27 +1,42 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import defaultAvatarImg from '$lib/assets/default/avatar.webp';
-	import type { LeaderboardPlayer } from '$lib/services/leaderboardService';
 	import {
 		formatNumber,
 		getPlayerAvatarUrl,
 		getRankColor,
 		getRankIcon
 	} from '$lib/utils/leaderboard';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
-		player: LeaderboardPlayer;
+		userId: number;
+		username: string;
+		country?: string;
 		rank: number;
-		rankingType: 'pp' | 'score';
+		primaryValue: number;
+		primaryLabel: string;
+		accuracy: number;
+		playcount: number;
+		extraCells?: Snippet;
 	}
 
-	let { player, rank, rankingType }: Props = $props();
+	let {
+		userId,
+		username,
+		country,
+		rank,
+		primaryValue,
+		primaryLabel,
+		accuracy,
+		playcount,
+		extraCells
+	}: Props = $props();
 
 	let isAvatarLoading = $state(true);
 
 	const rankColor = $derived(getRankColor(rank));
 	const RankIcon = $derived(getRankIcon(rank));
-	const primaryValue = $derived(rankingType === 'score' ? (player.score ?? 0) : (player.pp ?? 0));
 
 	function handleAvatarLoad() {
 		isAvatarLoading = false;
@@ -44,7 +59,7 @@
 	</td>
 	<td class="px-6 py-3">
 		<a
-			href={resolve(`/users/${player.userId}`)}
+			href={resolve(`/users/${userId}`)}
 			class="flex items-center gap-3 hover:opacity-80 transition-opacity"
 		>
 			<div class="relative size-10">
@@ -52,8 +67,8 @@
 					<div class="absolute inset-0 rounded-full bg-gray-700 animate-pulse"></div>
 				{/if}
 				<img
-					src={getPlayerAvatarUrl(player.userId)}
-					alt={player.username}
+					src={getPlayerAvatarUrl(userId)}
+					alt={username}
 					class="size-10 rounded-full bg-gray-700 {isAvatarLoading
 						? 'opacity-0'
 						: 'opacity-100'} transition-opacity duration-300"
@@ -62,23 +77,24 @@
 				/>
 			</div>
 			<div class="flex items-center gap-2">
-				<p class="text-sm text-gray-400">
-					<span class="rounded-xs fi fi-{player.country.toLowerCase()}"></span>
-				</p>
-				<span class="text-white font-medium">{player.username}</span>
+				{#if country}
+					<span class="rounded-xs fi fi-{country.toLowerCase()} text-sm text-gray-400"></span>
+				{/if}
+				<span class="text-white font-medium">{username}</span>
 			</div>
 		</a>
 	</td>
 	<td class="px-6 py-4 text-right">
 		<span class="text-white font-semibold">{formatNumber(primaryValue)}</span>
-		{#if rankingType !== 'score'}
-			<span class="text-gray-400 text-sm ml-1">pp</span>
-		{/if}
+		<span class="text-gray-400 text-sm ml-1">{primaryLabel}</span>
 	</td>
 	<td class="px-6 py-4 text-right">
-		<span class="text-white">{player.accuracy.toFixed(2)}%</span>
+		<span class="text-white">{accuracy.toFixed(2)}%</span>
 	</td>
 	<td class="px-6 py-4 text-right text-gray-400">
-		{formatNumber(player.playcount)}
+		{formatNumber(playcount)}
 	</td>
+	{#if extraCells}
+		{@render extraCells()}
+	{/if}
 </tr>
