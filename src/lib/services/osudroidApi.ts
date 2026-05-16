@@ -2,6 +2,7 @@ import axios from 'axios';
 import { parsePlayerFromApi } from '$lib/models/player';
 import { ApiError, NotFoundError } from '$lib/services/errors/userErrors';
 import logger from '$lib/utils/logger';
+import type { BeatmapScore } from '$lib/models/beatmapScore';
 
 const API_BASE_URL = 'https://new.osudroid.moe/api2/frontend';
 
@@ -80,5 +81,36 @@ export async function fetchLeaderboardFromApi(
 			logger.error({ error }, `❌ osu!droid API error`);
 			throw new ApiError(`osu!droid API request failed with status ${status}`);
 		}
+	}
+}
+
+export async function fetchBeatmapScoresFromApi(
+	hash: string,
+	order: 'sid' | 'date' | 'score' | 'pp' = 'score',
+	page: number = 0
+): Promise<BeatmapScore[]> {
+	try {
+		logger.debug(
+			`Fetching beatmap scores from osu!droid API: hash=${hash}, order=${order}, page=${page}`
+		);
+		const response = await axios.get(`${API_BASE_URL}/score-search`, {
+			params: { hash, order, page }
+		});
+		return response.data as BeatmapScore[];
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			const status = error.response?.status;
+
+			if (status === 404) {
+				logger.warn(`🔍 Beatmap scores not found for hash ${hash}`);
+				throw new NotFoundError(`Beatmap scores not found for hash ${hash}`);
+			}
+
+			logger.error({ error }, `❌ osu!droid API error`);
+			throw new ApiError(`osu!droid API request failed with status ${status}`);
+		}
+
+		logger.error({ error }, `❌ Unexpected error fetching beatmap scores for hash ${hash}`);
+		throw new ApiError(`Unexpected error fetching beatmap scores for hash ${hash}`);
 	}
 }
