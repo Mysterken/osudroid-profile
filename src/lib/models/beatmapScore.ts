@@ -7,7 +7,7 @@ export interface BeatmapScore {
 	combo: number;
 	mark: string;
 	mode: string;
-	mods: Record<string, unknown>;
+	mods: Array<{ acronym: string; settings?: Record<string, unknown> }>;
 	accuracy: number;
 	perfect: number;
 	geki: number;

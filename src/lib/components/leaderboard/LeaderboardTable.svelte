@@ -16,7 +16,6 @@
 		rows: TRow[];
 		columns: ColumnDef[];
 		isLoading: boolean;
-		// --- ADD THIS ---
 		hasError?: boolean;
 		currentPage: number;
 		totalPages: number;

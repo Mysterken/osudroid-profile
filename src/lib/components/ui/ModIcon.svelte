@@ -42,7 +42,7 @@
 	];
 
 	function shouldDisplayModIcon(mod: string): boolean {
-		return supportedMods.includes(mod) && !mod.startsWith('x');
+		return supportedMods.includes(mod) && !mod.startsWith('x') && mod !== 'NM' && mod !== 'None';
 	}
 </script>
 
