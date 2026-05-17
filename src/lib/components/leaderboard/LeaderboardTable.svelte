@@ -1,34 +1,59 @@
-<script lang="ts">
+<script module lang="ts">
+	export interface ColumnDef {
+		key: string;
+		label: string;
+		align?: 'left' | 'center' | 'right';
+		width?: string;
+	}
+</script>
+
+<script lang="ts" generics="TRow">
 	import { LoaderCircle } from 'lucide-svelte';
-	import type { LeaderboardPlayer } from '$lib/services/leaderboardService';
-	import { computeRank } from '$lib/utils/leaderboard';
-	import LeaderboardRow from './LeaderboardRow.svelte';
-	import LeaderboardCard from './LeaderboardCard.svelte';
+	import type { Snippet } from 'svelte';
 	import LeaderboardPagination from './LeaderboardPagination.svelte';
 
 	interface Props {
-		players: LeaderboardPlayer[];
-		rankingType: 'pp' | 'score';
+		rows: TRow[];
+		columns: ColumnDef[];
 		isLoading: boolean;
+		hasError?: boolean;
 		currentPage: number;
 		totalPages: number;
-		playersPerPage: number;
+		pageSize: number;
 		totalCount: number;
+		emptyMessage?: string;
+		loadingMessage?: string;
 		onPageChange: (page: number) => void;
+		row: Snippet<[TRow, number]>;
+		card: Snippet<[TRow, number]>;
+		error?: Snippet;
+		getRowKey?: (row: TRow, index: number) => string | number;
 	}
 
 	let {
-		players,
-		rankingType,
+		rows,
+		columns,
 		isLoading,
+		hasError = false,
 		currentPage,
 		totalPages,
-		playersPerPage,
+		pageSize,
 		totalCount,
-		onPageChange
+		emptyMessage = 'No results found',
+		loadingMessage = 'Loading...',
+		onPageChange,
+		row: rowSnippet,
+		card: cardSnippet,
+		error: errorSnippet,
+		getRowKey = (_row, i) => i
 	}: Props = $props();
 
-	const hasPlayers = $derived(!isLoading && players.length > 0);
+	const hasRows = $derived(!isLoading && rows.length > 0 && !hasError);
+	const colSpan = $derived(columns.length);
+
+	function alignClass(align: ColumnDef['align'] = 'left'): string {
+		return align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left';
+	}
 </script>
 
 {#snippet loadingIndicator(label: string)}
@@ -39,68 +64,64 @@
 {/snippet}
 
 <div class="bg-[#2A2A2A] rounded-2xl overflow-hidden">
-	<!-- Desktop -->
 	<div class="hidden md:block overflow-x-auto">
 		<table class="w-full">
 			<thead class="bg-[#1A1A1A] border-b border-gray-700">
-			<tr>
-				<th class="px-6 py-4 text-left text-sm font-semibold text-gray-400 w-20">Rank</th>
-				<th class="px-6 py-4 text-left text-sm font-semibold text-gray-400">Player</th>
-				<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">
-					{rankingType === 'score' ? 'Score' : 'Performance'}
-				</th>
-				<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">Accuracy</th>
-				<th class="px-6 py-4 text-right text-sm font-semibold text-gray-400">Playcount</th>
-			</tr>
+				<tr>
+					{#each columns as col (col.key)}
+						<th
+							class="px-6 py-4 text-sm font-semibold text-gray-400 {alignClass(
+								col.align
+							)} {col.width ?? ''}"
+						>
+							{col.label}
+						</th>
+					{/each}
+				</tr>
 			</thead>
 			<tbody>
-			{#if isLoading}
-				<tr>
-					<td colspan="5" class="px-6 py-16 text-center">
-						{@render loadingIndicator('Loading leaderboard...')}
-					</td>
-				</tr>
-			{:else if players.length === 0}
-				<tr>
-					<td colspan="5" class="px-6 py-16 text-center text-gray-400">No players found</td>
-				</tr>
-			{:else}
-				{#each players as player, i (player.userId)}
-					<LeaderboardRow
-						{player}
-						{rankingType}
-						rank={computeRank(currentPage, playersPerPage, i)}
-					/>
-				{/each}
-			{/if}
+				{#if isLoading}
+					<tr>
+						<td colspan={colSpan} class="px-6 py-16 text-center">
+							{@render loadingIndicator(loadingMessage)}
+						</td>
+					</tr>
+				{:else if hasError && errorSnippet}
+					<tr>
+						<td colspan={colSpan} class="px-6 py-16 text-center">
+							{@render errorSnippet()}
+						</td>
+					</tr>
+				{:else if rows.length === 0}
+					<tr>
+						<td colspan={colSpan} class="px-6 py-16 text-center text-gray-400">
+							{emptyMessage}
+						</td>
+					</tr>
+				{:else}
+					{#each rows as r, i (getRowKey(r, i))}
+						{@render rowSnippet(r, i)}
+					{/each}
+				{/if}
 			</tbody>
 		</table>
 	</div>
 
-	<!-- Mobile -->
 	<div class="md:hidden">
 		{#if isLoading}
-			{@render loadingIndicator('Loading...')}
-		{:else if players.length === 0}
-			<div class="py-16 text-center text-gray-400">No players found</div>
+			{@render loadingIndicator(loadingMessage)}
+		{:else if hasError && errorSnippet}
+			{@render errorSnippet()}
+		{:else if rows.length === 0}
+			<div class="py-16 text-center text-gray-400">{emptyMessage}</div>
 		{:else}
-			{#each players as player, i (player.userId)}
-				<LeaderboardCard
-					{player}
-					{rankingType}
-					rank={computeRank(currentPage, playersPerPage, i)}
-				/>
+			{#each rows as r, i (getRowKey(r, i))}
+				{@render cardSnippet(r, i)}
 			{/each}
 		{/if}
 	</div>
 
-	{#if hasPlayers}
-		<LeaderboardPagination
-			{currentPage}
-			{totalPages}
-			{playersPerPage}
-			{totalCount}
-			{onPageChange}
-		/>
+	{#if hasRows}
+		<LeaderboardPagination {currentPage} {totalPages} {pageSize} {totalCount} {onPageChange} />
 	{/if}
 </div>

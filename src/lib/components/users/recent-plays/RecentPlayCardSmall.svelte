@@ -4,6 +4,7 @@
 	import { playUtils } from '$lib/utils/playUtils';
 	import LetterRank from '$lib/components/ui/LetterRank.svelte';
 	import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
+	import type { Play } from '$lib/models/play';
 
 	let {
 		filename,
@@ -15,6 +16,7 @@
 		miss,
 		accuracy,
 		date,
+		play,
 		openModal,
 		beatmaps
 	}: {
@@ -27,7 +29,8 @@
 		miss: number;
 		accuracy: number;
 		date: string | null;
-		openModal: (beatmap: BeatmapExtended | null | undefined) => void;
+		play?: Play | null;
+		openModal: (beatmap: BeatmapExtended | null | undefined, play?: Play | null) => void;
 		beatmaps: Map<string, BeatmapExtended | null>;
 	} = $props();
 
@@ -50,12 +53,12 @@
 
 	function loadBeatmapModal() {
 		beatmap = beatmaps.get(hash ?? filename);
-		openModal(beatmap);
+		openModal(beatmap, play);
 
 		if (beatmap === undefined) {
 			getBeatmap(filename, hash).then((data) => {
 				beatmap = data;
-				openModal(beatmap);
+				openModal(beatmap, play);
 			});
 		}
 	}

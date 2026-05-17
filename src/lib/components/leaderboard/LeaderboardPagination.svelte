@@ -5,12 +5,12 @@
 	interface Props {
 		currentPage: number;
 		totalPages: number;
-		playersPerPage: number;
+		pageSize: number;
 		totalCount: number;
 		onPageChange: (page: number) => void;
 	}
 
-	let { currentPage, playersPerPage, totalCount, onPageChange }: Props = $props();
+	let { currentPage, pageSize, totalCount, onPageChange }: Props = $props();
 </script>
 
 <div
@@ -18,7 +18,7 @@
 >
 	<Pagination
 		count={totalCount}
-		pageSize={playersPerPage}
+		{pageSize}
 		page={currentPage}
 		onPageChange={(event) => onPageChange(event.page)}
 	>
@@ -42,9 +42,7 @@
 							{page.value}
 						</Pagination.Item>
 					{:else}
-						<Pagination.Ellipsis {index} class="px-2 text-gray-400">
-							&#8230;
-						</Pagination.Ellipsis>
+						<Pagination.Ellipsis {index} class="px-2 text-gray-400">&#8230;</Pagination.Ellipsis>
 					{/if}
 				{/each}
 			{/snippet}
