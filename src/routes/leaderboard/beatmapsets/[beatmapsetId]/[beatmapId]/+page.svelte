@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { page } from '$app/state';
+	import { tooltip } from '$lib/actions/tooltip';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
 	import ContentLayout from '$lib/components/layouts/ContentLayout.svelte';
 	import Footer from '$lib/components/layouts/Footer.svelte';
@@ -237,8 +238,20 @@
 		isPlaying = false;
 	}
 
-	function formatDate(timestamp: number): string {
-		return new Date(timestamp * 1000).toLocaleDateString();
+	function formatExactTime(timestamp: number): string {
+		return new Date(timestamp * 1000).toLocaleString();
+	}
+
+	function formatRelativeTime(timestamp: number): string {
+		const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+		const daysDifference = Math.round((timestamp * 1000 - Date.now()) / (1000 * 60 * 60 * 24));
+
+		if (Math.abs(daysDifference) < 30) return rtf.format(daysDifference, 'day');
+
+		const monthsDifference = Math.round(daysDifference / 30);
+		if (Math.abs(monthsDifference) < 12) return rtf.format(monthsDifference, 'month');
+
+		return rtf.format(Math.round(monthsDifference / 12), 'year');
 	}
 
 	function parseMods(
@@ -554,7 +567,9 @@
 					</td>
 
 					<td class="px-3 py-3 text-right text-gray-500 text-xs">
-						{formatDate(score.date)}
+						<span use:tooltip={{ text: formatExactTime(score.date) }}>
+							{formatRelativeTime(score.date)}
+						</span>
 					</td>
 
 					<td class="px-3 py-3 text-right">
@@ -617,7 +632,9 @@
 							<span class="text-white font-semibold">
 								{Math.round(score.pp)}<span class="text-gray-400 font-normal">pp</span>
 							</span>
-							<span>{formatDate(score.date)}</span>
+							<span use:tooltip={{ text: formatExactTime(score.date) }}>
+								{formatRelativeTime(score.date)}
+							</span>
 						</div>
 					</div>
 				</div>
