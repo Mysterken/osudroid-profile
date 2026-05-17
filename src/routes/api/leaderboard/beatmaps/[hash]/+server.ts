@@ -2,11 +2,7 @@ import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 import { fetchBeatmapScoresFromApi } from '$lib/services/osudroidApi';
 import { NotFoundError, ApiError } from '$lib/services/errors/userErrors';
-import {
-	getCacheKey,
-	getScoresCache,
-	setScoresCache
-} from '$lib/services/cache/beatmapScoresCache';
+import { wrapCache } from '$lib/services/cache';
 import logger from '$lib/utils/logger';
 
 export const GET: RequestHandler = async ({ params, url }) => {
@@ -21,18 +17,14 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		);
 	}
 
-	const cacheKey = getCacheKey(hash, order, page);
-	const cached = getScoresCache(cacheKey);
-
-	if (cached) {
-		logger.debug(`🎯 Cache hit for beatmap scores: ${cacheKey}`);
-		return json(cached);
-	}
-
 	try {
-		logger.info(`🎵 Fetching scores for beatmap hash: ${hash}, order=${order}, page=${page}`);
-		const scores = await fetchBeatmapScoresFromApi(hash, order, page);
-		setScoresCache(cacheKey, scores);
+		const cacheKey = `beatmapScores:${hash}:${order}:${page}`;
+
+		const scores = await wrapCache(cacheKey, 5 * 60 * 1000, async () => {
+			logger.info(`🎵 Fetching scores for beatmap hash: ${hash}, order=${order}, page=${page}`);
+			return await fetchBeatmapScoresFromApi(hash, order, page);
+		});
+
 		return json(scores);
 	} catch (error) {
 		if (error instanceof NotFoundError) {
