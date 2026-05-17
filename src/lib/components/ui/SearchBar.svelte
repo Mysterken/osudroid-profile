@@ -2,6 +2,7 @@
 	import { LoaderCircle, Search, TrophyIcon } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
+	import { toaster } from '$lib/utils/toaster';
 
 	let searchQuery = $state('');
 	let searchMode = $state<'user' | 'beatmap'>('user');
@@ -98,7 +99,10 @@
 				}
 			} catch (error) {
 				console.error('Search error:', error);
-				alert(error instanceof Error ? error.message : 'An error occurred while searching');
+				toaster.error({
+					title: 'Search Error',
+					description: error instanceof Error ? error.message : 'An error occurred while searching'
+				});
 			} finally {
 				isSearching = false;
 			}
