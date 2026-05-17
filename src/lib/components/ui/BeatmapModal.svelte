@@ -312,7 +312,7 @@
 				{#if beatmap}
 					<div class="flex flex-col gap-2 mt-6">
 						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-						<a href={`/leaderboard/beatmaps/${beatmap.id}`}>
+						<a href={`/leaderboard/beatmapsets/${beatmap.beatmapset_id}/${beatmap.id}`}>
 							<button
 								type="button"
 								class="btn preset-filled-primary-500 text-white py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors w-full"
