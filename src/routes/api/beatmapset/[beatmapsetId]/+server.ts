@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	try {
 		await refreshTokenIfNeeded();
-		logger.info(`🎵 Fetching beatmapset by ID: ${beatmapsetId}`);
+		logger.debug(`🔍 Fetching beatmapset with ID ${beatmapsetId} from osu! API...`);
 		const beatmapset = await getBeatmapset(beatmapsetId);
 
 		if (!beatmapset) {
