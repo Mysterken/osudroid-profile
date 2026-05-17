@@ -135,20 +135,47 @@
 	async function fetchBeatmapset(): Promise<void> {
 		isBeatmapsetLoading = true;
 		beatmapsetError = null;
+
+		// Clear previous state immediately to avoid showing stale info
+		beatmap = null;
+		beatmapset = null;
+		scores = [];
+
+		// Abort any in-flight score fetch to avoid races against the old checksum
+		if (fetchController) {
+			try {
+				fetchController.abort();
+			} catch {
+				// ignore
+			}
+			fetchController = null;
+		}
+
 		try {
 			// cache beatmapset for a longer period in client localStorage
 			const resJson = await fetchWithLocalCache(`/api/beatmapset/${beatmapsetId}`, undefined, {
 				ttlMs: 60 * 60 * 1000
 			}); // 1 hour
+
+			// If we got here, update the beatmapset and derived beatmap
 			beatmapset = resJson as Beatmapset;
 
 			// Find the specific beatmap from the beatmapset
-			beatmap = (beatmapset.beatmaps?.find((b) => b.id === beatmapId) as BeatmapExtended) ?? null;
+			const found =
+				(beatmapset.beatmaps?.find((b) => b.id === beatmapId) as BeatmapExtended) ?? null;
 
-			if (!beatmap) {
+			if (!found) {
+				beatmap = null;
 				beatmapsetError = 'Beatmap not found in beatmapset.';
+				return;
 			}
+
+			beatmap = found;
+			beatmapsetError = null;
 		} catch (err) {
+			beatmap = null;
+			beatmapset = null;
+
 			if (err instanceof Error && /404/.test(err.message)) {
 				beatmapsetError = 'Beatmapset not found.';
 			} else {
@@ -294,7 +321,16 @@
 					}
 				} else {
 					// Initial load, or navigating to an entirely new map
-					fetchBeatmapset().then(() => fetchScores());
+					fetchBeatmapset()
+						.then(() => {
+							// Only fetch scores if we successfully loaded a beatmap and it has a checksum
+							if (beatmap?.checksum) {
+								fetchScores();
+							}
+						})
+						.catch(() => {
+							// errors already handled inside fetchBeatmapset; nothing to do here
+						});
 				}
 			});
 		}

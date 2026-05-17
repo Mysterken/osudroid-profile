@@ -6,16 +6,21 @@ import { wrapCache } from '$lib/services/cache';
 import logger from '$lib/utils/logger';
 
 export const GET: RequestHandler = async ({ params, url }) => {
-	const hash = params.hash;
+	const rawHash = String(params.hash ?? '').trim();
 	const order = (url.searchParams.get('order') ?? 'score') as 'sid' | 'date' | 'score' | 'pp';
 	const page = parseInt(url.searchParams.get('page') ?? '0', 10);
 
-	if (!hash || hash.length !== 32) {
+	// Validate MD5-style hex
+	const md5hex = /^[a-fA-F0-9]{32}$/;
+	if (!md5hex.test(rawHash)) {
 		return json(
-			{ error: 'Invalid beatmap hash. Must be a 32-character MD5 string.' },
+			{ error: 'Invalid beatmap hash. Must be a 32-character hexadecimal MD5 string.' },
 			{ status: 400 }
 		);
 	}
+
+	// Normalize hash to lowercase for consistent caching and downstream requests
+	const hash = rawHash.toLowerCase();
 
 	try {
 		const cacheKey = `beatmapScores:${hash}:${order}:${page}`;

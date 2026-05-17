@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Beatmap Leaderboards:** Added a dedicated leaderboard page for individual beatmaps (`/beatmapsets/{beatmapsetId}/{beatmapId}`), accessible via the search bar or by clicking a user's play on their profile.
+- **Beatmap Leaderboards:** Added a dedicated leaderboard page for individual beatmaps (`/leaderboard/beatmapsets/{beatmapsetId}/{beatmapId}`), accessible via the search bar or by clicking a user's play on their profile.
 - **Beatmap Search:** Added a new "Beatmap" search mode to the global `SearchBar`. It smartly parses and resolves various formats including raw IDs, beatmapset IDs, shortened links, and full osu! URLs.
 - **API Caching:** Implemented a simple in-memory caching system to reduce redundant calls to external APIs and improve overall load times.
 

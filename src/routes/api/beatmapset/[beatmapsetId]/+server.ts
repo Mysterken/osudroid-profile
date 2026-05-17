@@ -1,6 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { getBeatmapset, refreshTokenIfNeeded } from '$lib/services/osuApi';
 import logger from '$lib/utils/logger';
+import { NotFoundError } from '$lib/services/errors/userErrors';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const beatmapsetId = parseInt(params.beatmapsetId ?? '', 10);
@@ -20,6 +21,10 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		return json(beatmapset);
 	} catch (error) {
+		if (error instanceof NotFoundError) {
+			return json({ error: error.message }, { status: 404 });
+		}
+
 		logger.error({ error }, '❌ Failed to fetch beatmapset by ID');
 		return json({ error: 'Failed to fetch beatmapset' }, { status: 500 });
 	}

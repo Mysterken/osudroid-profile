@@ -125,8 +125,8 @@ The application implements a two-tier caching system:
 
 ### Server-Side Cache (`src/lib/services/cache.ts`)
 
-- **User profiles**: 10 minutes TTL
-- **Leaderboard pages**: 30 seconds TTL (frequently updated)
+- **User profiles**: 2 minutes TTL
+- **Leaderboard pages**: 3 minutes TTL
 - **Beatmap scores**: 5 minutes TTL
 - **Beatmap metadata**: 1 hour TTL
 - **In-memory storage**: Automatically cleared on server restart
