@@ -462,8 +462,7 @@
 			</div>
 		{:else if beatmapsetError}
 			<div class="flex flex-col items-center gap-2 my-8 text-red-400">
-				<CircleAlertIcon
-				size={48} />
+				<CircleAlertIcon size={48} />
 				<h1 class="text-xl font-bold">Beatmap Not Found</h1>
 				<p class="text-sm text-gray-400">{beatmapsetError}</p>
 			</div>
