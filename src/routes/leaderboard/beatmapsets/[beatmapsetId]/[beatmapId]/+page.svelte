@@ -30,6 +30,7 @@
 	import defaultAvatarImg from '$lib/assets/default/avatar.webp';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import { getDifficultyColor } from '$lib/utils/colors';
+	import { fetchWithLocalCache } from '$lib/utils/fetchWithLocalCache';
 
 	const SCORES_PER_PAGE = 100;
 
@@ -134,16 +135,11 @@
 		isBeatmapsetLoading = true;
 		beatmapsetError = null;
 		try {
-			const res = await fetch(`/api/beatmapset/${beatmapsetId}`);
-			if (res.status === 404) {
-				beatmapsetError = 'Beatmapset not found.';
-				return;
-			}
-			if (!res.ok) {
-				beatmapsetError = 'Failed to load beatmapset info.';
-				return;
-			}
-			beatmapset = (await res.json()) as Beatmapset;
+			// cache beatmapset for a longer period in client localStorage
+			const resJson = await fetchWithLocalCache(`/api/beatmapset/${beatmapsetId}`, undefined, {
+				ttlMs: 60 * 60 * 1000
+			}); // 1 hour
+			beatmapset = resJson as Beatmapset;
 
 			// Find the specific beatmap from the beatmapset
 			beatmap = (beatmapset.beatmaps?.find((b) => b.id === beatmapId) as BeatmapExtended) ?? null;
@@ -152,8 +148,12 @@
 				beatmapsetError = 'Beatmap not found in beatmapset.';
 			}
 		} catch (err) {
-			beatmapsetError = 'An error occurred while loading beatmapset info.';
-			console.error('Error fetching beatmapset:', err);
+			if (err instanceof Error && /404/.test(err.message)) {
+				beatmapsetError = 'Beatmapset not found.';
+			} else {
+				beatmapsetError = 'An error occurred while loading beatmapset info.';
+				console.error('Error fetching beatmapset:', err);
+			}
 		} finally {
 			isBeatmapsetLoading = false;
 		}
@@ -170,15 +170,8 @@
 		isScoresLoading = true;
 		scoresError = null;
 		try {
-			const res = await fetch(
-				`/api/leaderboard/beatmaps/${beatmap.checksum}?order=${order}&page=${currentPage}`,
-				{ signal }
-			);
-			if (!res.ok) {
-				if (!signal.aborted) scoresError = 'Failed to load scores.';
-				return;
-			}
-			const data = await res.json();
+			const url = `/api/leaderboard/beatmaps/${beatmap.checksum}?order=${order}&page=${currentPage}`;
+			const data = await fetchWithLocalCache(url, { signal }, { ttlMs: 5 * 60 * 1000 });
 			if (!signal.aborted) {
 				scores = Array.isArray(data) ? data : [];
 			}
@@ -323,7 +316,7 @@
 						<img
 							src={beatmapset.covers.cover}
 							alt="Beatmap background"
-							class="w-full h-full object-cover opacity-30 blur-sm"
+							class="w-full h-full object-cover opacity-60 blur-sm"
 						/>
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-[#1E1E1E] via-[#1E1E1E]/80 to-transparent"

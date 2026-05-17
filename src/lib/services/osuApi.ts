@@ -3,6 +3,7 @@ import { ApiError, MissingError, NotFoundError } from '$lib/services/errors/osuA
 import axios from 'axios';
 import type { BeatmapExtended } from '$lib/models/osuApi/beatmap';
 import logger from '$lib/utils/logger';
+import { wrapCache } from '$lib/services/cache';
 
 const API_BASE_URL = 'https://osu.ppy.sh/api/v2';
 const TOKEN_URL = 'https://osu.ppy.sh/oauth/token';
@@ -136,28 +137,32 @@ export async function getBeatmaps(ids: number[]): Promise<BeatmapExtended[]> {
  * @param beatmapsetId Beatmapset ID
  */
 export async function getBeatmapset(beatmapsetId: number): Promise<BeatmapExtended> {
-	if (!beatmapsetId) {
-		throw new MissingError('No beatmapset ID provided');
-	}
+	const key = `osu:beatmapset:${beatmapsetId}`;
+	const ttl = 60 * 60 * 1000; // 1 hour
 
-	try {
-		logger.info(`🎵 Fetching beatmapset by ID: ${beatmapsetId}`);
-		const response = await callApi(`${API_BASE_URL}/beatmapsets/${beatmapsetId}`);
-		return response.data;
-	} catch (error: unknown) {
-		if (axios.isAxiosError(error)) {
-			const status = error.response?.status;
+	return wrapCache(key, ttl, async () => {
+		if (!beatmapsetId) {
+			throw new MissingError('No beatmapset ID provided');
+		}
+		try {
+			logger.info(`🎵 Fetching beatmapset by ID: ${beatmapsetId}`);
+			const response = await callApi(`${API_BASE_URL}/beatmapsets/${beatmapsetId}`);
+			return response.data;
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				const status = error.response?.status;
 
-			if (status === 404) {
-				logger.warn(`🔍 Beatmapset ${beatmapsetId} not found.`);
-				throw new NotFoundError(`Beatmapset ${beatmapsetId} not found`);
+				if (status === 404) {
+					logger.warn(`🔍 Beatmapset ${beatmapsetId} not found.`);
+					throw new NotFoundError(`Beatmapset ${beatmapsetId} not found`);
+				}
+
+				logger.error({ error }, '❌ osu! API error');
+				throw new ApiError(`osu! API request failed with status ${status}`);
 			}
 
-			logger.error({ error }, '❌ osu! API error');
-			throw new ApiError(`osu! API request failed with status ${status}`);
+			logger.error({ error }, '❌ Unexpected error fetching beatmapset');
+			throw new ApiError(`Unexpected error fetching beatmapset ${beatmapsetId}`);
 		}
-
-		logger.error({ error }, '❌ Unexpected error fetching beatmapset');
-		throw new ApiError(`Unexpected error fetching beatmapset ${beatmapsetId}`);
-	}
+	});
 }
