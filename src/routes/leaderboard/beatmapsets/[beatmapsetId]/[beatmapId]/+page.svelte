@@ -285,7 +285,21 @@
 		mods: Array<{ acronym: string; settings?: Record<string, unknown> }>
 	): string[] {
 		if (!mods || !Array.isArray(mods) || mods.length === 0) return ['NM'];
-		return mods.map((mod) => mod.acronym);
+
+		const parsedMods: string[] = [];
+		const multiplierMods: string[] = [];
+
+		for (const mod of mods) {
+			parsedMods.push(mod.acronym);
+
+			// Store multiplier mods separately
+			if (mod.settings && typeof mod.settings.rateMultiplier === 'number') {
+				multiplierMods.push(`x${mod.settings.rateMultiplier}`);
+			}
+		}
+
+		// Put multiplier mods at the end
+		return [...parsedMods, ...multiplierMods];
 	}
 
 	function formatAccuracy(accuracy: number): string {
@@ -373,7 +387,7 @@
 					</div>
 				{/if}
 
-				{#if availableBeatmaps.length > 1}
+				{#if availableBeatmaps.length > 0}
 					<div
 						class="relative z-10 w-full bg-black/40 border-b border-[#3C3C3C]/50 px-6 py-3 flex flex-col gap-2"
 					>
